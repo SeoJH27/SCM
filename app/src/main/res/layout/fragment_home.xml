@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="@string/desc_logo"
+        android:src="@drawable/ic_logo"
+        app:layout_constraintBottom_toTopOf="@id/txt_choose_cafeteria"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_choose_cafeteria"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_choose_cafeteria"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/img_sch_map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_sch_map"
+        android:layout_width="430dp"
+        android:layout_height="250dp"
+        android:contentDescription="@string/desc_sch_map"
+        android:src="@drawable/img_map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.521" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_hs1"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:background="@drawable/bg_map_button"
+        app:layout_constraintBottom_toBottomOf="@id/img_sch_map"
+        app:layout_constraintEnd_toEndOf="@id/img_sch_map"
+        app:layout_constraintHorizontal_bias="0.58"
+        app:layout_constraintStart_toStartOf="@id/img_sch_map"
+        app:layout_constraintTop_toTopOf="@id/img_sch_map"
+        app:layout_constraintVertical_bias="0.28"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_hs2"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:background="@drawable/bg_map_button"
+        app:layout_constraintBottom_toBottomOf="@id/img_sch_map"
+        app:layout_constraintEnd_toEndOf="@id/img_sch_map"
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintStart_toStartOf="@id/img_sch_map"
+        app:layout_constraintTop_toTopOf="@id/img_sch_map"
+        app:layout_constraintVertical_bias="0.13"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_staff"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/bg_map_button"
+        app:layout_constraintBottom_toBottomOf="@id/img_sch_map"
+        app:layout_constraintEnd_toEndOf="@id/img_sch_map"
+        app:layout_constraintHorizontal_bias="0.22"
+        app:layout_constraintStart_toStartOf="@id/img_sch_map"
+        app:layout_constraintTop_toTopOf="@id/img_sch_map"
+        app:layout_constraintVertical_bias="0.53"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_student_union"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/bg_map_button"
+        app:layout_constraintBottom_toBottomOf="@id/img_sch_map"
+        app:layout_constraintEnd_toEndOf="@id/img_sch_map"
+        app:layout_constraintHorizontal_bias="0.485"
+        app:layout_constraintStart_toStartOf="@id/img_sch_map"
+        app:layout_constraintTop_toTopOf="@id/img_sch_map"
+        app:layout_constraintVertical_bias="0.55"
+        />
+
+    <ImageView
+        android:id="@+id/ic_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="@string/desc_icon_today_menu"
+        android:src="@drawable/ic_map"
+        app:layout_constraintEnd_toStartOf="@id/txt_today_menu"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_sch_map" />
+
+    <TextView
+        android:id="@+id/txt_today_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_today_menu"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/ic_map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ic_map"
+        app:layout_constraintTop_toTopOf="@id/ic_map" />
+
+    <TextView
+        android:id="@+id/txt_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/str_login_admin"
+        android:textColor="@color/grey_300"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

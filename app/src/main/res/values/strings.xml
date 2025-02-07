@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SCM</string>
+    <string name="str_choose_cafeteria">원하는 식당을 선택하세요!</string>
+    <string name="desc_sch_map">순천향대 학교 지도</string>
+    <string name="str_login_admin"><u>관리자로 로그인</u></string>
+    <string name="desc_icon_today_menu">오늘의 학식 아이콘</string>
+    <string name="str_today_menu">오늘의 학식</string>
+    <string name="desc_logo">Sooncheonhyang Cafeteria Manager Logo</string>
+</resources>

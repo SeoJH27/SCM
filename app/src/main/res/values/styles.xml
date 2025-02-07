@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--                       AppToolBar                       -->
+    <style name="AppToolBar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/AppTextTitle.20sp</item>
+    </style>
+
+    <!--                       Navigation                       -->
+    <style name="AppToolBar.Navigation">
+        <item name="android:background">@color/white</item>
+        <item name="navigationIcon">@drawable/ic_arrow_back</item>
+    </style>
+
+    <style name="AppToolBar.ImageNavigation">
+        <item name="android:background">@color/transparency</item>
+        <item name="navigationIcon">@drawable/ic_arrow_back</item>
+    </style>
+
+    <!--                       AppTextTitle                       -->
+    <style name="AppTextTitle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppTextTitle.20sp">
+        <item name="android:textSize">23sp</item>
+    </style>
+    
+</resources>

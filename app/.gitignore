@@ -1,0 +1,21 @@
+# IDE 설정 파일
+.idea/
+*.iml
+
+# 빌드 파일
+/build/
+app/build/
+
+# 환경 설정
+local.properties
+*.keystore
+google-services.json
+
+# OS 및 편집기 파일
+.DS_Store
+Thumbs.db
+.vscode/
+
+# 캐시 파일
+.gradle/
+.cache/
