@@ -4,26 +4,27 @@
 
     <!-- Medium -->
     <font
-        android:font="@font/gmarketsansttf_medium"
+        android:font="@font/goormsans_medium"
         android:fontStyle="normal"
         android:fontWeight="400"
-        app:font="@font/gmarketsansttf_medium"
+        app:font="@font/goormsans_medium"
         app:fontStyle="normal" />
 
-    <!-- Light -->
+    <!-- Regular -->
     <font
-        android:font="@font/gmarketsansttg_light"
+        android:font="@font/goormsans_regular"
         android:fontStyle="normal"
         android:fontWeight="300"
-        app:font="@font/gmarketsansttg_light"
+        app:font="@font/goormsans_regular"
         app:fontStyle="normal" />
+
 
     <!-- Bold -->
     <font
         android:fontWeight="600"
-        android:font="@font/gmarketsansttf_bold"
+        android:font="@font/goormsans_bold"
         android:fontStyle="normal"
-        app:font="@font/gmarketsansttf_bold"
+        app:font="@font/goormsans_bold"
         app:fontStyle="normal" />
 
 </font-family>

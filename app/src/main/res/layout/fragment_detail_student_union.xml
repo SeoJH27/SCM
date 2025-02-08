@@ -9,11 +9,12 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_detail_staff"
+            android:id="@+id/toolbar_detail_student_union"
             style="@style/AppToolBar.ImageNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/img_staff" />
+            android:background="@drawable/img_student_union"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,11 +30,11 @@
             android:paddingTop="20dp">
 
             <TextView
-                android:id="@+id/title_hs1"
+                android:id="@+id/title_student_union"
                 style="@style/AppTextTitle.30sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/str_staff"
+                android:text="@string/str_student_union"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +48,7 @@
                 android:background="@color/grey_100"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title_hs1" />
+                app:layout_constraintTop_toBottomOf="@id/title_student_union" />
 
             <Space
                 android:id="@+id/space_1"
@@ -62,6 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/str_operating_hours"
                 app:layout_constraintEnd_toStartOf="@id/edit_operating_hours"
                 app:layout_constraintStart_toStartOf="parent"
@@ -72,9 +74,8 @@
                 style="@style/AppTextText.15sp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="20dp"
                 android:layout_marginEnd="70dp"
-                android:text="@string/edit_operating_hours_staff"
+                android:text="@string/edit_operating_hours_student_union"
                 app:layout_constraintBottom_toBottomOf="@id/txt_operating_hours"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/txt_operating_hours"
@@ -103,6 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/str_location"
                 app:layout_constraintEnd_toStartOf="@id/edit_location"
                 app:layout_constraintStart_toStartOf="parent"
@@ -131,31 +133,6 @@
                 app:layout_constraintStart_toEndOf="@id/edit_location"
                 app:layout_constraintTop_toTopOf="@id/edit_location" />
 
-            <TextView
-                android:id="@+id/txt_price"
-                style="@style/AppTextTitle.15sp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/str_price"
-                app:layout_constraintEnd_toStartOf="@id/edit_price"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_location" />
-
-            <TextView
-                android:id="@+id/edit_price"
-                style="@style/AppTextText.15sp"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="70dp"
-                android:text="@string/edit_price_staff"
-                app:layout_constraintBottom_toBottomOf="@id/txt_price"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/txt_price"
-                app:layout_constraintTop_toTopOf="@id/txt_price" />
-
             <View
                 android:id="@+id/line_2"
                 android:layout_width="match_parent"
@@ -165,7 +142,7 @@
                 android:background="@color/grey_100"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_price" />
+                app:layout_constraintTop_toBottomOf="@id/txt_location" />
 
             <Space
                 android:id="@+id/space_2"

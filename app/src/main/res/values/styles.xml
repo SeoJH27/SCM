@@ -3,7 +3,7 @@
 
     <!--                       AppToolBar                       -->
     <style name="AppToolBar" parent="Widget.Material3.Toolbar">
-        <item name="titleTextAppearance">@style/AppTextTitle.20sp</item>
+        <item name="titleTextAppearance">@style/AppTextTitle.23sp</item>
     </style>
 
     <!--                       Navigation                       -->
@@ -22,8 +22,29 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="AppTextTitle.20sp">
+    <style name="AppTextTitle.15sp">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="AppTextTitle.23sp">
         <item name="android:textSize">23sp</item>
     </style>
-    
+
+    <style name="AppTextTitle.30sp">
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <!--                       AppTextText                       -->
+    <style name="AppTextText">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="AppTextText.15sp">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="AppTextText.30sp">
+        <item name="android:textSize">30sp</item>
+    </style>
+
 </resources>

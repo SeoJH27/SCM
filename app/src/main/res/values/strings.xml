@@ -1,9 +1,40 @@
 <resources>
+    <!--                  STRING                  -->
     <string name="app_name">SCM</string>
+    <string name="str_hs1">향설 1관</string>
+    <string name="str_staff">교직원 식당</string>
+    <string name="str_hs2">향설 2관</string>
+    <string name="str_student_union">학생회관</string>
+
+
+    <!--                  Label: home                  -->
     <string name="str_choose_cafeteria">원하는 식당을 선택하세요!</string>
-    <string name="desc_sch_map">순천향대 학교 지도</string>
-    <string name="str_login_admin"><u>관리자로 로그인</u></string>
-    <string name="desc_icon_today_menu">오늘의 학식 아이콘</string>
     <string name="str_today_menu">오늘의 학식</string>
+
+
+    <!--                  Label: detail                  -->
+    <string name="str_operating_hours">운영 시간</string>
+    <string name="str_login_admin"><u>관리자로 로그인</u></string>
+    <string name="str_notice">배식 마감은 운영 시간 30분 전입니다.</string>
+    <string name="str_location">위치</string>
+    <string name="edit_location">위치 보기</string>
+    <string name="str_price">가격</string>
+
+
+    <!--                  Edit: detail                  -->
+    <string name="edit_operating_hours_student_union">08:00 ~ 19:00</string>
+    <string name="edit_operating_hours_hs2">08:00 ~ 19:00</string>
+    <string name="edit_operating_hours_hs1">08:00 ~ 19:00</string>
+    <string name="edit_operating_hours_staff">08:00 ~ 09:00</string>
+    <string name="edit_price_staff">6,000원</string>
+    <string name="edit_price_hs1">5,500원</string>
+
+
+    <!--                  Description                  -->
+    <string name="desc_sch_map">순천향대 학교 지도</string>
     <string name="desc_logo">Sooncheonhyang Cafeteria Manager Logo</string>
+    <string name="desc_icon_today_menu">오늘의 학식 아이콘</string>
+    <string name="desc_map_pin">지도 링크 아이콘</string>
+
+
 </resources>
