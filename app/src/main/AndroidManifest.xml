@@ -10,11 +10,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SCM"
-        tools:targetApi="31" >
+        android:theme="@style/Theme.SCM">
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

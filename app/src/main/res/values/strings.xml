@@ -35,6 +35,11 @@
     <string name="desc_logo">Sooncheonhyang Cafeteria Manager Logo</string>
     <string name="desc_icon_today_menu">오늘의 학식 아이콘</string>
     <string name="desc_map_pin">지도 링크 아이콘</string>
+    <string name="str_monday">월요일</string>
+    <string name="str_tuseday">화요일</string>
+    <string name="str_wednesday">수요일</string>
+    <string name="str_thusday">목요일</string>
+    <string name="str_friday">금요일</string>
 
 
 </resources>

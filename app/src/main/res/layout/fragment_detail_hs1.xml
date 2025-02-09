@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -69,7 +70,7 @@
 
             <TextView
                 android:id="@+id/edit_operating_hours"
-                style="@style/AppTextText.15sp"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="20dp"
@@ -82,7 +83,7 @@
 
             <TextView
                 android:id="@+id/txt_notice"
-                style="@style/AppTextText.15sp"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="55dp"
@@ -103,6 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/str_location"
                 app:layout_constraintEnd_toStartOf="@id/edit_location"
                 app:layout_constraintStart_toStartOf="parent"
@@ -110,13 +112,13 @@
 
             <TextView
                 android:id="@+id/edit_location"
-                style="@style/AppTextText.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                style="@style/AppTextTitle.15sp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="70dp"
                 android:text="@string/edit_location"
                 app:layout_constraintBottom_toBottomOf="@id/txt_location"
-                app:layout_constraintEnd_toEndOf="@id/edit_operating_hours"
+                app:layout_constraintEnd_toEndOf="ic_map_pin"
                 app:layout_constraintStart_toStartOf="@id/edit_operating_hours"
                 app:layout_constraintTop_toTopOf="@id/txt_location" />
 
@@ -145,7 +147,7 @@
 
             <TextView
                 android:id="@+id/edit_price"
-                style="@style/AppTextText.15sp"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="20dp"
@@ -173,6 +175,80 @@
                 android:layout_height="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/line_2" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/blue_400"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/space_2"
+                app:tabBackground="@drawable/detail_menu_select"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:tabMode="scrollable"
+                app:tabTextAppearance="@style/AppTextTitle.15sp"
+                app:tabTextColor="@color/white">
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItem_Monday"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/str_monday" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItem_Tuseday"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/str_tuseday" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItem_Wednesday"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/str_wednesday" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItem_Thursday"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/str_thusday" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItem_Friday"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/str_friday" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <View
+                android:id="@+id/space_menu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/bluesky_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_detail_hs1_menu"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="20dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="@id/space_menu"
+                app:layout_constraintEnd_toEndOf="@id/space_menu"
+                app:layout_constraintStart_toStartOf="@id/space_menu"
+                app:layout_constraintTop_toTopOf="@id/space_menu"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_detail_menu"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

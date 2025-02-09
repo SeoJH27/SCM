@@ -26,6 +26,10 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="AppTextTitle.18sp">
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="AppTextTitle.23sp">
         <item name="android:textSize">23sp</item>
     </style>
@@ -34,16 +38,16 @@
         <item name="android:textSize">30sp</item>
     </style>
 
-    <!--                       AppTextText                       -->
-    <style name="AppTextText">
+    <!--                       AppTextBody                       -->
+    <style name="AppTextBody">
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="AppTextText.15sp">
+    <style name="AppTextBody.15sp">
         <item name="android:textSize">15sp</item>
     </style>
 
-    <style name="AppTextText.30sp">
+    <style name="AppTextBody.30sp">
         <item name="android:textSize">30sp</item>
     </style>
 

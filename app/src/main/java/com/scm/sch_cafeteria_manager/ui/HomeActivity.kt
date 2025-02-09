@@ -6,7 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.databinding.ActivityHomeBinding
 
-class MainActivity: AppCompatActivity() {
+class HomeActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
