@@ -40,7 +40,7 @@
     <string name="str_wednesday">수요일</string>
     <string name="str_thusday">목요일</string>
     <string name="str_friday">금요일</string>
-    <string name="str_app_inquiry">앱 문의하기</string>
+    <string name="str_app_inquiry"><u>앱 문의하기</u></string>
 
 
 </resources>

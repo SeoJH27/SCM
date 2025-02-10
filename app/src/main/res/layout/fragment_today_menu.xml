@@ -10,12 +10,81 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_today_menu"
+            android:id="@+id/tb_today_menu"
             style="@style/AppToolBar.Navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="오늘의 학식" />
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tl_today_memu"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabBackground="@drawable/todaymenu_menu_select"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextAppearance="@style/AppTextTitle.15sp"
+                app:tabTextColor="@color/black" />
+
+            <View
+                android:id="@+id/space_menu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/bluesky_10"
+                app:layout_constraintBottom_toTopOf="@id/txt_inquiry"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tl_today_memu" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_today_menu"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="20dp"
+                app:layout_constraintBottom_toBottomOf="@id/space_menu"
+                app:layout_constraintEnd_toEndOf="@id/space_menu"
+                app:layout_constraintStart_toStartOf="@id/space_menu"
+                app:layout_constraintTop_toTopOf="@id/space_menu"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_detail_menu"
+                tools:visibility="visible"
+                android:elevation="20dp"/>
+
+            <TextView
+                android:id="@+id/txt_inquiry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                style="@style/AppTextBody.10sp"
+                android:layout_marginVertical="5dp"
+                android:text="@string/str_app_inquiry"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/space_menu" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

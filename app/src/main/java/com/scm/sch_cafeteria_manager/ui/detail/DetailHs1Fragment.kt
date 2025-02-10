@@ -34,13 +34,13 @@ class DetailHs1Fragment : Fragment() {
         // TODO: 코드 정리
 
         with(binding) {
-            tabLayout.addTab(tabLayout.newTab().setText("월요일"))
-            tabLayout.addTab(tabLayout.newTab().setText("화요일"))
-            tabLayout.addTab(tabLayout.newTab().setText("수요일"))
-            tabLayout.addTab(tabLayout.newTab().setText("목요일"))
-            tabLayout.addTab(tabLayout.newTab().setText("금요일"))
+            tlDetailHs1.addTab(tlDetailHs1.newTab().setText("월요일"))
+            tlDetailHs1.addTab(tlDetailHs1.newTab().setText("화요일"))
+            tlDetailHs1.addTab(tlDetailHs1.newTab().setText("수요일"))
+            tlDetailHs1.addTab(tlDetailHs1.newTab().setText("목요일"))
+            tlDetailHs1.addTab(tlDetailHs1.newTab().setText("금요일"))
 
-            tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+            tlDetailHs1.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                 //TODO: 각 탭에 맞는 데이터를 세팅
                 //when(tab.position){

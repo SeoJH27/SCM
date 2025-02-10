@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
                 navigateTo("todaymenu")
             }
             txtLogin.setOnClickListener{
-                // TODO: 로그인 화면 Fragment로 할건지 Activity로 할건지 결정 후 작성
+                // TODO: LogindActivity로 이동
             }
         }
     }

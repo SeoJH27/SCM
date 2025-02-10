@@ -43,6 +43,10 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="AppTextBody.10sp">
+        <item name="android:textSize">10sp</item>
+    </style>
+
     <style name="AppTextBody.15sp">
         <item name="android:textSize">15sp</item>
     </style>
