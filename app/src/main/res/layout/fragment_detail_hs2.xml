@@ -70,7 +70,7 @@
 
             <TextView
                 android:id="@+id/edit_operating_hours"
-                style="@style/AppTextText.15sp"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginEnd="70dp"
@@ -82,7 +82,7 @@
 
             <TextView
                 android:id="@+id/txt_notice"
-                style="@style/AppTextText.15sp"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="55dp"
@@ -111,7 +111,7 @@
 
             <TextView
                 android:id="@+id/edit_location"
-                style="@style/AppTextText.15sp"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginEnd="70dp"
@@ -122,7 +122,7 @@
                 app:layout_constraintTop_toTopOf="@id/txt_location" />
 
             <ImageView
-                android:id="@+id/ic_map_pin"
+                android:id="@+id/btn_map_pin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"

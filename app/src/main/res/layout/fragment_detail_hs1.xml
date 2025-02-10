@@ -118,12 +118,11 @@
                 android:layout_marginEnd="70dp"
                 android:text="@string/edit_location"
                 app:layout_constraintBottom_toBottomOf="@id/txt_location"
-                app:layout_constraintEnd_toEndOf="ic_map_pin"
                 app:layout_constraintStart_toStartOf="@id/edit_operating_hours"
                 app:layout_constraintTop_toTopOf="@id/txt_location" />
 
             <ImageView
-                android:id="@+id/ic_map_pin"
+                android:id="@+id/btn_map_pin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -189,39 +188,16 @@
                 app:tabIndicatorHeight="0dp"
                 app:tabMode="scrollable"
                 app:tabTextAppearance="@style/AppTextTitle.15sp"
-                app:tabTextColor="@color/white">
+                app:tabTextColor="@color/white" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItem_Monday"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/str_monday" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItem_Tuseday"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/str_tuseday" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItem_Wednesday"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/str_wednesday" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItem_Thursday"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/str_thusday" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItem_Friday"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/str_friday" />
-
-            </com.google.android.material.tabs.TabLayout>
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_hs1_menu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout"/>
 
             <View
                 android:id="@+id/space_menu"
@@ -249,6 +225,15 @@
                 tools:itemCount="3"
                 tools:listitem="@layout/item_detail_menu"
                 tools:visibility="visible" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/str_app_inquiry"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/space_menu" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

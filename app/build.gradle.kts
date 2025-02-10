@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.scm.sch_cafeteria_manager"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.scm.sch_cafeteria_manager"
         minSdk = 33
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 

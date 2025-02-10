@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.scm.sch_cafeteria_manager.databinding.FragmentDetailStudentUnionBinding
 
 class DetailStudentUnionFragment : Fragment() {
@@ -21,6 +22,30 @@ class DetailStudentUnionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setLayout()
+        // TODO: 서버에서 메뉴 받아옴
+
+    }
+
+    private fun setLayout() {
+        setBackToHome()
+        binding.editLocation.setOnClickListener {
+            setLocationHyperLink()
+        }
+        binding.btnMapPin.setOnClickListener {
+            setLocationHyperLink()
+        }
+    }
+
+    private fun setBackToHome() {
+        binding.toolbarDetailStudentUnion.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun setLocationHyperLink() {
+        // TODO: 위치 하이퍼링크
     }
 
     override fun onDestroyView() {

@@ -17,15 +17,18 @@ class HomeActivity: AppCompatActivity() {
 
         setContentView(binding.root)
 
-        setNavigation()
+        supportFragmentManager.findFragmentById(R.id.container_home) as NavHostFragment
+
+
+        //setNavigation()
     }
 
-    private fun setNavigation() {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.container_home) as NavHostFragment
-
-        val navController = navHostFragment.navController
-
-    }
+//    private fun setNavigation() {
+//        val navHostFragment =
+//            supportFragmentManager.findFragmentById(R.id.container_home) as NavHostFragment
+//
+//        val navController = navHostFragment.navController
+//
+//    }
 
 }
