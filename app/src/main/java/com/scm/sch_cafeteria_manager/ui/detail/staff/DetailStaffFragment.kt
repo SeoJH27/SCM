@@ -1,4 +1,4 @@
-package com.scm.sch_cafeteria_manager.ui.detail
+package com.scm.sch_cafeteria_manager.ui.detail.staff
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.scm.sch_cafeteria_manager.databinding.FragmentDetailHs2Binding
+import com.scm.sch_cafeteria_manager.databinding.FragmentDetailStaffBinding
 
-class DetailHs2Fragment: Fragment() {
-    private var _binding: FragmentDetailHs2Binding? = null
+class DetailStaffFragment : Fragment() {
+    private var _binding: FragmentDetailStaffBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -25,6 +25,7 @@ class DetailHs2Fragment: Fragment() {
 
         setLayout()
         // TODO: 서버에서 메뉴 받아옴
+
     }
 
     private fun setLayout() {
@@ -37,8 +38,8 @@ class DetailHs2Fragment: Fragment() {
         }
     }
 
-    private fun setBackToHome() {
-        binding.toolbarDetailHs2.setNavigationOnClickListener {
+    private fun setBackToHome(){
+        binding.toolbarDetailStaff.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
     }
@@ -46,7 +47,6 @@ class DetailHs2Fragment: Fragment() {
     private fun setLocationHyperLink() {
         // TODO: 위치 하이퍼링크
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

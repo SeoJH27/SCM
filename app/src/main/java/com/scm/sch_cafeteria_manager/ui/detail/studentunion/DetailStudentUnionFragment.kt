@@ -1,4 +1,4 @@
-package com.scm.sch_cafeteria_manager.ui.detail
+package com.scm.sch_cafeteria_manager.ui.detail.studentunion
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.navigateUp
-import com.scm.sch_cafeteria_manager.databinding.FragmentDetailStaffBinding
+import com.scm.sch_cafeteria_manager.databinding.FragmentDetailStudentUnionBinding
 
-class DetailStaffFragment : Fragment() {
-    private var _binding: FragmentDetailStaffBinding? = null
+class DetailStudentUnionFragment : Fragment() {
+    private var _binding: FragmentDetailStudentUnionBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -39,8 +38,8 @@ class DetailStaffFragment : Fragment() {
         }
     }
 
-    private fun setBackToHome(){
-        binding.toolbarDetailStaff.setNavigationOnClickListener {
+    private fun setBackToHome() {
+        binding.toolbarDetailStudentUnion.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
     }

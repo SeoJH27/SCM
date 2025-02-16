@@ -29,22 +29,22 @@
 
     <fragment
         android:id="@+id/fragment_detail_hs1"
-        android:name="com.scm.sch_cafeteria_manager.ui.detail.DetailHs1Fragment"
+        android:name="com.scm.sch_cafeteria_manager.ui.detail.hs1.DetailHs1Fragment"
         android:label="Hs1Fragment"
         tools:layout="@layout/fragment_detail_hs1" />
     <fragment
         android:id="@+id/fragment_detail_hs2"
-        android:name="com.scm.sch_cafeteria_manager.ui.detail.DetailHs2Fragment"
+        android:name="com.scm.sch_cafeteria_manager.ui.detail.hs2.DetailHs2Fragment"
         android:label="DetailHs2Fragment"
         tools:layout="@layout/fragment_detail_hs2" />
     <fragment
         android:id="@+id/fragment_detail_staff"
-        android:name="com.scm.sch_cafeteria_manager.ui.detail.DetailStaffFragment"
+        android:name="com.scm.sch_cafeteria_manager.ui.detail.staff.DetailStaffFragment"
         android:label="DetailStaffFragment"
         tools:layout="@layout/fragment_detail_staff" />
     <fragment
         android:id="@+id/fragment_detail_student_union"
-        android:name="com.scm.sch_cafeteria_manager.ui.detail.DetailStudentUnionFragment"
+        android:name="com.scm.sch_cafeteria_manager.ui.detail.studentunion.DetailStudentUnionFragment"
         android:label="DetailStudentUnionFragment"
         tools:layout="@layout/fragment_detail_student_union" />
 

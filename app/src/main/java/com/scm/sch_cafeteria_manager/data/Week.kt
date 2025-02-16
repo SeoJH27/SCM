@@ -4,6 +4,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Week(
+    val dailyMealPlans: List<Daily>
+): Parcelable
+
+
+@Parcelize
+data class Daily(
     val dayOfWeek: String,
     val meals: List<Meal>
 ): Parcelable
