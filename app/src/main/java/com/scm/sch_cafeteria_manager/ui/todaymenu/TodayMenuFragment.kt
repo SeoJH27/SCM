@@ -1,12 +1,14 @@
 package com.scm.sch_cafeteria_manager.ui.todaymenu
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
+import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.TodayMenu
 import com.scm.sch_cafeteria_manager.data.dummy
 import com.scm.sch_cafeteria_manager.databinding.FragmentTodayMenuBinding
@@ -16,9 +18,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Objects.isNull
 
-class TodayMenuFragment : Fragment() {
+class TodayMenuFragment : Fragment(R.layout.fragment_today_menu), TodayMenuItemClickListener {
     private var _binding: FragmentTodayMenuBinding? = null
     private val binding get() = _binding!!
+
     private var TODAYMENU: TodayMenu? = null // JSON 데이터를 저장할 변수
 
     override fun onCreateView(
@@ -57,48 +60,68 @@ class TodayMenuFragment : Fragment() {
         }
     }
 
-    //TODO: 코드 정리
     private fun setLayout() {
 
         //TODO: Test
         TODAYMENU = dummy.tmDummy
 
+        setTab()
+        viewClickListener()
+        setBackToHome()
+    }
+
+    private fun setTab() {
         with(binding) {
-            tlTodayMemu.addTab(tlTodayMemu.newTab().setText("향설 1관"))
-            tlTodayMemu.addTab(tlTodayMemu.newTab().setText("향설 2관"))
+            tlTodayMemu.addTab(tlTodayMemu.newTab().setText("향설1"))
+            tlTodayMemu.addTab(tlTodayMemu.newTab().setText("향설2"))
             tlTodayMemu.addTab(tlTodayMemu.newTab().setText("학생회관"))
             tlTodayMemu.addTab(tlTodayMemu.newTab().setText("교직원 식당"))
-
-            tlTodayMemu.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    if (isNull(TODAYMENU)) {
-                        throw IllegalArgumentException("TODAYMENU is Null")
-                    } else {
-                        //TODO: 각 탭에 맞는 데이터를 세팅
-                        when (tab!!.position) {
-                            0 -> rvTodayMenu.adapter =
-                                TodayMenuListAdapter(TODAYMENU!!, "향설1관") // 향설 1관 Tab을 눌렸을 경우
-                            1 -> rvTodayMenu.adapter =
-                                TodayMenuListAdapter(TODAYMENU!!, "향설2관")  // 향설 2관
-                            2 -> rvTodayMenu.adapter =
-                                TodayMenuListAdapter(TODAYMENU!!, "학생회관")  // 학생회관
-                            3 -> rvTodayMenu.adapter =
-                                TodayMenuListAdapter(TODAYMENU!!, "교직원 식당")  // 교직원 식당
-                            else -> throw IllegalArgumentException("Invalid button config: $tab")
-                        }
-                    }
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab?) {}
-                override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            })
         }
+        // init tab
+        connectAdapter("향설1")
+    }
 
+    private fun viewClickListener() {
+        binding.tlTodayMemu.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                clickTab(tab)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                clickTab(tab)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                connectAdapter("향설1")
+            }
+        })
+    }
+
+    private fun clickTab(tab: TabLayout.Tab?) {
+        if (tab == null) {
+            Log.e("RecyclerView Tab Error", "Tab이 없음")
+            return
+        }
+        when (tab.position) {
+            0 -> connectAdapter("향설1") // 향설 1관 Tab을 눌렸을 경우
+            1 -> connectAdapter("항설2")
+            2 -> connectAdapter("학생회관")
+            3 -> connectAdapter("교직원 식당")
+            else -> throw IllegalArgumentException("Invalid button config: $tab")
+        }
+    }
+
+    private fun connectAdapter(cf: String) {
+        Log.e("TodayMenuFragment", "connectAdapter")
+        binding.rvTodayMenu.adapter =
+            TodayMenuListAdapter(TODAYMENU!!, cf, this)
+    }
+
+    private fun setBackToHome() {
         binding.tbTodayMenu.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

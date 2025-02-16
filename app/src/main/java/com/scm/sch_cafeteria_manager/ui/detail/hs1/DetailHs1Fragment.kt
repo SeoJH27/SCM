@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.DetailMenu
@@ -22,7 +21,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1), DetailHs1ItemC
     private var _binding: FragmentDetailHs1Binding? = null
     private val binding get() = _binding!!
 
-    private var HS1: DetailMenu? = null
+    private var HS1: DetailMenu? = null // JSON 데이터를 저장할 변수
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +34,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1), DetailHs1ItemC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // TODO: test가 끝나면 변경 - fetchData -> setLayout 순
         setLayout()
     }
 
@@ -81,7 +81,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1), DetailHs1ItemC
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    connectAdaper("월요일")
+                    connectAdapter("월요일")
                 }
             })
             csLocation.setOnClickListener {
@@ -99,7 +99,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1), DetailHs1ItemC
             tlDetailHs1.addTab(tlDetailHs1.newTab().setText("금요일"))
         }
         // init tab
-        connectAdaper("월요일")
+        connectAdapter("월요일")
     }
 
     private fun clickTab(tab: TabLayout.Tab?) {
@@ -108,18 +108,18 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1), DetailHs1ItemC
             return
         }
         when (tab.position) {
-            0 -> connectAdaper("월요일")
-            1 -> connectAdaper("화요일")
-            2 -> connectAdaper("수요일")
-            3 -> connectAdaper("목요일")
-            4 -> connectAdaper("금요일")
+            0 -> connectAdapter("월요일")
+            1 -> connectAdapter("화요일")
+            2 -> connectAdapter("수요일")
+            3 -> connectAdapter("목요일")
+            4 -> connectAdapter("금요일")
             else -> throw IllegalArgumentException("Invalid button config: $tab")
         }
     }
 
-    private fun connectAdaper(weekly: String) {
+    private fun connectAdapter(weekly: String) {
         binding.rvDetailHs1Menu.adapter =
-            DetailHs1ListAdapter(HS1!!, weekly, this@DetailHs1Fragment)
+            DetailHs1ListAdapter(HS1!!, weekly, this)
     }
 
     private fun setBackToHome() {

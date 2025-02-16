@@ -7,14 +7,17 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_detail_hs1"
             style="@style/AppToolBar.ImageNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/img_hs1" />
+            android:background="@drawable/img_hs1"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -22,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -70,7 +73,7 @@
 
             <TextView
                 android:id="@+id/edit_operating_hours"
-                style="@style/AppTextBody.15sp"
+                style="@style/AppTextBody"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="20dp"
@@ -83,13 +86,13 @@
 
             <TextView
                 android:id="@+id/txt_notice"
-                style="@style/AppTextBody.15sp"
+                style="@style/AppTextBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="55dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/red_10"
-                android:paddingHorizontal="20dp"
+                android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp"
                 android:text="@string/str_notice"
                 android:textAlignment="center"
@@ -136,12 +139,11 @@
                 android:id="@+id/cs_location"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintStart_toStartOf="@id/edit_location"
-                app:layout_constraintEnd_toEndOf="@id/btn_map_pin"
-                app:layout_constraintTop_toTopOf="@id/edit_location"
-                app:layout_constraintBottom_toBottomOf="@id/btn_map_pin"
                 android:background="@color/transparency"
-                />
+                app:layout_constraintBottom_toBottomOf="@id/btn_map_pin"
+                app:layout_constraintEnd_toEndOf="@id/btn_map_pin"
+                app:layout_constraintStart_toStartOf="@id/edit_location"
+                app:layout_constraintTop_toTopOf="@id/edit_location" />
 
             <TextView
                 android:id="@+id/txt_price"
@@ -219,21 +221,21 @@
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp"
                 android:paddingTop="20dp"
-                tools:listitem="@layout/item_detail_menu"
-                tools:itemCount="3"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="@id/space_menu"
                 app:layout_constraintEnd_toEndOf="@id/space_menu"
                 app:layout_constraintStart_toStartOf="@id/space_menu"
-                app:layout_constraintTop_toTopOf="@id/space_menu" />
+                app:layout_constraintTop_toTopOf="@id/space_menu"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_detail_menu" />
 
             <TextView
                 android:id="@+id/txt_inquiry"
+                style="@style/AppTextBody.10sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                style="@style/AppTextBody.10sp"
                 android:layout_marginVertical="5dp"
+                android:gravity="center"
                 android:text="@string/str_app_inquiry"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

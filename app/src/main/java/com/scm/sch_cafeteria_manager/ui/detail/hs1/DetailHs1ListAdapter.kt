@@ -10,7 +10,7 @@ import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
 
 class DetailHs1ListAdapter(
-    private val items: DetailMenu,
+    items: DetailMenu,
     private val dayOfWeek: String,
     private val listener: DetailHs1ItemClickListener
 ) : RecyclerView.Adapter<DetailHs1ItemViewHolder>() {
@@ -21,14 +21,13 @@ class DetailHs1ListAdapter(
         items.weekMealPlans.dailyMealPlans.forEach {
             if (it.dayOfWeek == dayOfWeek) {
                 MEAL = it.meals
+                return@forEach
             }
         }
     }
 
     // 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailHs1ItemViewHolder {
-        Log.e("DetailHs1ListAdapter", "onCreateViewHolder")
-
         if (MEAL.isEmpty()) {
             Log.e("DetailHs1ListAdapter", "데이터가 없습니다.")
         }
@@ -38,7 +37,6 @@ class DetailHs1ListAdapter(
 
     //할당
     override fun onBindViewHolder(holder: DetailHs1ItemViewHolder, position: Int) {
-        Log.e("DetailHs1ListAdapter", "onBindViewHolder")
         holder.bind(
             MEAL.get(position), listener
         )
@@ -60,7 +58,8 @@ class DetailHs1ItemViewHolder(
 
         with(binding) {
             txtTime.text = meal.mealType
-            txtMenu.text = meal.mainMenu.replaceCommaToLinebreak()
+            txtMenu.text =
+                meal.mainMenu.replaceCommaToLinebreak() + "\n" + meal.subMenu.replaceCommaToLinebreak()
         }
     }
 
