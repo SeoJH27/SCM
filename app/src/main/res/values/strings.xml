@@ -5,7 +5,7 @@
     <string name="str_staff">교직원 식당</string>
     <string name="str_hs2">향설 2관</string>
     <string name="str_student_union">학생회관</string>
-
+    <string name="str_app_inquiry"><u>앱 문의 하기</u></string>
 
     <!--                  Label: home                  -->
     <string name="str_choose_cafeteria">원하는 식당을 선택하세요!</string>
@@ -35,12 +35,13 @@
     <string name="desc_logo">Sooncheonhyang Cafeteria Manager Logo</string>
     <string name="desc_icon_today_menu">오늘의 학식 아이콘</string>
     <string name="desc_map_pin">지도 링크 아이콘</string>
-    <string name="str_monday">월요일</string>
-    <string name="str_tuseday">화요일</string>
-    <string name="str_wednesday">수요일</string>
-    <string name="str_thusday">목요일</string>
-    <string name="str_friday">금요일</string>
-    <string name="str_app_inquiry"><u>앱 문의하기</u></string>
+    <string name="desc_detail_hs1_tab">향설 1관 메뉴 탭 바</string>
+    <string name="str_login_title">관리자 로그인</string>
+    <string name="str_id">아이디</string>
+    <string name="str_id_eng">ID</string>
+    <string name="str_password">비밀번호</string>
+    <string name="str_password_eng">password</string>
+    <string name="str_login">로그인</string>
 
 
 </resources>

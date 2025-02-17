@@ -3,8 +3,10 @@ package com.scm.sch_cafeteria_manager.ui.detail.hs1
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
@@ -87,6 +89,9 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1), DetailHs1ItemC
             csLocation.setOnClickListener {
                 setLocationHyperLink()
             }
+            txtInquiry.setOnClickListener {
+                setInquiryLink()
+            }
         }
     }
 
@@ -131,6 +136,11 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1), DetailHs1ItemC
     private fun setLocationHyperLink() {
         // TODO: 위치 하이퍼링크
         Log.e("DetailHs1Fragment", "setLocationHyperLink")
+    }
+
+    private fun setInquiryLink() {
+        // TODO: 카카오톡 오픈채팅방 하이퍼링크
+        Log.e("DetailHs1Fragment", "setInquiryLink")
     }
 
     override fun onDestroyView() {

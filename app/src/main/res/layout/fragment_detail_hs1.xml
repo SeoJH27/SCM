@@ -193,6 +193,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/blue_400"
+                android:contentDescription="@string/desc_detail_hs1_tab"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/space_2"
@@ -232,7 +233,7 @@
             <TextView
                 android:id="@+id/txt_inquiry"
                 style="@style/AppTextBody.10sp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
                 android:gravity="center"
@@ -240,7 +241,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/space_menu" />
+                app:layout_constraintTop_toBottomOf="@id/space_menu"
+                android:clickable="false"
+                android:focusable="false"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

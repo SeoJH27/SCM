@@ -7,8 +7,10 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Headers
 
 interface ApiService_TM {
+    @Headers("Content-Type: application/json")
     @GET("user.json") // TODO: 방식 설정
     suspend fun getTodayMenu(): TodayMenu
 }

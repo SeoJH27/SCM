@@ -1,4 +1,4 @@
-package com.scm.sch_cafeteria_manager.ui
+package com.scm.sch_cafeteria_manager.ui.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -14,21 +14,8 @@ class HomeActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding= ActivityHomeBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
         supportFragmentManager.findFragmentById(R.id.container_home) as NavHostFragment
-
-
-        //setNavigation()
     }
-
-//    private fun setNavigation() {
-//        val navHostFragment =
-//            supportFragmentManager.findFragmentById(R.id.container_home) as NavHostFragment
-//
-//        val navController = navHostFragment.navController
-//
-//    }
-
 }
