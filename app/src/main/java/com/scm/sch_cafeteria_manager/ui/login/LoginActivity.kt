@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
     private fun login(id: String, password: String) {
         val request = loginRequest(id, password)
 
-        Retrofit_Login.getInstance(this).login(request).enqueue(object : Callback<loginResponse> {
+        Retrofit_Login.getInstance(this@LoginActivity).login(request).enqueue(object : Callback<loginResponse> {
             override fun onResponse(call: Call<loginResponse>, response: Response<loginResponse>) {
                 val statusCode = response.code()
                 Log.e("LoginActivity", "Response Code: $statusCode")

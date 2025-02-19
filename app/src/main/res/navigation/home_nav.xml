@@ -12,46 +12,47 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/home_to_hs1"
-            app:destination="@id/fragment_detail_hs1" />
+            app:destination="@id/fragmentDetailHs1" />
         <action
             android:id="@+id/home_to_hs2"
-            app:destination="@id/fragment_detail_hs2" />
+            app:destination="@id/fragmentDetailHs2" />
         <action
             android:id="@+id/home_to_student_union"
-            app:destination="@id/fragment_detail_student_union" />
+            app:destination="@id/fragmentDetailStudentUnion" />
         <action
             android:id="@+id/home_to_staff"
-            app:destination="@id/fragment_detail_staff" />
+            app:destination="@id/fragmentDetailStaff" />
         <action
             android:id="@+id/home_to_today_menu"
-            app:destination="@id/fragment_today_menu" />
+            app:destination="@id/fragmentTodayMenu" />
     </fragment>
 
     <fragment
-        android:id="@+id/fragment_detail_hs1"
+        android:id="@+id/fragmentDetailHs1"
         android:name="com.scm.sch_cafeteria_manager.ui.detail.hs1.DetailHs1Fragment"
         android:label="Hs1Fragment"
         tools:layout="@layout/fragment_detail_hs1" />
     <fragment
-        android:id="@+id/fragment_detail_hs2"
+        android:id="@+id/fragmentDetailHs2"
         android:name="com.scm.sch_cafeteria_manager.ui.detail.hs2.DetailHs2Fragment"
         android:label="DetailHs2Fragment"
         tools:layout="@layout/fragment_detail_hs2" />
     <fragment
-        android:id="@+id/fragment_detail_staff"
+        android:id="@+id/fragmentDetailStaff"
         android:name="com.scm.sch_cafeteria_manager.ui.detail.staff.DetailStaffFragment"
         android:label="DetailStaffFragment"
         tools:layout="@layout/fragment_detail_staff" />
     <fragment
-        android:id="@+id/fragment_detail_student_union"
+        android:id="@+id/fragmentDetailStudentUnion"
         android:name="com.scm.sch_cafeteria_manager.ui.detail.studentunion.DetailStudentUnionFragment"
         android:label="DetailStudentUnionFragment"
         tools:layout="@layout/fragment_detail_student_union" />
 
     <fragment
-        android:id="@+id/fragment_today_menu"
+        android:id="@+id/fragmentTodayMenu"
         android:name="com.scm.sch_cafeteria_manager.ui.todaymenu.TodayMenuFragment"
         android:label="TodayMenuFragment"
         tools:layout="@layout/fragment_today_menu"/>
+
 
 </navigation>

@@ -3,7 +3,7 @@ package com.scm.sch_cafeteria_manager.util
 import android.content.Context
 import com.scm.sch_cafeteria_manager.data.loginRequest
 import com.scm.sch_cafeteria_manager.data.loginResponse
-import okhttp3.Authenticator
+import com.scm.sch_cafeteria_manager.ui.login.LoginActivity
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -13,7 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
-import
 
 interface ApiService_login {
     @Headers("Content-Type: application/json")
@@ -29,7 +28,7 @@ object Retrofit_Login {
             .addInterceptor(AuthInterceptor(context)) //Authorization 헤더 자동 추가
             .build()
     }
-    fun getInstance(context: Context):ApiService_login{
+    fun getInstance(context: LoginActivity):ApiService_login{
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(createOkHttpClient(context))

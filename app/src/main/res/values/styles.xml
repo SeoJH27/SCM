@@ -51,8 +51,19 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="AppTextBody.20sp">
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="AppTextBody.30sp">
         <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="btnStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_btn</item>
+        <item name="android:textAppearance">@style/AppTextTitle.18sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
 </resources>

@@ -6,6 +6,9 @@
     <string name="str_hs2">향설 2관</string>
     <string name="str_student_union">학생회관</string>
     <string name="str_app_inquiry"><u>앱 문의 하기</u></string>
+    <string name="str_master">MASTER</string>
+    <string name="str_total_admin">총 관리자</string>
+
 
     <!--                  Label: home                  -->
     <string name="str_choose_cafeteria">원하는 식당을 선택하세요!</string>
@@ -30,18 +33,47 @@
     <string name="edit_price_hs1">5,500원</string>
 
 
-    <!--                  Description                  -->
-    <string name="desc_sch_map">순천향대 학교 지도</string>
-    <string name="desc_logo">Sooncheonhyang Cafeteria Manager Logo</string>
-    <string name="desc_icon_today_menu">오늘의 학식 아이콘</string>
-    <string name="desc_map_pin">지도 링크 아이콘</string>
-    <string name="desc_detail_hs1_tab">향설 1관 메뉴 탭 바</string>
+    <!--                  Label: login                  -->
     <string name="str_login_title">관리자 로그인</string>
     <string name="str_id">아이디</string>
     <string name="str_id_eng">ID</string>
     <string name="str_password">비밀번호</string>
     <string name="str_password_eng">password</string>
     <string name="str_login">로그인</string>
+
+
+    <!--                  Label: admin                  -->
+    <string name="str_monday">월요일</string>
+    <string name="str_tusday">화요일</string>
+    <string name="str_wednesday">수요일</string>
+    <string name="str_thursday">목요일</string>
+    <string name="str_friday">금요일</string>
+    <string name="str_open_time">고정 오픈 시간:</string>
+    <string name="str_swung_dash">~</string>
+    <string name="str_logout"><u>로그아웃 하기</u></string>
+    <string name="str_today_date_and_time">1/2일 조식</string>
+    <string name="str_early_closed">조기 마감하기</string>
+    <string name="str_regist_week_menu">일주일 치 등록</string>
+    <string name="str_fine_tuning">세부 조정</string>
+    <string name="str_change_open_time">운영 시간 변경</string>
+    <string name="str_shoot">촬영하여 등록</string>
+    <string name="str_breakfast">조식</string>
+    <string name="str_lunch">중식</string>
+    <string name="str_dinner">석식</string>
+    <string name="str_save">저장</string>
+    <string name="str_week">일주일</string>
+
+
+    <!--                  Description                  -->
+    <string name="desc_sch_map">순천향대 학교 지도</string>
+    <string name="desc_logo">Sooncheonhyang Cafeteria Manager Logo</string>
+    <string name="desc_icon_today_menu">오늘의 학식 아이콘</string>
+    <string name="desc_map_pin">지도 링크 아이콘</string>
+    <string name="desc_detail_hs1_tab">향설 1관 메뉴 탭 바</string>
+    <string name="desc_img_staff">교직원 식당 식단표 사진</string>
+    <string name="desc_img_hs1">향설 1관 식단표 사진</string>
+
+
 
 
 </resources>
