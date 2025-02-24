@@ -6,14 +6,17 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.data.loginRequest
 import com.scm.sch_cafeteria_manager.data.loginResponse
 import com.scm.sch_cafeteria_manager.databinding.ActivityLoginBinding
 import com.scm.sch_cafeteria_manager.ui.admin.AdminActivity
+import com.scm.sch_cafeteria_manager.ui.home.HomeActivity
 import com.scm.sch_cafeteria_manager.util.Retrofit_Login
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Body
 
 
 //TODO: TEST!!!!!
@@ -28,29 +31,39 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         with(binding) {
-            btnLoginConfirm.setOnClickListener {
-                val id = editLoginId.text.toString()
-                val password = editLoginPassword.text.toString()
-
-                //TODO: 서버로 보내서 인증 -> Test 필요
-                if (id.isEmpty() && password.isEmpty()) {
-                    Toast.makeText(this@LoginActivity, "아이디 혹은 비밀번호를 입력하세요.", Toast.LENGTH_LONG)
-                        .show()
-                } else if (id.length > 4 && password.length < 4) {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "아이디 혹은 비밀번호가 4자리 이상이어야 합니다.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                } else {
-                    login(id, password)
-
-                }
-            }
 
             if (isAdminLoggedIn()) {
                 startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
                 finish()
+            }
+            btnLoginConfirm.setOnClickListener {
+
+                //화면 테스트
+                startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
+                finish()
+
+//                val id = editLoginId.text.toString()
+//                val password = editLoginPassword.text.toString()
+//
+//                //TODO: 서버로 보내서 인증 -> Test 필요
+//                if (id.isEmpty() && password.isEmpty()) {
+//                    Toast.makeText(this@LoginActivity, "아이디 혹은 비밀번호를 입력하세요.", Toast.LENGTH_LONG)
+//                        .show()
+//                } else if (id.length > 4 && password.length < 4) {
+//                    Toast.makeText(
+//                        this@LoginActivity,
+//                        "아이디 혹은 비밀번호가 4자리 이상이어야 합니다.",
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                } else {
+//                    login(id, password)
+//
+//                }
+            }
+
+            // 뒤로가기
+            appbarLogin.setNavigationOnClickListener {
+                backDialog()
             }
         }
     }
@@ -64,32 +77,48 @@ class LoginActivity : AppCompatActivity() {
     private fun login(id: String, password: String) {
         val request = loginRequest(id, password)
 
-        Retrofit_Login.getInstance(this@LoginActivity).login(request).enqueue(object : Callback<loginResponse> {
-            override fun onResponse(call: Call<loginResponse>, response: Response<loginResponse>) {
-                val statusCode = response.code()
-                Log.e("LoginActivity", "Response Code: $statusCode")
+        Retrofit_Login.getInstance(this@LoginActivity).login(request)
+            .enqueue(object : Callback<loginResponse> {
+                override fun onResponse(
+                    call: Call<loginResponse>,
+                    response: Response<loginResponse>
+                ) {
+                    val statusCode = response.code()
+                    Log.e("LoginActivity", "Response Code: $statusCode")
 
-                if (statusCode == 200) {
-                    val headers = response.headers()
-                    val accessTk = headers["Authorization"]?.replace("Bearer ", "")
-                    val refreshTk = extraRefreshToken(headers)
+                    if (statusCode == 200) {
+                        val headers = response.headers()
+                        val accessTk = headers["Authorization"]?.replace("Bearer ", "")
+                        val refreshTk = extraRefreshToken(headers)
+                        val authority = response.message()
 
-                    if(!accessTk.isNullOrEmpty() && !refreshTk.isNullOrEmpty()){
-                        saveTokens(accessTk, refreshTk)
-                        Toast.makeText(this@LoginActivity, "Login Successful", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
-                        finish()
-                    }else{
-                        //TODO: 사용자 입장에서 처리 간편하게
-                        Toast.makeText(this@LoginActivity, "Tokens missing in response", Toast.LENGTH_LONG).show()
+                        if (!accessTk.isNullOrEmpty() && !refreshTk.isNullOrEmpty()) {
+                            saveTokens(accessTk, refreshTk)
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Login Successful",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
+                            finish()
+                        } else {
+                            //TODO: 사용자 입장에서 처리 간편하게
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Tokens missing in response",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else if (statusCode == 401) {
+                        val errorResponse = response.body()?.error ?: "Unauthorized access"
+                        Toast.makeText(this@LoginActivity, errorResponse, Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Unexpected Error: $statusCode",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
-                }
-                else if(statusCode==401){
-                    val errorResponse = response.body()?.error ?: "Unauthorized access"
-                    Toast.makeText(this@LoginActivity, errorResponse, Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(this@LoginActivity, "Unexpected Error: $statusCode", Toast.LENGTH_LONG).show()
-                }
 
 
 //                if (response.isSuccessful) {
@@ -109,14 +138,18 @@ class LoginActivity : AppCompatActivity() {
 //                        Log.e("LoginActivity", "API_ERROR: Error parsing response", e)
 //                    }
 //                }
-            }
+                }
 
-            override fun onFailure(call: Call<loginResponse>, t: Throwable) {
-                Toast.makeText(this@LoginActivity, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                Log.e("LoginActivity", "Network Error")
-            }
+                override fun onFailure(call: Call<loginResponse>, t: Throwable) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Network Error: ${t.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("LoginActivity", "Network Error")
+                }
 
-        })
+            })
     }
 
     private fun extraRefreshToken(headers: okhttp3.Headers): String? {
@@ -139,10 +172,23 @@ class LoginActivity : AppCompatActivity() {
     // Preference에 Token들 저장
     private fun saveTokens(accessTk: String, refreshTk: String) {
         val prefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        prefs.edit().apply{
+        prefs.edit().apply {
             putString("accessToken", accessTk)
             putString("refreshToken", refreshTk)
             apply()
         }
+    }
+
+    private fun backDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setMessage("뒤로가기 시 로그아웃 됩니다.\n홈 화면으로 돌아가시겠습니까?")
+            .setNegativeButton("취소") { dialog, which ->
+                // 취소 시 아무 액션 없음
+            }
+            .setPositiveButton("확인") { dialog, which ->
+                startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                finish()
+            }
+            .show()
     }
 }

@@ -1,5 +1,6 @@
 package com.scm.sch_cafeteria_manager.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.scm.sch_cafeteria_manager.databinding.FragmentHomeBinding
+import com.scm.sch_cafeteria_manager.ui.login.LoginActivity
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -41,9 +43,14 @@ class HomeFragment : Fragment() {
                 navigateTo("todaymenu")
             }
             txtLogin.setOnClickListener{
-                // TODO: LogindActivity로 이동
+                toLogin()
             }
         }
+    }
+
+    private fun toLogin() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        startActivity(intent)
     }
 
     private fun navigateTo(destination: String) {

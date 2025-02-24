@@ -38,7 +38,6 @@
                 style="@style/btnStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:text="@string/str_week"
                 app:backgroundTint="@color/grey_100"
                 app:layout_constraintBottom_toTopOf="@id/img_master_hs1"
