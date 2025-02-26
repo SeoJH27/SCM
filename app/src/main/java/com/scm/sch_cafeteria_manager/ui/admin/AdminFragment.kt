@@ -38,7 +38,7 @@ class AdminFragment : Fragment() {
 
         setManageDay(weeks)
 
-
+ 
         // TODO:
         //  1. 첫 화면에 주일 계산 필요 **
         //  2. 권한 별 접근 제한 필요

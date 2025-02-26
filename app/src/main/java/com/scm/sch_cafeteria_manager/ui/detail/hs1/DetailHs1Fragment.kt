@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
@@ -37,34 +38,35 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1), DetailHs1ItemC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // TODO: test가 끝나면 변경 - fetchData -> setLayout 순
+        fetchData(view)
         setLayout()
     }
 
     // 네트워크 통신 -> 코루틴으로 제어
     private fun fetchData(view: View) {
 
-        //TODO: Progressbar 생성
-        //progressBar.visibility = View.VISIBLE
+        binding.prograssbar.visibility = View.VISIBLE
 
         CoroutineScope(Dispatchers.Main).launch {
-            HS1 = fetchDetailMenu() // Retrofit에서 데이터 가져오기
+            HS1 = fetchDetailMenu(true) // Retrofit에서 데이터 가져오기 (true: hs1)
 
             if (HS1 != null) {
                 //TODO: 데이터 배치 (오류 처리 포함)
-                //updateUI(view, todayMenu!!)
+                setLayout()
             } else {
                 // TODO: 데이터를 불러올 수 없다는 알림과 함께 Back
-                //textView.text = "데이터를 불러올 수 없습니다."
+                Log.e("DetailHs1Fragment", "Network Error")
+                setBackToHome()
             }
 
-            //progressBar.visibility = View.GONE
+            binding.prograssbar.visibility = View.GONE
         }
     }
 
     private fun setLayout() {
 
         // TODO: 서버에서 메뉴 받아옴 (HS1가 null일 시에도 처리)
-        HS1 = dummy.dDummy
+        //HS1 = dummy.dDummy
 
         setTab()
         viewClickListener()
