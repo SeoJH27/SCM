@@ -51,7 +51,8 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="30dp"                android:background="@drawable/bg_admin_background"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/bg_admin_background"
                 app:layout_constraintBottom_toBottomOf="@id/space_dinner_menu_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -65,9 +66,9 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
                 android:text="@string/str_change_open_time"
+                app:layout_constraintBottom_toTopOf="@id/view_breakfast_menu"
                 app:layout_constraintStart_toStartOf="@id/background_view"
-                app:layout_constraintTop_toTopOf="@id/background_view"
-                app:layout_constraintBottom_toTopOf="@id/view_breakfast_menu"/>
+                app:layout_constraintTop_toTopOf="@id/background_view" />
 
             <EditText
                 android:id="@+id/edit_breakfast_open_time_start"
@@ -118,16 +119,16 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toTopOf="@id/edit_breakfast_menu"
                 app:layout_constraintEnd_toEndOf="@id/edit_breakfast_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
-                app:layout_constraintTop_toBottomOf="@id/txt_change_time_breakfast"
-                app:layout_constraintBottom_toTopOf="@id/edit_breakfast_menu"/>
+                app:layout_constraintTop_toBottomOf="@id/txt_change_time_breakfast" />
 
             <TextView
+                style="@style/AppTextTitle.18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/str_breakfast"
-                style="@style/AppTextTitle.18sp"
                 app:layout_constraintBottom_toBottomOf="@id/view_breakfast_menu"
                 app:layout_constraintEnd_toEndOf="@id/txt_change_time_breakfast"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
@@ -139,8 +140,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:textAlignment="center"
                 android:padding="10dp"
+                android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@id/view_breakfast_menu"
                 app:layout_constraintEnd_toEndOf="@id/view_breakfast_menu"
                 app:layout_constraintStart_toStartOf="@id/edit_breakfast_open_time_start"
@@ -166,9 +167,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/str_change_open_time"
+                app:layout_constraintBottom_toTopOf="@id/view_lunch_menu"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
-                app:layout_constraintTop_toBottomOf="@+id/line_1"
-                app:layout_constraintBottom_toTopOf="@id/view_lunch_menu"/>
+                app:layout_constraintTop_toBottomOf="@+id/line_1" />
 
             <EditText
                 android:id="@+id/edit_lunch_open_time_start"
@@ -219,16 +220,16 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toTopOf="@id/edit_lunch_menu"
                 app:layout_constraintEnd_toEndOf="@id/edit_lunch_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
-                app:layout_constraintTop_toBottomOf="@id/txt_change_time_lunch"
-                app:layout_constraintBottom_toTopOf="@id/edit_lunch_menu"/>
+                app:layout_constraintTop_toBottomOf="@id/txt_change_time_lunch" />
 
             <TextView
+                style="@style/AppTextTitle.18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/str_lunch"
-                style="@style/AppTextTitle.18sp"
                 app:layout_constraintBottom_toBottomOf="@id/view_lunch_menu"
                 app:layout_constraintEnd_toEndOf="@id/txt_change_time_lunch"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
@@ -240,8 +241,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:textAlignment="center"
                 android:padding="10dp"
+                android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@id/view_lunch_menu"
                 app:layout_constraintEnd_toEndOf="@id/view_lunch_menu"
                 app:layout_constraintStart_toStartOf="@id/edit_lunch_open_time_start"
@@ -266,9 +267,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/str_change_open_time"
+                app:layout_constraintBottom_toTopOf="@id/view_dinner_menu"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
-                app:layout_constraintTop_toBottomOf="@+id/line_2"
-                app:layout_constraintBottom_toTopOf="@id/view_dinner_menu"/>
+                app:layout_constraintTop_toBottomOf="@+id/line_2" />
 
             <EditText
                 android:id="@+id/edit_dinner_open_time_start"
@@ -319,16 +320,16 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toBottomOf="@id/background_view"
                 app:layout_constraintEnd_toEndOf="@id/edit_dinner_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_dinner"
-                app:layout_constraintTop_toBottomOf="@id/txt_change_time_dinner"
-                app:layout_constraintBottom_toBottomOf="@id/background_view"/>
+                app:layout_constraintTop_toBottomOf="@id/txt_change_time_dinner" />
 
             <TextView
+                style="@style/AppTextTitle.18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/str_dinner"
-                style="@style/AppTextTitle.18sp"
                 app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
                 app:layout_constraintEnd_toEndOf="@id/txt_change_time_lunch"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_dinner"
@@ -340,8 +341,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:textAlignment="center"
                 android:padding="10dp"
+                android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
                 app:layout_constraintEnd_toEndOf="@id/view_dinner_menu"
                 app:layout_constraintStart_toStartOf="@id/edit_dinner_open_time_start"
@@ -360,15 +361,26 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_upload_all_menu"
                 style="@style/btnStyle"
-                android:layout_marginVertical="30dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="30dp"
                 android:text="@string/str_save"
                 app:backgroundTint="@color/grey_100"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/space_dinner_menu_bottom" />
+
+            <ProgressBar
+                android:id="@+id/prograssbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:visibility="visible"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

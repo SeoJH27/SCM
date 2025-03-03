@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Hidden API 관련 경고 무시
+-dontwarn java.lang.invoke.MethodHandles$Lookup
+
+# Reflection을 사용하는 라이브러리 보호
+-keep class java.lang.invoke.** { *; }
+-keep class sun.misc.** { *; }

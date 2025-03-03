@@ -11,8 +11,7 @@ import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
 
 class DetailHs1ListAdapter(
     items: DetailMenu,
-    private val dayOfWeek: String,
-    private val listener: DetailHs1ItemClickListener
+    private val dayOfWeek: String
 ) : RecyclerView.Adapter<DetailHs1ItemViewHolder>() {
 
     private var MEAL: List<Meal> = emptyList()
@@ -37,9 +36,7 @@ class DetailHs1ListAdapter(
 
     //할당
     override fun onBindViewHolder(holder: DetailHs1ItemViewHolder, position: Int) {
-        holder.bind(
-            MEAL.get(position), listener
-        )
+        holder.bind(MEAL.get(position))
     }
 
     override fun getItemCount(): Int = MEAL.size
@@ -51,15 +48,14 @@ class DetailHs1ItemViewHolder(
     private val binding: ItemDetailMenuBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(meal: Meal, listener: DetailHs1ItemClickListener) {
-        itemView.setOnClickListener {
-            listener.onDetailMenuClick(meal)
-        }
+    fun bind(meal: Meal) {
 
         with(binding) {
-            txtTime.text = meal.mealType
+            txtTime.text = meal.mealType ?: ""
             txtMenu.text =
-                meal.mainMenu.replaceCommaToLinebreak() + "\n" + meal.subMenu.replaceCommaToLinebreak()
+                (meal.mainMenu?.replaceCommaToLinebreak()
+                    ?: "") + "\n" + (meal.subMenu?.replaceCommaToLinebreak()
+                    ?: "")
         }
     }
 

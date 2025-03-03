@@ -52,9 +52,10 @@ class TodayMenuItemViewHolder(
             listener.onTodayMenuClick(meal)
         }
         with(binding) {
-            txtTime.text = meal.mealType
+            txtTime.text = meal.mealType?: ""
             txtMenu.text =
-                meal.mainMenu.replaceCommaToLinebreak() + "\n" + meal.subMenu.replaceCommaToLinebreak()
+                (meal.mainMenu?.replaceCommaToLinebreak() ?: "") + "\n" + (meal.subMenu?.replaceCommaToLinebreak()
+                    ?: "")
         }
     }
 

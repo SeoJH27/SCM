@@ -51,8 +51,6 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.kotlinx.serialization.json)
-
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-
 }

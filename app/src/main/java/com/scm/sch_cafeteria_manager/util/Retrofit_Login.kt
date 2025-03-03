@@ -21,11 +21,11 @@ interface ApiService_login {
 }
 
 object Retrofit_Login {
-    private const val BASE_URL = "https:///api/auth/login"
+    private const val BASE_URL = "http://localhost:8080" // TODO: JSON 파일의 호스트 URL
 
     private fun createOkHttpClient(context: Context): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(AuthInterceptor(context)) //Authorization 헤더 자동 추가
+            .addInterceptor(AuthInterceptor_Login(context)) //Authorization 헤더 자동 추가
             .build()
     }
     fun getInstance(context: LoginActivity):ApiService_login{
@@ -47,7 +47,7 @@ object Retrofit_Login {
 
 }
 
-class AuthInterceptor(private val context: Context) : Interceptor {
+private class AuthInterceptor_Login(private val context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val accessToken = PrefHelper_Login.getAccessToken(context)
         val request= chain.request().newBuilder()

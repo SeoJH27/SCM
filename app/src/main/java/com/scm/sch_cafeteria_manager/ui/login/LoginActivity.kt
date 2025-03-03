@@ -12,7 +12,9 @@ import com.scm.sch_cafeteria_manager.data.loginResponse
 import com.scm.sch_cafeteria_manager.databinding.ActivityLoginBinding
 import com.scm.sch_cafeteria_manager.ui.admin.AdminActivity
 import com.scm.sch_cafeteria_manager.ui.home.HomeActivity
+import com.scm.sch_cafeteria_manager.util.PrefHelper_Login.saveTokens
 import com.scm.sch_cafeteria_manager.util.Retrofit_Login
+import com.scm.sch_cafeteria_manager.util.cacheHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
             btnLoginConfirm.setOnClickListener {
 
                 //화면 테스트
+                cacheHelper.saveToCache(this@LoginActivity, "authority", "3")
                 startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
                 finish()
 
@@ -71,6 +74,8 @@ class LoginActivity : AppCompatActivity() {
     // 자동 로그인 체크
     private fun isAdminLoggedIn(): Boolean {
         val prefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        Log.e("LoginActivity", "isAdminLoggedIn prefs: $prefs")
+
         return prefs.getString("isLoggedIn", null) != null
     }
 
@@ -93,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
                         val authority = response.message()
 
                         if (!accessTk.isNullOrEmpty() && !refreshTk.isNullOrEmpty()) {
-                            saveTokens(accessTk, refreshTk)
+                            saveTokens(this@LoginActivity, accessTk, refreshTk)
                             Toast.makeText(
                                 this@LoginActivity,
                                 "Login Successful",
@@ -169,16 +174,7 @@ class LoginActivity : AppCompatActivity() {
         return null
     }
 
-    // Preference에 Token들 저장
-    private fun saveTokens(accessTk: String, refreshTk: String) {
-        val prefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        prefs.edit().apply {
-            putString("accessToken", accessTk)
-            putString("refreshToken", refreshTk)
-            apply()
-        }
-    }
-
+    // 뒤로가기 전 알림
     private fun backDialog() {
         MaterialAlertDialogBuilder(this)
             .setMessage("뒤로가기 시 로그아웃 됩니다.\n홈 화면으로 돌아가시겠습니까?")
