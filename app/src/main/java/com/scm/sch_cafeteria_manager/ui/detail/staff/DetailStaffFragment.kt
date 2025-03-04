@@ -40,8 +40,6 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
         super.onViewCreated(view, savedInstanceState)
 
         fetchData()
-        // TODO: 서버에서 메뉴 받아옴
-
     }
 
     // 네트워크 통신 -> 코루틴으로 제어
@@ -161,7 +159,7 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
             backToHome()
         } else
             binding.rvDetailStaffMenu.adapter =
-                DetailHs1ListAdapter(STAFF!!, weekly)
+                DetailStaffListAdapter(STAFF!!, weekly)
     }
 
     // 항목이 없으면 true

@@ -39,7 +39,6 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // TODO: test가 끝나면 변경 - fetchData -> setLayout 순
         fetchData()
     }
 
