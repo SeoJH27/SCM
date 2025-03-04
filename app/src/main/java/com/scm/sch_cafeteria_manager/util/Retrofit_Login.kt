@@ -1,6 +1,7 @@
 package com.scm.sch_cafeteria_manager.util
 
 import android.content.Context
+import com.scm.sch_cafeteria_manager.data.BASE_URL
 import com.scm.sch_cafeteria_manager.data.loginRequest
 import com.scm.sch_cafeteria_manager.data.loginResponse
 import com.scm.sch_cafeteria_manager.ui.login.LoginActivity
@@ -16,12 +17,11 @@ import retrofit2.http.POST
 
 interface ApiService_login {
     @Headers("Content-Type: application/json")
-    @POST("login") // 로그인 API 엔드 포인트
+    @POST("/reissue") // 로그인 API 엔드 포인트 // TODO: 설정 안함
     fun login(@Body request: loginRequest) : Call<loginResponse>
 }
 
 object Retrofit_Login {
-    private const val BASE_URL = "http://localhost:8080" // TODO: JSON 파일의 호스트 URL
 
     private fun createOkHttpClient(context: Context): OkHttpClient {
         return OkHttpClient.Builder()

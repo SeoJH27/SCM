@@ -1,7 +1,17 @@
 package com.scm.sch_cafeteria_manager.data
 
-sealed class ApiResponse<out T>{
-    data class Success<T>(val data: T): ApiResponse<T>()
-    data class Error(val message: String, val errorCode: Int? = null): ApiResponse<Nothing>()
-    object UnknownError: ApiResponse<Nothing>()
-}
+
+// 디테일 API Response
+data class D_API_Response(
+    val status: String,
+    val message: String,
+    val data: DetailMenu
+)
+
+
+// 오늘의 메뉴 API Response
+data class TM_API_Response(
+    val status: String,
+    val message: String,
+    val data: DetailMenu
+)

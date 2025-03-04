@@ -2,18 +2,22 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_detail_staff"
             style="@style/AppToolBar.ImageNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/img_staff" />
+            android:background="@drawable/img_staff"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -21,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -29,7 +33,7 @@
             android:paddingTop="20dp">
 
             <TextView
-                android:id="@+id/title_hs1"
+                android:id="@+id/title_staff"
                 style="@style/AppTextTitle.30sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,7 +51,7 @@
                 android:background="@color/grey_100"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title_hs1" />
+                app:layout_constraintTop_toBottomOf="@id/title_staff" />
 
             <Space
                 android:id="@+id/space_1"
@@ -69,12 +73,12 @@
 
             <TextView
                 android:id="@+id/edit_operating_hours"
-                style="@style/AppTextBody.15sp"
+                style="@style/AppTextBody"
+                tools:text="@string/edit_operating_hours_staff"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="70dp"
-                android:text="@string/edit_operating_hours_staff"
                 app:layout_constraintBottom_toBottomOf="@id/txt_operating_hours"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/txt_operating_hours"
@@ -82,13 +86,13 @@
 
             <TextView
                 android:id="@+id/txt_notice"
-                style="@style/AppTextBody.15sp"
+                style="@style/AppTextBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="55dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/red_10"
-                android:paddingHorizontal="20dp"
+                android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp"
                 android:text="@string/str_notice"
                 android:textAlignment="center"
@@ -103,6 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/str_location"
                 app:layout_constraintEnd_toStartOf="@id/edit_location"
                 app:layout_constraintStart_toStartOf="parent"
@@ -111,12 +116,11 @@
             <TextView
                 android:id="@+id/edit_location"
                 style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="70dp"
                 android:text="@string/edit_location"
                 app:layout_constraintBottom_toBottomOf="@id/txt_location"
-                app:layout_constraintEnd_toEndOf="@id/edit_operating_hours"
                 app:layout_constraintStart_toStartOf="@id/edit_operating_hours"
                 app:layout_constraintTop_toTopOf="@id/txt_location" />
 
@@ -129,6 +133,16 @@
                 android:src="@drawable/ic_map_pin"
                 app:layout_constraintBottom_toBottomOf="@id/edit_location"
                 app:layout_constraintStart_toEndOf="@id/edit_location"
+                app:layout_constraintTop_toTopOf="@id/edit_location" />
+
+            <View
+                android:id="@+id/cs_location"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/transparency"
+                app:layout_constraintBottom_toBottomOf="@id/btn_map_pin"
+                app:layout_constraintEnd_toEndOf="@id/btn_map_pin"
+                app:layout_constraintStart_toStartOf="@id/edit_location"
                 app:layout_constraintTop_toTopOf="@id/edit_location" />
 
             <TextView
@@ -174,15 +188,71 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/line_2" />
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tl_detail_staff"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/blue_400"
+                android:contentDescription="@string/desc_detail_staff_tab"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/space_2"
+                app:tabBackground="@drawable/detail_menu_select"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:tabMode="scrollable"
+                app:tabTextAppearance="@style/AppTextTitle.15sp"
+                app:tabTextColor="@color/white" />
+
+            <View
+                android:id="@+id/space_menu"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/bluesky_10"
+                app:layout_constraintBottom_toTopOf="@id/txt_inquiry"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tl_detail_staff" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_detail_staff_menu"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="20dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="@id/space_menu"
+                app:layout_constraintEnd_toEndOf="@id/space_menu"
+                app:layout_constraintStart_toStartOf="@id/space_menu"
+                app:layout_constraintTop_toTopOf="@id/space_menu"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_detail_menu" />
+
+            <TextView
+                android:id="@+id/txt_inquiry"
+                style="@style/AppTextBody.10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:gravity="center"
+                android:text="@string/str_app_inquiry"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/space_menu" />
+
             <ProgressBar
                 android:id="@+id/prograssbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

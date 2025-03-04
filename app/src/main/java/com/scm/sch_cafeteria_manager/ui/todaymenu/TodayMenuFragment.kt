@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.TodayMenu
-import com.scm.sch_cafeteria_manager.data.dummy
 import com.scm.sch_cafeteria_manager.databinding.FragmentTodayMenuBinding
 import com.scm.sch_cafeteria_manager.util.fetchTodayMenu
 import kotlinx.coroutines.CoroutineScope
@@ -63,7 +62,7 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu), TodayMenuItemC
     private fun setLayout() {
 
         //TODO: Test
-        TODAYMENU = dummy.tmDummy
+        //TODAYMENU = dummy.tmDummy
 
         setTab()
         viewClickListener()

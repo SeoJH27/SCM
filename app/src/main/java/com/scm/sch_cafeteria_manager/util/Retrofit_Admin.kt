@@ -3,6 +3,7 @@ package com.scm.sch_cafeteria_manager.util
 import android.content.Context
 import com.google.gson.Gson
 import com.scm.sch_cafeteria_manager.data.AdminData
+import com.scm.sch_cafeteria_manager.data.BASE_URL
 import com.scm.sch_cafeteria_manager.data.adminResponse
 import com.scm.sch_cafeteria_manager.data.requestDTO_day
 import com.scm.sch_cafeteria_manager.data.requestDTO_week
@@ -31,11 +32,9 @@ interface ApiService_Admin {
     @POST("/api/admin/meal-plans/{restaurant-name}")
     suspend fun setMealPlans(@Path("restaurant-name") resName: String, @Body requestDTO_day: String): adminResponse
 
-
 }
 
 object Retrofit_Admin {
-    private const val BASE_URL = "http://localhost:8080" // TODO: JSON 파일의 호스트 URL
 
     fun createApiService(context: Context): ApiService_Admin {
         // Headers에 AuthInterceptor 추가

@@ -249,7 +249,6 @@ class AdminFragment : Fragment() {
     // 교직원 식당 마감 시간
     private fun checkMealTimeStaff(): String {
         val now = LocalTime.now()
-
         return when {
             now.isAfter(LocalTime.of(11, 30)) and now.isBefore(
                 LocalTime.of(

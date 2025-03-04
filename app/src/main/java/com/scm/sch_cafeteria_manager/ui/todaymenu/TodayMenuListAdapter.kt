@@ -8,7 +8,6 @@ import com.scm.sch_cafeteria_manager.data.Meal
 import com.scm.sch_cafeteria_manager.data.TodayMenu
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
-import com.scm.sch_cafeteria_manager.ui.detail.hs1.DetailHs1ItemClickListener
 
 class TodayMenuListAdapter(
     items: TodayMenu,

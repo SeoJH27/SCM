@@ -1,6 +1,7 @@
 package com.scm.sch_cafeteria_manager.util
 
 import android.util.Log
+import com.scm.sch_cafeteria_manager.data.BASE_URL
 import com.scm.sch_cafeteria_manager.data.TodayMenu
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,7 +17,6 @@ interface ApiService_TM {
 }
 
 object RetrofitClient_TM {
-    private const val BASE_URL = "https://example.com/api/"
 
     val apiService: ApiService_TM by lazy {
         Retrofit.Builder()

@@ -108,18 +108,18 @@ class Admin1Hs1WeekFragment : Fragment() {
 
     // 촬영하여 등록 버튼 누를 시 -> 촬영
     private fun setPhotoBtnClick(){
-
+        findNavController().navigate(Admin1Hs1WeekFragmentDirections.admin1Hs1WeekFragmentToCameraFragment())
     }
 
 
     // 텍스트 저장
     private fun setTextSaveBtnClick(){
         binding.btnUploadAllMenu.setOnClickListener {
-
+            //TODO: uploading
         }
     }
 
-    //
+    // 해당 버튼에 해당하는 날짜 연산
     private fun weekStartDate(week: String): String {
         val today = LocalDate.now()
         val formatterDay = DateTimeFormatter.ofPattern("dd")
@@ -159,6 +159,7 @@ class Admin1Hs1WeekFragment : Fragment() {
 
     }
 
+    // 데이터 Null-check
     private fun checkData(data: AdminData?): Boolean {
         if (isNull(data))
             return false

@@ -41,27 +41,27 @@ class LoginActivity : AppCompatActivity() {
             btnLoginConfirm.setOnClickListener {
 
                 //화면 테스트
-                cacheHelper.saveToCache(this@LoginActivity, "authority", "3")
-                startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
-                finish()
+//                cacheHelper.saveToCache(this@LoginActivity, "authority", "3")
+//                startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
+//                finish()
 
-//                val id = editLoginId.text.toString()
-//                val password = editLoginPassword.text.toString()
-//
-//                //TODO: 서버로 보내서 인증 -> Test 필요
-//                if (id.isEmpty() && password.isEmpty()) {
-//                    Toast.makeText(this@LoginActivity, "아이디 혹은 비밀번호를 입력하세요.", Toast.LENGTH_LONG)
-//                        .show()
-//                } else if (id.length > 4 && password.length < 4) {
-//                    Toast.makeText(
-//                        this@LoginActivity,
-//                        "아이디 혹은 비밀번호가 4자리 이상이어야 합니다.",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                } else {
-//                    login(id, password)
-//
-//                }
+                val id = editLoginId.text.toString()
+                val password = editLoginPassword.text.toString()
+
+                //TODO: 서버로 보내서 인증 -> Test 필요
+                if (id.isEmpty() && password.isEmpty()) {
+                    Toast.makeText(this@LoginActivity, "아이디 혹은 비밀번호를 입력하세요.", Toast.LENGTH_LONG)
+                        .show()
+                } else if (id.length > 4 && password.length < 4) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "아이디 혹은 비밀번호가 4자리 이상이어야 합니다.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    login(id, password)
+
+                }
             }
 
             // 뒤로가기

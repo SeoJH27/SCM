@@ -1,19 +1,18 @@
-package com.scm.sch_cafeteria_manager.ui.detail.hs1
+package com.scm.sch_cafeteria_manager.ui.detail.staff
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.scm.sch_cafeteria_manager.data.D_API_Response
-import com.scm.sch_cafeteria_manager.data.DetailMenu
 import com.scm.sch_cafeteria_manager.data.Meal
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
 
-class DetailHs1ListAdapter(
+class DetailStaffListAdapter(
     items: D_API_Response,
     private val dayOfWeek: String
-) : RecyclerView.Adapter<DetailHs1ItemViewHolder>() {
+) : RecyclerView.Adapter<DetailStaffItemViewHolder>() {
 
     private var MEAL: List<Meal?> = emptyList()
 
@@ -29,7 +28,7 @@ class DetailHs1ListAdapter(
     init {
         items.data.dailyMeals.forEach {
             if (it.dayOfWeek == dayOfWeek) {
-                Log.e("DetailHs1ListAdapter", "init - $MEAL")
+                Log.e("DetailStaffListAdapter", "init - $MEAL")
                 MEAL = it.meals
                 return@forEach
             }
@@ -37,19 +36,19 @@ class DetailHs1ListAdapter(
     }
 
     // 생성
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailHs1ItemViewHolder {
-        Log.e("DetailHs1ListAdapter", "onCreateViewHolder")
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailStaffItemViewHolder {
+        Log.e("DetailStaffListAdapter", "onCreateViewHolder")
         if (MEAL.isEmpty()) {
-            Log.e("DetailHs1ListAdapter", "데이터가 없습니다.")
+            Log.e("DetailStaffListAdapter", "데이터가 없습니다.")
             MEAL = emptyMEAL
         }
 
-        return DetailHs1ItemViewHolder.from(parent)
+        return DetailStaffItemViewHolder.from(parent)
     }
 
     //할당
-    override fun onBindViewHolder(holder: DetailHs1ItemViewHolder, position: Int) {
-        Log.e("DetailHs1ListAdapter", "onBindViewHolder: ${MEAL.get(position)}")
+    override fun onBindViewHolder(holder: DetailStaffItemViewHolder, position: Int) {
+        Log.e("DetailStaffListAdapter", "onBindViewHolder: ${MEAL.get(position)}")
         if (MEAL.isEmpty()) {
             MEAL = emptyMEAL
             holder.bind(MEAL.get(position))
@@ -60,19 +59,19 @@ class DetailHs1ListAdapter(
     }
 
     override fun getItemCount(): Int {
-        Log.e("DetailHs1ListAdapter", "getItemCount")
+        Log.e("DetailStaffListAdapter", "getItemCount")
         return if (MEAL.isEmpty()) 1 else MEAL.size
     }
 
 
 }
 
-class DetailHs1ItemViewHolder(
+class DetailStaffItemViewHolder(
     private val binding: ItemDetailMenuBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(meal: Meal?) {
-        Log.e("DetailHs1ListAdapter", "bind")
+        Log.e("DetailStaffListAdapter", "bind")
 
         with(binding) {
             if (meal != null) {
@@ -86,9 +85,9 @@ class DetailHs1ItemViewHolder(
     }
 
     companion object {
-        fun from(parent: ViewGroup): DetailHs1ItemViewHolder {
+        fun from(parent: ViewGroup): DetailStaffItemViewHolder {
             Log.e("DetailHs1ListAdapter", "from")
-            return DetailHs1ItemViewHolder(
+            return DetailStaffItemViewHolder(
                 ItemDetailMenuBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,

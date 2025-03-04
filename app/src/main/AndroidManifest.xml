@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-feature android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -13,8 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SCM"
-        android:usesCleartextTraffic="true"
-        android:usesNonSdkApi="true">
+        android:usesCleartextTraffic="true">
 
         <activity
             android:name=".ui.home.HomeActivity"
@@ -42,5 +48,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

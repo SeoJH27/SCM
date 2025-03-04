@@ -4,10 +4,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class DetailMenu(
-    val restaurantName: String,
-    val weekStartDate: String,
-    val operatingStartTime: String,
-    val operatingEndTime: String,
-    val isActive: Boolean,
-    val weekMealPlans: Week,
+    val restaurantOperatingStartTime: String,
+    val restaurantOperatingEndTime: String,
+    val dailyMeals: List<Daily>,
+    val active: Boolean
 ): Parcelable
