@@ -51,6 +51,7 @@ class HomeFragment : Fragment() {
     private fun toLogin() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun navigateTo(destination: String) {

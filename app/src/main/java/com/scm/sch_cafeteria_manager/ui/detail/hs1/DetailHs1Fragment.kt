@@ -14,11 +14,13 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.D_API_Response
-import com.scm.sch_cafeteria_manager.data.DetailMenu
+import com.scm.sch_cafeteria_manager.data.dOw
 import com.scm.sch_cafeteria_manager.databinding.FragmentDetailHs1Binding
 import com.scm.sch_cafeteria_manager.util.fetchDetailMenu
+import com.scm.sch_cafeteria_manager.util.utilAll.setInquiryLink
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.util.Objects.isNull
 
 
@@ -42,7 +44,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
         fetchData()
     }
 
-    // 네트워크 통신 -> 코루틴으로 제어
+    // 네트워크 통신 -> lifecycleScope로 제어
     private fun fetchData() {
         binding.prograssbar.visibility = View.VISIBLE
 
@@ -51,7 +53,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
             // Retrofit에서 데이터 가져오기 (true: hs1)
             try {
                 HS1 = fetchDetailMenu(true)
-                Log.e("DetailHs1Fragment", "fetchData - HS1: $HS1")
+                Log.e("DetailHs1Fragment", "fetchDetailMenu - HS1: $HS1")
             } catch (e: Error) {
                 Log.e("DetailHs1Fragment", "fetchData - e: $e")
             }
@@ -92,7 +94,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    connectAdapter(DayOfWeek.MONDAY.toString())
+                    connectAdapter(dOw.MONDAY.dName)
                 }
             })
             csLocation.setOnClickListener {
@@ -104,6 +106,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
         }
     }
 
+    // 상단 탭 설정
     private fun setTab() {
         Log.e("DetailHs1Fragment", "setTab")
 
@@ -119,9 +122,10 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
             Log.e("DetailHs1Fragment", "setTab - checkData")
             backToHome()
         } else // init tab
-            connectAdapter(DayOfWeek.MONDAY.toString())
+            connectAdapter(dOw.MONDAY.dName)
     }
 
+    // 시간 설정
     private fun setTime() {
         with(binding) {
             if (checkData()) {
@@ -151,11 +155,11 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
             return
         }
         when (tab.position) {
-            0 -> connectAdapter(DayOfWeek.MONDAY.toString())
-            1 -> connectAdapter(DayOfWeek.TUESDAY.toString())
-            2 -> connectAdapter(DayOfWeek.WEDNESDAY.toString())
-            3 -> connectAdapter(DayOfWeek.THURSDAY.toString())
-            4 -> connectAdapter(DayOfWeek.FRIDAY.toString())
+            0 -> connectAdapter(dOw.MONDAY.dName)
+            1 -> connectAdapter(dOw.TUESDAY.dName)
+            2 -> connectAdapter(dOw.WEDNESDAY.dName)
+            3 -> connectAdapter(dOw.THURSDAY.dName)
+            4 -> connectAdapter(dOw.FRIDAY.dName)
             else -> throw IllegalArgumentException("Invalid button config: $tab")
         }
     }
@@ -187,11 +191,6 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
         val url = "https://naver.me/5mId7mbJ"
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
-    }
-
-    private fun setInquiryLink() {
-        // TODO: 카카오톡 오픈채팅방 하이퍼링크
-        Log.e("DetailHs1Fragment", "setInquiryLink")
     }
 
     override fun onDestroyView() {

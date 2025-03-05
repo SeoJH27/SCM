@@ -3,30 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/admin_nav"
-    app:startDestination="@id/adminFragment">
+    app:startDestination="@id/fragment_admin">
 
     <fragment
-        android:id="@+id/adminFragment"
+        android:id="@+id/fragment_admin"
         android:name="com.scm.sch_cafeteria_manager.ui.admin.AdminFragment"
         android:label="AdminFragment"
         tools:layout="@layout/fragment_admin">
         <action
-            android:id="@+id/to_admin1Hs1WeekFragment"
+            android:id="@+id/to_admin1Hs1"
             app:destination="@id/admin1Hs1WeekFragment" />
         <action
-            android:id="@+id/to_admin2WeekFragment"
-            app:destination="@id/admin2WeekFragment" />
-        <action
-            android:id="@+id/to_admin3WeekFragment"
-            app:destination="@id/admin3WeekFragment" />
-        <action
-            android:id="@+id/to_admin1StaffWeekFragment"
+            android:id="@+id/to_admin1Staff"
             app:destination="@id/admin1StaffWeekFragment" />
         <action
-            android:id="@+id/to_masterHs1WeekFragment"
+            android:id="@+id/to_admin2"
+            app:destination="@id/admin2WeekFragment" />
+        <action
+            android:id="@+id/to_admin3"
+            app:destination="@id/admin3WeekFragment" />
+        <action
+            android:id="@+id/to_masterHs1"
             app:destination="@id/masterHs1WeekFragment" />
         <action
-            android:id="@+id/to_masterStaffWeekFragment"
+            android:id="@+id/to_masterStaff"
             app:destination="@id/masterStaffWeekFragment" />
     </fragment>
 
@@ -39,8 +39,8 @@
             android:name="manageDate"
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
         <action
-            android:id="@+id/admin1Hs1WeekFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            android:id="@+id/admin1Hs1_to_camera"
+            app:destination="@id/fragment_camera" />
     </fragment>
     <fragment
         android:id="@+id/admin2WeekFragment"
@@ -51,8 +51,8 @@
             android:name="manageDate"
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
         <action
-            android:id="@+id/admin2WeekFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            android:id="@+id/admin2_to_camera"
+            app:destination="@id/fragment_camera" />
     </fragment>
     <fragment
         android:id="@+id/admin3WeekFragment"
@@ -63,8 +63,8 @@
             android:name="manageDate"
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
         <action
-            android:id="@+id/admin3WeekFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            android:id="@+id/admin3_to_camera"
+            app:destination="@id/fragment_camera" />
     </fragment>
     <fragment
         android:id="@+id/admin1StaffWeekFragment"
@@ -75,8 +75,8 @@
             android:name="manageDate"
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
         <action
-            android:id="@+id/admin1StaffWeekFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            android:id="@+id/admin1Staff_to_camera"
+            app:destination="@id/fragment_camera" />
     </fragment>
     <fragment
         android:id="@+id/masterHs1WeekFragment"
@@ -97,13 +97,13 @@
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
     </fragment>
     <fragment
-        android:id="@+id/cameraFragment"
+        android:id="@+id/fragment_camera"
         android:name="com.scm.sch_cafeteria_manager.ui.admin.CameraFragment"
         android:label="CameraFragment"
         tools:layout="@layout/fragment_camera" >
         <action
-            android:id="@+id/to_adminFragment"
-            app:destination="@id/adminFragment" />
+            android:id="@+id/to_admin"
+            app:destination="@id/fragment_admin" />
     </fragment>
 
 

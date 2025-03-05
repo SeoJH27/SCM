@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -13,12 +12,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.data.AdminData
+import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminHs1Binding
 import com.scm.sch_cafeteria_manager.util.fetchMealPlans
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Objects.isNull
@@ -43,47 +40,57 @@ class Admin1Hs1WeekFragment : Fragment() {
 
         // 서버로부터 data 받기
         viewLifecycleOwner.lifecycleScope.launch {
-            fetchDataAndBlockUI(binding.prograssbar)
+            fetchData()
         }
-        setLayout()
+    }
+
+    private suspend fun fetchData() {
+        binding.prograssbar.visibility = View.VISIBLE // UI 블로킹 시작
+
+        Log.e("Admin1Hs1WeekFragment", "fetchData - prograssbar")
+        lifecycleScope.launch {
+            // Retrofit에서 데이터 가져오기
+            try {
+                data = fetchMealPlans(
+                    requireContext(),
+                    CafeteriaData.HYANGSEOL1.cfName,
+                    args.manageDate.week,
+                    weekStartDate(args.manageDate.day)
+                )
+                Log.e("Admin1Hs1WeekFragment", "fetchAdmin1Hs1Menu: $data")
+            } catch (e: Exception) {
+                Log.e(
+                    "Admin1Hs1WeekFragment",
+                    "fetchAdmin1Hs1Menu Exception: $e, ${weekStartDate(args.manageDate.week)}, ${args.manageDate.day}"
+                )
+                errorToBack()
+            }
+            Log.e("Admin1Hs1WeekFragment", "fetchAdmin1Hs1Menu")
+
+            if (checkData(data)) {
+                Log.e("Admin1Hs1WeekFragment", "fetchAdmin1Hs1Menu: checkData - $data")
+                setLayout()
+            } else {
+                Toast.makeText(requireContext(), "데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                Log.e("Admin1Hs1WeekFragment", "fetchAdmin1Hs1Menu: errorToBack - $data")
+                errorToBack()
+            }
+
+            binding.prograssbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
+        }
+    }
+
+    // 대기 상태 데이터 불러오기
+    private fun setLayout() {
+        checkDay()
         setPhotoBtnClick()
         setTextSaveBtnClick()
         setBack()
     }
 
-    private suspend fun fetchDataAndBlockUI(progressBar: ProgressBar) {
-        progressBar.visibility = View.VISIBLE // UI 블로킹 시작
-
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                data = fetchMealPlans(
-                    requireContext(),
-                    weekStartDate(args.manageDate.week),
-                    args.manageDate.day,
-                    "HYANGSEOL1"
-                )
-                withContext(Dispatchers.Main) {
-                    progressBar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
-                }
-                if (checkData(data)) {
-                    errorToBack()
-                }
-            } catch (e: Error) {
-                Log.e("fetchDataAndBlockUI", "error: $e")
-                errorToBack()
-            }
-        }
-    }
-
-    private fun errorToBack() {
-        Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_SHORT).show()
-        backToHome()
-    }
-
-    // 대기 상태 데이터 불러오기
-    private fun setLayout() {
-        // 한 번 더 해당 요일이 맞는지 체크
-        if (data!!.data.dailyMeals.dayOfWeek == args.manageDate.day){
+    // 한 번 더 해당 요일이 맞는지 체크
+    private fun checkDay() {
+        if (data!!.data.dailyMeals.dayOfWeek == args.manageDate.day) {
             val meals = data!!.data.dailyMeals.meals
             with(binding) {
                 editBreakfastOpenTimeStart.setText(meals[0].operatingStartTime)
@@ -98,26 +105,25 @@ class Admin1Hs1WeekFragment : Fragment() {
                 editDinnerOpenTimeEnd.setText(meals[2].operatingEndTime)
                 editDinnerMenu.setText(meals[2].mainMenu)
             }
-        }
-        else{
+        } else {
             errorToBack()
             Log.e("Admin1Hs1WeekFragment", "setLayout - 요일이 맞지 않음")
         }
     }
 
-
     // 촬영하여 등록 버튼 누를 시 -> 촬영
-    private fun setPhotoBtnClick(){
-        findNavController().navigate(Admin1Hs1WeekFragmentDirections.admin1Hs1WeekFragmentToCameraFragment())
+    private fun setPhotoBtnClick() {
+        findNavController().navigate(Admin1Hs1WeekFragmentDirections.admin1Hs1ToCamera())
     }
 
 
     // 텍스트 저장
-    private fun setTextSaveBtnClick(){
+    private fun setTextSaveBtnClick() {
         binding.btnUploadAllMenu.setOnClickListener {
             //TODO: uploading
         }
     }
+
 
     // 해당 버튼에 해당하는 날짜 연산
     private fun weekStartDate(week: String): String {
@@ -161,7 +167,7 @@ class Admin1Hs1WeekFragment : Fragment() {
 
     // 데이터 Null-check
     private fun checkData(data: AdminData?): Boolean {
-        if (isNull(data))
+        if (isNull(data) || isNull(data?.data))
             return false
         else
             return true
@@ -179,6 +185,11 @@ class Admin1Hs1WeekFragment : Fragment() {
                 backToHome()
             }
             .show()
+    }
+
+    private fun errorToBack() {
+        Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_SHORT).show()
+        backToHome()
     }
 
     // 뒤로가기

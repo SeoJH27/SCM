@@ -109,7 +109,7 @@ class CameraFragment : Fragment() {
     }
     
     private fun backToHome(){
-        findNavController().navigate(CameraFragmentDirections.toAdminFragment())
+        findNavController().navigate(CameraFragmentDirections.toAdmin())
     }
 
     override fun onDestroyView() {

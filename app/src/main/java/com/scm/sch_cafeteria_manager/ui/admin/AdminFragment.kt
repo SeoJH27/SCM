@@ -7,18 +7,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.UserRole
+import com.scm.sch_cafeteria_manager.data.dOw
 import com.scm.sch_cafeteria_manager.data.manageDate
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminBinding
 import com.scm.sch_cafeteria_manager.extentions.toEnumOrNull
 import com.scm.sch_cafeteria_manager.ui.home.HomeActivity
 import com.scm.sch_cafeteria_manager.util.cacheHelper
-import java.io.File
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -27,6 +28,8 @@ import java.time.format.DateTimeFormatter
 class AdminFragment : Fragment() {
     private var _binding: FragmentAdminBinding? = null
     private val binding get() = _binding!!
+
+    private var fragmentContext: Context? = null
 
     val formatter = DateTimeFormatter.ofPattern("dd")
     private var authority = UserRole.ADMIN1 // 0: Master, 1: 총관리자, 2: 향설1관, 3: 교직원
@@ -41,90 +44,104 @@ class AdminFragment : Fragment() {
         return binding.root
     }
 
-    init{
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         try {
-            authority = cacheHelper.readFromCache(requireContext(), "authority")?.toEnumOrNull<UserRole>()!!
+            //TODO: 로그인 Test 이후 수정
+            authority =
+                cacheHelper.readFromCache(requireContext(), "authority")?.toEnumOrNull<UserRole>()!!
             Log.e("AdminFragment", "authority: $authority")
-        } catch (e: Error){
-            Log.e("AdminFragment", "authority error: $e")
+        } catch (e: Exception) {
+            Log.e("AdminFragment", "authority exception: $e")
+            Toast.makeText(requireContext(), "로그인 오류", Toast.LENGTH_LONG).show()
             backToHome()
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weeks = getWeekDates()
+        val days = getDates()
 
-        setManageDay(weeks)
-
+        setManageDay(days)
+        setTodayDate()
         // 권한별 접근 제한
-        when(authority){
-            UserRole.MASTER -> setMaster(weeks)
-            UserRole.ADMIN1 -> setAdmin1(weeks)
-            UserRole.ADMIN2 -> setAdmin2(weeks)
-            UserRole.ADMIN3 -> setAdmin3(weeks)
+        when (authority) {
+            UserRole.MASTER -> setMaster(days)
+            UserRole.ADMIN1 -> setAdmin1(days)
+            UserRole.ADMIN2 -> setAdmin2(days)
+            UserRole.ADMIN3 -> setAdmin3(days)
         }
         setBackToHome()
     }
 
     // 총관리자 레이아웃
-    private fun setAdmin1(weeks: List<String>) {
+    private fun setAdmin1(days: List<String>) {
         with(binding) {
             icSearch.visibility = View.VISIBLE
             viewAdminTitle.focusable = View.FOCUSABLE
 
+            setAdmin1TitleClick(days)
+
             viewAdminTitle.setOnClickListener {
-                // 향설 1관
-                if (isTitleClick) {
-                    // 향설 1관으로 타이틀 변경
-                    txtAdminTitle.text = R.string.str_hs1.toString()
-                    // 해당 날짜 표시 및 시간
-                    txtAdminDate.setText(
-                        LocalDate.now().format(formatter) + "일 " + checkMealTimeHs1()
-                    )
-                    // 세부 메뉴의 ClickListener
-                    setManageMenuNavigateTo("admin1Hs1", weeks)
-                    // 다음 타이틀 클릭 시
-                    isTitleClick = false
-                }
-                // 교직원 식당
-                else {
-                    txtAdminTitle.text = R.string.str_staff.toString()
-                    txtAdminDate.setText(
-                        LocalDate.now().format(formatter) + "일 " + checkMealTimeStaff()
-                    )
-                    setManageMenuNavigateTo("admin1Staff", weeks)
-                    isTitleClick = true
-                }
+                setAdmin1TitleClick(days)
             }
         }
     }
 
+    private fun setAdmin1TitleClick(days: List<String>) {
+        with(binding) {
+            // 향설 1관
+            if (isTitleClick) {
+                // 향설 1관으로 타이틀 변경
+                txtAdminTitle.text = getStr(R.string.str_hs1)
+                // 해당 날짜 표시 및 시간
+                setTodayDate()
+                // 세부 메뉴의 ClickListener
+                setManageMenuNavigateTo("admin1Hs1", days)
+                // 다음 타이틀 클릭 시
+                isTitleClick = false
+            }
+            // 교직원 식당
+            else {
+                // 교직원 식당으로 타이틀 변경
+                txtAdminTitle.text = getStr(R.string.str_staff)
+                // 해당 날짜 표시 및 시간
+                setTodayDate()
+                // 세부 메뉴의 ClickListener
+                setManageMenuNavigateTo("admin1Staff", days)
+                // 다음 타이틀 클릭 시
+                isTitleClick = true
+            }
+        }
+    }
+
+    private fun setTodayDate() {
+        binding.txtAdminDate.setText(
+            LocalDate.now().format(formatter) + "일 " + checkMealTimeHs1()
+        )
+    }
+
     // 향설 1관 레이아웃
-    private fun setAdmin2(weeks: List<String>) {
-        with(binding){
+    private fun setAdmin2(days: List<String>) {
+        with(binding) {
             icSearch.visibility = View.GONE
             viewAdminTitle.focusable = View.NOT_FOCUSABLE
 
-            txtAdminTitle.text = R.string.str_hs1.toString()
-            txtAdminDate.setText(
-                LocalDate.now().format(formatter) + "일 " + checkMealTimeStaff()
-            )
-            setManageMenuNavigateTo("admin2", weeks)
+            txtAdminTitle.text = getStr(R.string.str_hs1)
+            setTodayDate()
+            setManageMenuNavigateTo("admin2", days)
         }
     }
 
     // 교직원 레이아웃
-    private fun setAdmin3(weeks: List<String>) {
-        with(binding){
+    private fun setAdmin3(days: List<String>) {
+        with(binding) {
             icSearch.visibility = View.GONE
             viewAdminTitle.focusable = View.NOT_FOCUSABLE
 
-            txtAdminTitle.text = R.string.str_staff.toString()
-            txtAdminDate.setText(
-                LocalDate.now().format(formatter) + "일 " + checkMealTimeStaff()
-            )
-            setManageMenuNavigateTo("admin3", weeks)
+            txtAdminTitle.text = getStr(R.string.str_staff)
+            setTodayDate()
+            setManageMenuNavigateTo("admin3", days)
 
         }
     }
@@ -132,7 +149,7 @@ class AdminFragment : Fragment() {
     //TODO: 아직 안됨
     //Master 레이아웃
     private fun setMaster(weeks: List<String>) {
-        with(binding){
+        with(binding) {
             icSearch.visibility = View.VISIBLE
             viewAdminTitle.focusable = View.FOCUSABLE
             //TODO:
@@ -148,18 +165,20 @@ class AdminFragment : Fragment() {
     // 세부 정보 클릭
     private fun navigateOtherFragment(destination: String, date: manageDate): NavDirections =
         when (destination) {
-            "admin1Hs1" -> AdminFragmentDirections.toAdmin1Hs1WeekFragment(date)
-            "admin1Staff" -> AdminFragmentDirections.toAdmin1StaffWeekFragment(date)
-            "admin2" -> AdminFragmentDirections.toAdmin2WeekFragment(date)
-            "admin3" -> AdminFragmentDirections.toAdmin3WeekFragment(date)
-            "masterHs1" -> AdminFragmentDirections.toMasterHs1WeekFragment(date)
-            "masterStaff" -> AdminFragmentDirections.toMasterStaffWeekFragment(date)
+            "admin1Hs1" -> AdminFragmentDirections.toAdmin1Hs1(date)
+            "admin1Staff" -> AdminFragmentDirections.toAdmin1Staff(date)
+            "admin2" -> AdminFragmentDirections.toAdmin2(date)
+            "admin3" -> AdminFragmentDirections.toAdmin3(date)
+            "masterHs1" -> AdminFragmentDirections.toMasterHs1(date)
+            "masterStaff" -> AdminFragmentDirections.toMasterStaff(date)
             else -> throw IllegalArgumentException("Invalid button config: $destination")
         }
 
     // 일주일 메뉴 속 날짜 설정
     private fun setManageDay(dayOfWeek: List<String>) {
         with(binding) {
+            txtAdminDate
+
             btnMonday.text = "월요일 (" + dayOfWeek[0] + "일)"
             btnTuesday.text = "화요일 (" + dayOfWeek[1] + "일)"
             btnWednesday.text = "수요일 (" + dayOfWeek[2] + "일)"
@@ -169,7 +188,7 @@ class AdminFragment : Fragment() {
     }
 
     // 오늘 날짜를 기준으로 해당 주의 월-일 날짜 구하기
-    fun getWeekDates(): List<String> {
+    fun getDates(): List<String> {
         val today = LocalDate.now()
         val m = today.with(DayOfWeek.MONDAY) // 이번 주 월요일
         val t = today.with(DayOfWeek.TUESDAY) // 이번 주 월요일
@@ -177,41 +196,49 @@ class AdminFragment : Fragment() {
         val th = today.with(DayOfWeek.THURSDAY) // 이번 주 월요일
         val f = today.with(DayOfWeek.FRIDAY)   // 이번 주 금요일
 
-        return listOf(m.format(formatter), t.format(formatter), w.format(formatter), th.format(formatter), f.format(formatter))
+        Log.e(
+            "AdminFrgment",
+            "getDates: ${m.format(formatter)}, ${t.format(formatter)}, ${w.format(formatter)}, ${
+                th.format(
+                    formatter
+                )
+            }, ${f.format(formatter)}"
+        )
+        return listOf(
+            m.format(formatter),
+            t.format(formatter),
+            w.format(formatter),
+            th.format(formatter),
+            f.format(formatter)
+        )
     }
 
     // 세부 메뉴를 눌렀을 때
     fun setManageMenuNavigateTo(
         destination: String,  // 권한 별 프레그먼트
-        weeks: List<String>   // 일주일 날짜 모음
+        days: List<String>   // 일주일 날짜 모음
     ) {
         with(binding) {
             btnMonday.setOnClickListener {
-                navigateTo(destination, manageDate(DayOfWeek.MONDAY.toString(), weeks[0]))
+                navigateTo(destination, manageDate(dOw.MONDAY.dName, days[0]))
             }
             btnTuesday.setOnClickListener {
                 navigateTo(
-                    destination,
-                    manageDate(DayOfWeek.TUESDAY.toString(), weeks[1])
+                    destination, manageDate(dOw.TUESDAY.dName, days[1])
                 )
             }
             btnWednesday.setOnClickListener {
                 navigateTo(
-                    destination,
-                    manageDate(
-                        DayOfWeek.WEDNESDAY.toString(),
-                        weeks[2]
-                    )
+                    destination, manageDate(dOw.WEDNESDAY.dName, days[2])
                 )
             }
             btnThursday.setOnClickListener {
                 navigateTo(
-                    destination,
-                    manageDate(DayOfWeek.THURSDAY.toString(), weeks[3])
+                    destination, manageDate(dOw.THURSDAY.dName, days[3])
                 )
             }
             btnFriday.setOnClickListener {
-                navigateTo(destination, manageDate(DayOfWeek.FRIDAY.toString(), weeks[4]))
+                navigateTo(destination, manageDate(dOw.FRIDAY.dName, days[4]))
             }
         }
     }
@@ -240,7 +267,7 @@ class AdminFragment : Fragment() {
                     0
                 )
             ) -> return "석식"  // 17:00 ~ 18:59
-            else -> return ""
+            else -> return "\n(식사 시간 아님)"
         }
 
     }
@@ -285,6 +312,15 @@ class AdminFragment : Fragment() {
     private fun backToHome() {
         startActivity(Intent(requireContext(), HomeActivity::class.java))
         requireActivity().finish()
+    }
+
+    private fun getStr(id: Int): String {
+        return resources.getString(id)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        fragmentContext = null // Context 해제
     }
 
     override fun onDestroyView() {

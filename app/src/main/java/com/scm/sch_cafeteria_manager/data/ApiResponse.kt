@@ -13,5 +13,5 @@ data class D_API_Response(
 data class TM_API_Response(
     val status: String,
     val message: String,
-    val data: DetailMenu
+    val data: List<Cafeteria>
 )

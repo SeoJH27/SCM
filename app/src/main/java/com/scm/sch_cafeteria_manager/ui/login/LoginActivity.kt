@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.scm.sch_cafeteria_manager.data.UserRole
 import com.scm.sch_cafeteria_manager.data.loginRequest
 import com.scm.sch_cafeteria_manager.data.loginResponse
 import com.scm.sch_cafeteria_manager.databinding.ActivityLoginBinding
@@ -41,33 +42,41 @@ class LoginActivity : AppCompatActivity() {
             btnLoginConfirm.setOnClickListener {
 
                 //화면 테스트
-//                cacheHelper.saveToCache(this@LoginActivity, "authority", "3")
-//                startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
-//                finish()
+                test()
 
-                val id = editLoginId.text.toString()
-                val password = editLoginPassword.text.toString()
-
-                //TODO: 서버로 보내서 인증 -> Test 필요
-                if (id.isEmpty() && password.isEmpty()) {
-                    Toast.makeText(this@LoginActivity, "아이디 혹은 비밀번호를 입력하세요.", Toast.LENGTH_LONG)
-                        .show()
-                } else if (id.length > 4 && password.length < 4) {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "아이디 혹은 비밀번호가 4자리 이상이어야 합니다.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                } else {
-                    login(id, password)
-
-                }
+                //setLogin()
             }
 
             // 뒤로가기
             appbarLogin.setNavigationOnClickListener {
                 backDialog()
             }
+        }
+    }
+
+    private fun test() {
+        cacheHelper.saveToCache(this@LoginActivity, "authority", UserRole.ADMIN1)
+        startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
+        finish()
+    }
+
+    private fun ActivityLoginBinding.setLogin() {
+        val id = editLoginId.text.toString()
+        val password = editLoginPassword.text.toString()
+
+        //TODO: 서버로 보내서 인증 -> Test 필요
+        if (id.isEmpty() && password.isEmpty()) {
+            Toast.makeText(this@LoginActivity, "아이디 혹은 비밀번호를 입력하세요.", Toast.LENGTH_LONG)
+                .show()
+        } else if (id.length > 4 && password.length < 4) {
+            Toast.makeText(
+                this@LoginActivity,
+                "아이디 혹은 비밀번호가 4자리 이상이어야 합니다.",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            login(id, password)
+
         }
     }
 

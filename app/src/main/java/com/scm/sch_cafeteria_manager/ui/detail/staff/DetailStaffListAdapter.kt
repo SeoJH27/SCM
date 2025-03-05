@@ -8,6 +8,9 @@ import com.scm.sch_cafeteria_manager.data.D_API_Response
 import com.scm.sch_cafeteria_manager.data.Meal
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
+import com.scm.sch_cafeteria_manager.util.utilAll.blank
+import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
+import com.scm.sch_cafeteria_manager.util.utilAll.nonData
 
 class DetailStaffListAdapter(
     items: D_API_Response,
@@ -16,20 +19,12 @@ class DetailStaffListAdapter(
 
     private var MEAL: List<Meal?> = emptyList()
 
-    // TODO : 비었을 때 사용. 더 적절한 용어 필요함.
-    private val emptyMEAL = listOf(
-        Meal(
-            "",
-            "", "",
-            "정보 없음", "정보 없음"
-        )
-    )
-
     init {
         items.data.dailyMeals.forEach {
             if (it.dayOfWeek == dayOfWeek) {
+                if(it.meals.isEmpty()) MEAL = emptyMEAL
+                else MEAL = it.meals
                 Log.e("DetailStaffListAdapter", "init - $MEAL")
-                MEAL = it.meals
                 return@forEach
             }
         }
@@ -39,8 +34,8 @@ class DetailStaffListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailStaffItemViewHolder {
         Log.e("DetailStaffListAdapter", "onCreateViewHolder")
         if (MEAL.isEmpty()) {
-            Log.e("DetailStaffListAdapter", "데이터가 없습니다.")
             MEAL = emptyMEAL
+            Log.e("DetailStaffListAdapter", "onCreateViewHolder: 데이터가 없습니다. 할당: $MEAL")
         }
 
         return DetailStaffItemViewHolder.from(parent)
@@ -51,9 +46,9 @@ class DetailStaffListAdapter(
         Log.e("DetailStaffListAdapter", "onBindViewHolder: ${MEAL.get(position)}")
         if (MEAL.isEmpty()) {
             MEAL = emptyMEAL
+            Log.e("DetailStaffListAdapter", "onBindViewHolder: 데이터가 없습니다. 할당: $MEAL")
             holder.bind(MEAL.get(position))
-        }
-        else {
+        } else {
             holder.bind(MEAL.get(position))
         }
     }
@@ -76,11 +71,11 @@ class DetailStaffItemViewHolder(
         with(binding) {
             if (meal != null) {
                 txtTime.text = meal.mealType
-            } else txtTime.setText("")
+            } else txtTime.setText(blank)
             if (meal != null) {
                 txtMenu.text = meal.mainMenu?.replaceCommaToLinebreak()
             } else
-                txtMenu.setText("정보 없음")
+                txtMenu.setText(nonData)
         }
     }
 

@@ -1,13 +1,14 @@
 package com.scm.sch_cafeteria_manager.util
 
 import android.content.Context
+import com.scm.sch_cafeteria_manager.data.UserRole
 import java.io.File
 
 object cacheHelper {
 
-    fun saveToCache(context: Context, fileName: String, data: String) {
+    fun saveToCache(context: Context, fileName: String, data: UserRole) {
         val file = File(context.cacheDir, fileName)
-        file.writeText(data)
+        file.writeText(data.toString())
     }
 
     fun readFromCache(context: Context, fileName: String): String? {

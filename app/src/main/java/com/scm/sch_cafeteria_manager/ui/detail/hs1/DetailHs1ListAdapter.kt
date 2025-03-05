@@ -9,28 +9,22 @@ import com.scm.sch_cafeteria_manager.data.DetailMenu
 import com.scm.sch_cafeteria_manager.data.Meal
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
+import com.scm.sch_cafeteria_manager.util.utilAll.blank
+import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
+import com.scm.sch_cafeteria_manager.util.utilAll.nonData
 
 class DetailHs1ListAdapter(
-    items: D_API_Response,
-    private val dayOfWeek: String
+    items: D_API_Response, private val dayOfWeek: String
 ) : RecyclerView.Adapter<DetailHs1ItemViewHolder>() {
 
     private var MEAL: List<Meal?> = emptyList()
 
-    // TODO : 비었을 때 사용. 더 적절한 용어 필요함.
-    private val emptyMEAL = listOf(
-        Meal(
-            "",
-            "", "",
-            "정보 없음", "정보 없음"
-        )
-    )
-
     init {
         items.data.dailyMeals.forEach {
             if (it.dayOfWeek == dayOfWeek) {
+                if (it.meals.isEmpty()) MEAL = emptyMEAL
+                else MEAL = it.meals
                 Log.e("DetailHs1ListAdapter", "init - $MEAL")
-                MEAL = it.meals
                 return@forEach
             }
         }
@@ -40,10 +34,9 @@ class DetailHs1ListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailHs1ItemViewHolder {
         Log.e("DetailHs1ListAdapter", "onCreateViewHolder")
         if (MEAL.isEmpty()) {
-            Log.e("DetailHs1ListAdapter", "데이터가 없습니다.")
             MEAL = emptyMEAL
+            Log.e("DetailHs1ListAdapter", "onCreateViewHolder: 데이터가 없습니다. 할당: $MEAL")
         }
-
         return DetailHs1ItemViewHolder.from(parent)
     }
 
@@ -52,9 +45,9 @@ class DetailHs1ListAdapter(
         Log.e("DetailHs1ListAdapter", "onBindViewHolder: ${MEAL.get(position)}")
         if (MEAL.isEmpty()) {
             MEAL = emptyMEAL
+            Log.e("DetailHs1ListAdapter", "onBindViewHolder: 데이터가 없습니다. 할당: $MEAL")
             holder.bind(MEAL.get(position))
-        }
-        else {
+        } else {
             holder.bind(MEAL.get(position))
         }
     }
@@ -63,8 +56,6 @@ class DetailHs1ListAdapter(
         Log.e("DetailHs1ListAdapter", "getItemCount")
         return if (MEAL.isEmpty()) 1 else MEAL.size
     }
-
-
 }
 
 class DetailHs1ItemViewHolder(
@@ -77,11 +68,10 @@ class DetailHs1ItemViewHolder(
         with(binding) {
             if (meal != null) {
                 txtTime.text = meal.mealType
-            } else txtTime.setText("")
+            } else txtTime.setText(blank)
             if (meal != null) {
                 txtMenu.text = meal.mainMenu?.replaceCommaToLinebreak()
-            } else
-                txtMenu.setText("정보 없음")
+            } else txtMenu.setText(nonData)
         }
     }
 
@@ -90,9 +80,7 @@ class DetailHs1ItemViewHolder(
             Log.e("DetailHs1ListAdapter", "from")
             return DetailHs1ItemViewHolder(
                 ItemDetailMenuBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
         }

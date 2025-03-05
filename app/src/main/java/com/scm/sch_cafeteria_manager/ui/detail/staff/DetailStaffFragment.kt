@@ -14,9 +14,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.D_API_Response
+import com.scm.sch_cafeteria_manager.data.dOw
 import com.scm.sch_cafeteria_manager.databinding.FragmentDetailStaffBinding
-import com.scm.sch_cafeteria_manager.ui.detail.hs1.DetailHs1ListAdapter
 import com.scm.sch_cafeteria_manager.util.fetchDetailMenu
+import com.scm.sch_cafeteria_manager.util.utilAll.setInquiryLink
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.util.Objects.isNull
@@ -119,7 +120,7 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
-                    connectAdapter(DayOfWeek.MONDAY.toString())
+                    connectAdapter(dOw.MONDAY.dName)
                 }
             })
 
@@ -143,11 +144,11 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
             return
         }
         when (tab.position) {
-            0 -> connectAdapter(DayOfWeek.MONDAY.toString())
-            1 -> connectAdapter(DayOfWeek.TUESDAY.toString())
-            2 -> connectAdapter(DayOfWeek.WEDNESDAY.toString())
-            3 -> connectAdapter(DayOfWeek.THURSDAY.toString())
-            4 -> connectAdapter(DayOfWeek.FRIDAY.toString())
+            0 -> connectAdapter(dOw.MONDAY.dName)
+            1 -> connectAdapter(dOw.TUESDAY.dName)
+            2 -> connectAdapter(dOw.WEDNESDAY.dName)
+            3 -> connectAdapter(dOw.THURSDAY.dName)
+            4 -> connectAdapter(dOw.FRIDAY.dName)
             else -> throw IllegalArgumentException("Invalid button config: $tab")
         }
     }
@@ -188,11 +189,6 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
         val url = "https://naver.me/G9rdyWhF"
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
-    }
-
-    private fun setInquiryLink() {
-        // TODO: 카카오톡 오픈채팅방 하이퍼링크
-        Log.e("DetailStaffFragment", "setInquiryLink")
     }
 
     override fun onDestroyView() {
