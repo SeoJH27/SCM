@@ -9,6 +9,8 @@ object utilAll {
     val blank = ""
     val nonData = "정보 없음"
 
+    const val BASE_URL = "http://3.36.206.211:8080"
+
     // TODO : 비었을 때 사용. 더 적절한 용어 필요함.
     val emptyMEAL = listOf(
         Meal(blank, blank, blank, nonData, nonData)

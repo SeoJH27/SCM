@@ -29,7 +29,7 @@ class AdminFragment : Fragment() {
     private var _binding: FragmentAdminBinding? = null
     private val binding get() = _binding!!
 
-    private var fragmentContext: Context? = null
+    //private var fragmentContext: Context? = null
 
     val formatter = DateTimeFormatter.ofPattern("dd")
     private var authority = UserRole.ADMIN1 // 0: Master, 1: 총관리자, 2: 향설1관, 3: 교직원
@@ -62,6 +62,9 @@ class AdminFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val days = getDates()
 
+        // Camera test
+        testCamera()
+
         setManageDay(days)
         setTodayDate()
         // 권한별 접근 제한
@@ -73,6 +76,14 @@ class AdminFragment : Fragment() {
         }
         setBackToHome()
     }
+
+
+    private fun testCamera(){
+        binding.btnEarlyClosed.setOnClickListener {
+            findNavController().navigate(AdminFragmentDirections.testCamera())
+        }
+    }
+
 
     // 총관리자 레이아웃
     private fun setAdmin1(days: List<String>) {
@@ -316,11 +327,6 @@ class AdminFragment : Fragment() {
 
     private fun getStr(id: Int): String {
         return resources.getString(id)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        fragmentContext = null // Context 해제
     }
 
     override fun onDestroyView() {

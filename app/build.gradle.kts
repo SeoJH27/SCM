@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 android {
@@ -65,4 +66,9 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.mlkit.vision)
+
+    // Glide: 작동 안됨
+    //    implementation(libs.glide)
+    //    kapt(libs.lifecycle.compiler)
+    //    kapt(libs.glide.compiler)
 }

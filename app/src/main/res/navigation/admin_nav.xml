@@ -28,6 +28,9 @@
         <action
             android:id="@+id/to_masterStaff"
             app:destination="@id/masterStaffWeekFragment" />
+        <action
+            android:id="@+id/test_camera"
+            app:destination="@id/fragment_camera" />
     </fragment>
 
     <fragment
@@ -100,11 +103,12 @@
         android:id="@+id/fragment_camera"
         android:name="com.scm.sch_cafeteria_manager.ui.admin.CameraFragment"
         android:label="CameraFragment"
-        tools:layout="@layout/fragment_camera" >
+        tools:layout="@layout/fragment_camera">
         <action
             android:id="@+id/to_admin"
-            app:destination="@id/fragment_admin" />
+            app:destination="@id/fragment_admin"
+            app:popUpTo="@id/fragment_admin"
+            app:popUpToInclusive="false" />
     </fragment>
-
 
 </navigation>

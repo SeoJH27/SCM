@@ -1,7 +1,7 @@
 package com.scm.sch_cafeteria_manager.util
 
 import android.content.Context
-import com.scm.sch_cafeteria_manager.data.BASE_URL
+import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import com.scm.sch_cafeteria_manager.data.loginRequest
 import com.scm.sch_cafeteria_manager.data.loginResponse
 import com.scm.sch_cafeteria_manager.ui.login.LoginActivity

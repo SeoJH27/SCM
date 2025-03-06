@@ -74,6 +74,9 @@
     <string name="desc_img_hs1">향설 1관 식단표 사진</string>
     <string name="desc_icon_other_cafeteria">누르면 다른 식당으로 전환할 수 있는 아이콘</string>
     <string name="desc_detail_staff_tab">교직원 식당 메뉴 탭 바</string>
+    <string name="str_capture">촬영</string>
+    <string name="desc_iv_camera_capture">카메라로 촬영한 이미지를 미리볼 수 있는 뷰</string>
+    <string name="str_cancle">취소</string>
 
 
 </resources>

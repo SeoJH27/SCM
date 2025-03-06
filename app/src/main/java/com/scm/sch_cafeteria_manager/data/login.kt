@@ -1,7 +1,5 @@
 package com.scm.sch_cafeteria_manager.data
 
-const val BASE_URL = "http://3.36.206.211:8080"
-
 data class loginRequest(
     val loginId: String,
     val password: String

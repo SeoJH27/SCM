@@ -1,7 +1,7 @@
 package com.scm.sch_cafeteria_manager.util
 
 import android.util.Log
-import com.scm.sch_cafeteria_manager.data.BASE_URL
+import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import com.scm.sch_cafeteria_manager.data.TM_API_Response
 import com.scm.sch_cafeteria_manager.data.TodayMenu
 import kotlinx.coroutines.Dispatchers

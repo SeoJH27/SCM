@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.scm.sch_cafeteria_manager.data.AdminData
-import com.scm.sch_cafeteria_manager.data.BASE_URL
 import com.scm.sch_cafeteria_manager.data.adminResponse
+import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
