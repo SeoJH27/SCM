@@ -12,15 +12,11 @@
         android:fitsSystemWindows="true"
         app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_admin_hs1"
+        <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-            app:navigationIcon="@drawable/ic_arrow_back"
-            app:titleTextAppearance="@style/AppTextTitle.23sp"
-            tools:title="월요일 수정" />
-
+            app:navigationIcon="@drawable/ic_arrow_back" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -34,52 +30,42 @@
             android:layout_height="0dp">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_week"
+                android:id="@+id/btn_upload_week"
                 style="@style/btnStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:text="@string/str_week"
                 app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/img_master_staff"
-                app:layout_constraintEnd_toStartOf="@id/btn_current_day"
+                app:layout_constraintBottom_toTopOf="@id/background_view"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_current_day"
+                android:id="@+id/btn_change_week"
                 style="@style/btnStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/str_monday"
+                android:layout_marginTop="30dp"
+                android:text="요일 변경"
                 app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toBottomOf="@id/btn_week"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btn_week"
-                app:layout_constraintTop_toTopOf="@id/btn_week" />
-
-            <ImageView
-                android:id="@+id/img_master_staff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                tools:src="@drawable/ic_map"
-                android:contentDescription="@string/desc_img_staff"
                 app:layout_constraintBottom_toTopOf="@id/background_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_week" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/background_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/bg_admin_background"
                 app:layout_constraintBottom_toBottomOf="@id/space_lunch_menu_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_master_staff" />
+                app:layout_constraintTop_toBottomOf="@id/btn_upload_week" />
 
             <TextView
                 android:id="@+id/txt_change_time_lunch"
@@ -179,7 +165,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_lunch_menu" />
 
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_upload_all_menu"
                 style="@style/btnStyle"
@@ -193,15 +178,20 @@
                 app:layout_constraintTop_toBottomOf="@id/space_lunch_menu_bottom" />
 
             <ProgressBar
-                android:id="@+id/progressbar"
+                android:id="@+id/prograssbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:outlineAmbientShadowColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     </androidx.core.widget.NestedScrollView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -12,7 +12,7 @@
         android:fitsSystemWindows="true"
         app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_admin_hs1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                 android:id="@+id/background_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/bg_admin_background"
                 app:layout_constraintBottom_toBottomOf="@id/space_lunch_menu_bottom"
@@ -169,16 +169,15 @@
                 app:layout_constraintTop_toBottomOf="@id/space_lunch_menu_bottom" />
 
             <ProgressBar
-                android:outlineAmbientShadowColor="@color/black"
-                android:id="@+id/prograssbar"
+                android:id="@+id/progressbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:outlineAmbientShadowColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:visibility="visible"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

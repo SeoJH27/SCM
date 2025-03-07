@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class manageDate(
     val week: String,  // 요일
-    val day: String    // 날짜
+    val day: String    // 일주일 시작 날짜
 ): Parcelable

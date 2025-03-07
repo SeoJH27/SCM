@@ -1,11 +1,18 @@
 package com.scm.sch_cafeteria_manager.ui.admin.admin1
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,7 +22,9 @@ import com.scm.sch_cafeteria_manager.data.AdminData
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminHs1Binding
 import com.scm.sch_cafeteria_manager.util.fetchMealPlans
+import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
 import kotlinx.coroutines.launch
+import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Objects.isNull
@@ -45,7 +54,7 @@ class Admin1Hs1WeekFragment : Fragment() {
     }
 
     private suspend fun fetchData() {
-        binding.prograssbar.visibility = View.VISIBLE // UI 블로킹 시작
+        binding.progressbar.visibility = View.VISIBLE // UI 블로킹 시작
 
         Log.e("Admin1Hs1WeekFragment", "fetchData - prograssbar")
         lifecycleScope.launch {
@@ -76,7 +85,7 @@ class Admin1Hs1WeekFragment : Fragment() {
                 errorToBack()
             }
 
-            binding.prograssbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
+            binding.progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
         }
     }
 
@@ -85,12 +94,13 @@ class Admin1Hs1WeekFragment : Fragment() {
         checkDay()
         setPhotoBtnClick()
         setTextSaveBtnClick()
+        setCheckImage()
         setBack()
     }
 
     // 한 번 더 해당 요일이 맞는지 체크
     private fun checkDay() {
-        if (data!!.data.dailyMeals.dayOfWeek == args.manageDate.day) {
+        if (data!!.data.dailyMeals.dayOfWeek == args.manageDate.week) {
             val meals = data!!.data.dailyMeals.meals
             with(binding) {
                 editBreakfastOpenTimeStart.setText(meals[0].operatingStartTime)
@@ -117,11 +127,46 @@ class Admin1Hs1WeekFragment : Fragment() {
     }
 
 
-    // 텍스트 저장
+    // 서버로 전송 및 뒤로가기
     private fun setTextSaveBtnClick() {
         binding.btnUploadAllMenu.setOnClickListener {
             //TODO: uploading
+            // 캐시에 사진이 있는지 테스트 후 같이 보내기
+            // 저장 후 캐시 이미지 삭제
         }
+    }
+
+    // 캐시 이미지 체크
+    private fun setCheckImage() {
+        binding.btnImage.setOnClickListener {
+            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+            if (file.exists()) {
+                popUpImage(file)
+            } else {
+                Toast.makeText(requireContext(), "찍은 사진이 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun popUpImage(file: File) {
+        val builder = Dialog(requireContext())
+        builder.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        builder.window!!.setBackgroundDrawable(
+            ColorDrawable(Color.TRANSPARENT)
+        )
+        builder.setOnDismissListener {
+            //nothing
+        }
+
+        val imageView = ImageView(requireContext())
+        imageView.setImageURI(file.toUri())
+        builder.addContentView(
+            imageView, RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        )
+        builder.show()
     }
 
 

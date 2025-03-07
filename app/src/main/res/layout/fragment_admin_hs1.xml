@@ -12,7 +12,7 @@
         android:fitsSystemWindows="true"
         app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_admin_hs1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,15 +42,49 @@
                 android:text="@string/str_shoot"
                 app:backgroundTint="@color/grey_100"
                 app:layout_constraintBottom_toTopOf="@id/background_view"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_change_week"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/btn_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/desc_btn_cache_image"
+                android:src="@drawable/ic_image"
+                app:backgroundTint="@color/grey_100"
+                app:layout_constraintBottom_toTopOf="@id/background_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_upload_week"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_change_week"
+                style="@style/btnStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_chance_week"
+                android:visibility="gone"
+                app:backgroundTint="@color/grey_100"
+                app:layout_constraintBottom_toTopOf="@id/background_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_upload_week"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/txt_change_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/background_view"
+                app:layout_constraintEnd_toEndOf="@id/background_view"
+                app:layout_constraintStart_toStartOf="@id/background_view" />
 
             <View
                 android:id="@+id/background_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/bg_admin_background"
                 app:layout_constraintBottom_toBottomOf="@id/space_dinner_menu_bottom"
@@ -63,7 +97,7 @@
                 style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="30dp"
                 android:text="@string/str_change_open_time"
                 app:layout_constraintBottom_toTopOf="@id/view_breakfast_menu"
@@ -372,15 +406,13 @@
                 app:layout_constraintTop_toBottomOf="@id/space_dinner_menu_bottom" />
 
             <ProgressBar
-                android:id="@+id/prograssbar"
+                android:id="@+id/progressbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:visibility="visible"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

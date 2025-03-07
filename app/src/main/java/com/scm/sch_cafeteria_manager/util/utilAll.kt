@@ -10,6 +10,8 @@ object utilAll {
     val nonData = "정보 없음"
 
     const val BASE_URL = "http://3.36.206.211:8080"
+    const val photoFilePath = "photo.jpg"
+
 
     // TODO : 비었을 때 사용. 더 적절한 용어 필요함.
     val emptyMEAL = listOf(

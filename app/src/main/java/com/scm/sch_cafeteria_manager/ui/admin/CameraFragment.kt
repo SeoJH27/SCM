@@ -23,9 +23,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.databinding.FragmentCameraBinding
 import java.io.File
+import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
 import java.util.Objects.isNull
 
 class CameraFragment : Fragment() {
@@ -34,8 +36,6 @@ class CameraFragment : Fragment() {
 
     private var imageCapture: ImageCapture? = null
     private var capturedPhotoFile: File? = null  // 저장할 파일 변수
-
-    private val photoFilePath = "photo.jpg"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +56,7 @@ class CameraFragment : Fragment() {
         }
         startCamera()
         setCaptureBtn()
-
+        setBack()
     }
 
     private fun setCaptureBtn() {
@@ -110,10 +110,9 @@ class CameraFragment : Fragment() {
         Log.e("CameraFragment", "setSaveBtn")
         binding.btnPhotoSave.setOnClickListener {
             // 캐시가 있으면 true
-            if (isNull(isCacheFileExists(photoFilePath))) {
+            if (isNull(isCacheFileExists())) {
                 Toast.makeText(requireContext(), "사진을 찍지 않았습니다.", Toast.LENGTH_LONG).show()
             } else {
-                // TODO: 저장된 사진을 서버로 보냄
                 Toast.makeText(requireContext(), "사진 전송 완료", Toast.LENGTH_LONG).show()
                 backToHome()
             }
@@ -164,14 +163,14 @@ class CameraFragment : Fragment() {
         Log.e("CameraFragment", "capturedPhotoFile: $capturedPhotoFile")
 
         if (viewLifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-            imageCapture?.takePicture(outputOptions, ContextCompat.getMainExecutor(requireContext()),
+            imageCapture?.takePicture(outputOptions,
+                ContextCompat.getMainExecutor(requireContext()),
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults?) {
                         try {
                             capturedPhotoFile = photoFile  // 파일 저장
                             Log.e("CameraFragment", "capturedPhotoFile: $capturedPhotoFile")
                             displayCapturedPhoto(photoFile)  // 미리보기 표시
-                            Toast.makeText(requireContext(), "사진 저장됨", Toast.LENGTH_SHORT).show()
                             setCancleBtn()
                         } catch (e: Exception) {
                             Log.e("CameraFragment", "onImageSaved 중 실패", e)
@@ -179,7 +178,7 @@ class CameraFragment : Fragment() {
                     }
 
                     override fun onError(exception: ImageCaptureException) {
-                        Log.e("CameraFragment", "사진저장실패", exception)
+                        Log.e("CameraFragment", "사진 저장 실패: ", exception)
                     }
                 })
         }
@@ -198,13 +197,49 @@ class CameraFragment : Fragment() {
     }
 
     // 캐시 확인
-    fun isCacheFileExists(fileName: String): Boolean {
-        val file = File(requireContext().cacheDir, fileName)
+    fun isCacheFileExists(): Boolean {
+        val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
         return file.exists()
     }
 
+    // 사진 삭제
+    fun deleteCacheFile(): Boolean {
+        try {
+            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+            file.delete()
+        } catch (e: Exception) {
+            Log.e("CameraFragment", "사진 저장 실패: ", e)
+        }
+        return isCacheFileExists()
+    }
+
+    private fun setBack() {
+        binding.toolbarCamera.setNavigationOnClickListener {
+            // 저장을 누르지 않았을 경우 경고 후 Back
+            MaterialAlertDialogBuilder(requireContext())
+                .setMessage("뒤로가기 시 저장이 되지 않습니다.\n관리자 홈 화면으로 돌아가시겠습니까?")
+                .setNegativeButton("취소") { dialog, which ->
+                    // 취소 시 아무 액션 없음
+                }
+                .setPositiveButton("확인") { dialog, which ->
+                    Log.e("CameraFragment", "사진 삭제")
+                    cancleBackToHome()
+                }
+                .show()
+        }
+    }
+
     private fun backToHome() {
-        findNavController().navigate(CameraFragmentDirections.toAdmin())
+        findNavController().navigateUp()
+    }
+
+    private fun cancleBackToHome() {
+        if (deleteCacheFile()) {
+            findNavController().navigateUp()
+
+        } else {
+            findNavController().navigateUp()
+        }
     }
 
     private val requestPermissionLauncher =
