@@ -1,5 +1,7 @@
 package com.scm.sch_cafeteria_manager.data
 
+import android.graphics.Bitmap
+
 data class AdminData(
     val status: String,
     val message: String,
@@ -14,4 +16,16 @@ data class MealData(
 data class DailyMeals(
     val dayOfWeek: String,            // 요일 (예: "MONDAY")
     val meals: List<Meal>             // 식사 리스트
+)
+
+data class MasterData(
+    val status: String,
+    val message: String,
+    val data: MealWithImg
+)
+
+data class MealWithImg(
+    val dayMealImg: Bitmap,
+    val weekMealImg: Bitmap,
+    val dailyMeal: DailyMeals
 )

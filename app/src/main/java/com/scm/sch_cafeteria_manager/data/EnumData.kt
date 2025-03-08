@@ -16,3 +16,9 @@ enum class dOw(
     MONDAY("MONDAY"), TUESDAY("TUESDAY"), WEDNESDAY("WEDNESDAY"), THURSDAY("THURSDAY"), FRIDAY("FRIDAY")
 }
 
+enum class MealType(
+    val myNmae: String
+){
+    BREAKFAST("BREAKFAST"), LUNCH("LUNCH"), DINNER("DINNER")
+}
+
