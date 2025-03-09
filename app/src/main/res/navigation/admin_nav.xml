@@ -12,31 +12,36 @@
         tools:layout="@layout/fragment_admin">
         <action
             android:id="@+id/to_admin1Hs1"
-            app:destination="@id/admin1Hs1WeekFragment" />
+            app:destination="@id/admin1Hs1WeekFragment"
+            app:popUpTo="@id/fragment_admin" />
         <action
             android:id="@+id/to_admin1Staff"
-            app:destination="@id/admin1StaffWeekFragment" />
+            app:destination="@id/admin1StaffWeekFragment"
+            app:popUpTo="@id/fragment_admin" />
         <action
             android:id="@+id/to_admin2"
-            app:destination="@id/admin2WeekFragment" />
+            app:destination="@id/admin2WeekFragment"
+            app:popUpTo="@id/fragment_admin" />
         <action
             android:id="@+id/to_admin3"
-            app:destination="@id/admin3WeekFragment" />
+            app:destination="@id/admin3WeekFragment"
+            app:popUpTo="@id/fragment_admin" />
         <action
             android:id="@+id/to_masterHs1"
-            app:destination="@id/masterHs1WeekFragment" />
+            app:destination="@id/masterHs1WeekFragment"
+            app:popUpTo="@id/fragment_admin" />
         <action
             android:id="@+id/to_masterStaff"
-            app:destination="@id/masterStaffWeekFragment" />
-        <action
-            android:id="@+id/test_camera"
-            app:destination="@id/fragment_camera" />
+            app:destination="@id/masterStaffWeekFragment"
+            app:popUpTo="@id/fragment_admin" />
         <action
             android:id="@+id/to_masterHs1AllWeek"
-            app:destination="@id/masterHs1AllWeekFragment" />
+            app:destination="@id/masterHs1AllWeekFragment"
+            app:popUpTo="@id/fragment_admin" />
         <action
             android:id="@+id/to_masterStaffAllWeek"
-            app:destination="@id/masterStaffAllWeekFragment" />
+            app:destination="@id/masterStaffAllWeekFragment"
+            app:popUpTo="@id/fragment_admin" />
     </fragment>
 
     <fragment
@@ -49,7 +54,8 @@
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
         <action
             android:id="@+id/admin1Hs1_to_camera"
-            app:destination="@id/fragment_camera" />
+            app:destination="@id/fragment_camera"
+            app:popUpTo="@id/admin1Hs1WeekFragment"/>
     </fragment>
     <fragment
         android:id="@+id/admin2WeekFragment"
@@ -61,7 +67,8 @@
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
         <action
             android:id="@+id/admin2_to_camera"
-            app:destination="@id/fragment_camera" />
+            app:destination="@id/fragment_camera"
+            app:popUpTo="@id/admin2WeekFragment"/>
     </fragment>
     <fragment
         android:id="@+id/admin3WeekFragment"
@@ -73,7 +80,8 @@
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
         <action
             android:id="@+id/admin3_to_camera"
-            app:destination="@id/fragment_camera" />
+            app:destination="@id/fragment_camera"
+            app:popUpTo="@id/admin3WeekFragment"/>
     </fragment>
     <fragment
         android:id="@+id/admin1StaffWeekFragment"
@@ -85,7 +93,8 @@
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
         <action
             android:id="@+id/admin1Staff_to_camera"
-            app:destination="@id/fragment_camera" />
+            app:destination="@id/fragment_camera"
+            app:popUpTo="@id/admin1StaffWeekFragment" />
     </fragment>
     <fragment
         android:id="@+id/masterHs1WeekFragment"
@@ -109,11 +118,11 @@
         android:id="@+id/fragment_camera"
         android:name="com.scm.sch_cafeteria_manager.ui.admin.CameraFragment"
         android:label="CameraFragment"
-        tools:layout="@layout/fragment_camera"/>
+        tools:layout="@layout/fragment_camera" />
     <fragment
         android:id="@+id/masterHs1AllWeekFragment"
         android:name="com.scm.sch_cafeteria_manager.ui.admin.master.MasterHs1AllWeekFragment"
-        android:label="MasterHs1AllWeekFragment" >
+        android:label="MasterHs1AllWeekFragment">
         <argument
             android:name="manageDate"
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
@@ -121,7 +130,7 @@
     <fragment
         android:id="@+id/masterStaffAllWeekFragment"
         android:name="com.scm.sch_cafeteria_manager.ui.admin.master.MasterStaffAllWeekFragment"
-        android:label="MasterStaffAllWeekFragment" >
+        android:label="MasterStaffAllWeekFragment">
         <argument
             android:name="manageDate"
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />

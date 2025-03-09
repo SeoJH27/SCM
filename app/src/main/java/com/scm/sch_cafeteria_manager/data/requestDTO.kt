@@ -1,5 +1,6 @@
 package com.scm.sch_cafeteria_manager.data
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -13,7 +14,7 @@ data class requestDTO_week(
 data class requestDTO_dayOfWeek(
     val weekStartDate: String,
     val dailyMeals: Daily,
-    val dailyMealImg: String
+    val dailyMealImg: Bitmap
 ) : Parcelable
 
 @Parcelize

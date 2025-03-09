@@ -21,7 +21,7 @@ class TodayMenuListAdapter(
     init {
         items.data.forEach {
             if (it.restaurantName == restaurantName) {
-                if (it.meals.isEmpty()) MEAL = emptyMEAL
+                if (it.meals.isNullOrEmpty()) MEAL = emptyMEAL
                 else MEAL = it.meals
                 Log.e("TodayMenuListAdapter", "init: $restaurantName - $MEAL")
                 return@forEach

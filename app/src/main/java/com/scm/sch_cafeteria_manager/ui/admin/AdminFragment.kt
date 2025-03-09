@@ -70,9 +70,6 @@ class AdminFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val days = getDates()
 
-        // Camera test
-        testCamera()
-
         setManageDay(days)
         setTodayDate()
         // 권한별 접근 제한
@@ -84,13 +81,6 @@ class AdminFragment : Fragment() {
         }
         checkCacheImage()
         setBackToHome()
-    }
-
-
-    private fun testCamera() {
-        binding.btnEarlyClosed.setOnClickListener {
-            findNavController().navigate(AdminFragmentDirections.testCamera())
-        }
     }
 
 

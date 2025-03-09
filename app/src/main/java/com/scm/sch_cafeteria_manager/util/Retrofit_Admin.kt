@@ -8,11 +8,16 @@ import com.scm.sch_cafeteria_manager.data.adminResponse
 import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
 import com.scm.sch_cafeteria_manager.data.requestDTO_week
 import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
+import okhttp3.Response as okResponse
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -23,7 +28,7 @@ import retrofit2.http.QueryMap
 interface ApiService_Admin {
     @Headers("Content-Type: application/json")
     @GET("/api/admin/meal-plans")
-    suspend fun getMealPlans(@QueryMap pendingDailyMealRequestDTO: Map<String, String>): AdminData
+    suspend fun getMealPlans(@QueryMap pendingDailyMealRequestDTO: Map<String, String>): Response<AdminData>
 
     @Headers("Content-Type: application/json")
     @GET("/api/admin/week-meal-plans")
@@ -60,10 +65,29 @@ object Retrofit_Admin {
             .build()
             .create(ApiService_Admin::class.java)
     }
+
+    fun createApiService_test(context: Context): ApiService_Admin {
+        // Headers에 AuthInterceptor 추가
+//        val okHttpClient = OkHttpClient.Builder()
+//            .addInterceptor(AuthInterceptor_Admin(context))
+//            .build()
+
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            //.client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+            .create(ApiService_Admin::class.java)
+    }
 }
 
 private class AuthInterceptor_Admin(private val context: Context) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
+    override fun intercept(chain: Interceptor.Chain): okResponse {
         val token = PrefHelper_Login.getAccessToken(context) // SharedPreferences에서 토큰 불러오기
         val request = chain.request().newBuilder()
 
@@ -89,7 +113,7 @@ suspend fun fetchWeekMealPlans(
 
     try {
         val response = Retrofit_Admin.createApiService(context).getWeekMealPlans(requestDTO)
-        Log.e("fetchWeekMealPlans", "응답 데이터: $response")
+        Log.e("fetchWeekMealPlans", "응답 데이터: ${response.message}")
         return response
     } catch (e: Exception) {
         Log.e("fetchWeekMealPlans", "API 호출 실패: ${e.message}")
@@ -110,32 +134,42 @@ suspend fun fetchMealPlans(
         "dayOfWeek" to dayOfWeek,
         "weekStartDate" to weekStartDate
     )
+    var value: AdminData? = null
 
+    //TODO: Moshi Test
     Log.e("fetchMealPlans", "requestDTO: $requestDTO")
-
     try {
-        val response = Retrofit_Admin.createApiService(context).getMealPlans(requestDTO)
-        Log.e("fetchMealPlans", "응답 데이터: $response")
-        return response
+        val data = Retrofit_Admin.createApiService_test(context).getMealPlans(requestDTO)
+
+        if (data.isSuccessful) {
+            val adminData: AdminData? = data.body()
+        }else{
+            value = null
+        }
+
+        Log.e("fetchMealPlans", "응답 데이터: ${data.body()?.data?.dailyMeal}")
+
     } catch (e: Exception) {
         Log.e("fetchMealPlans", "API 호출 실패: ${e.message}")
-        return null
     }
+    return value
 }
 
 // 일주일 메뉴 모두 업로드 하기
 suspend fun uploadingWeekMealPlans(
     context: Context,
     body: requestDTO_week
-) {
+): adminResponse? {
     val jsonData = Gson().toJson(body) // data를 JSON으로 변환
 
     try {
         val response =
             Retrofit_Admin.createApiService(context).setWeekMealPlans("HYANGSEOL1", jsonData)
-        println("응답 데이터: $response")
+        Log.e("uploadingWeekMealPlans", "응답 데이터: ${response.message}")
+        return response
     } catch (e: Exception) {
-        println("upLoadingMealPlans API 호출 실패: ${e.message}")
+        println("uploadingWeekMealPlans API 호출 실패: ${e.message}")
+        return null
     }
 }
 
@@ -145,14 +179,16 @@ suspend fun uploadingMealPlans(
     context: Context,
     dayOfWeek: String,
     body: requestDTO_dayOfWeek
-) {
+): adminResponse? {
     val jsonData = Gson().toJson(body) // data를 JSON으로 변환
 
     try {
         val response =
             Retrofit_Admin.createApiService(context).setMealPlans("HYANGSEOL1", dayOfWeek, jsonData)
-        println("응답 데이터: $response")
+        Log.e("uploadingMealPlans", "응답 데이터: ${response.message}")
+        return response
     } catch (e: Exception) {
-        println("upLoadingMealPlans API 호출 실패: ${e.message}")
+        Log.e("uploadingMealPlans", "API 호출 실패: ${e.message}")
+        return null
     }
 }

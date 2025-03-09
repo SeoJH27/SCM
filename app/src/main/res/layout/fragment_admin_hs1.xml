@@ -69,7 +69,7 @@
                 app:layout_constraintBottom_toTopOf="@id/background_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btn_upload_week"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txt_change_week"
@@ -82,6 +82,7 @@
 
             <View
                 android:id="@+id/background_view"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="10dp"
@@ -104,14 +105,13 @@
                 app:layout_constraintStart_toStartOf="@id/background_view"
                 app:layout_constraintTop_toTopOf="@id/background_view" />
 
-            <EditText
-                android:id="@+id/edit_breakfast_open_time_start"
+            <TextView
+                android:id="@+id/txt_breakfast_open_time_start"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:inputType="date|datetime"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
@@ -128,18 +128,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/str_swung_dash"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
-                app:layout_constraintEnd_toStartOf="@id/edit_breakfast_open_time_end"
-                app:layout_constraintStart_toEndOf="@id/edit_breakfast_open_time_start"
+                app:layout_constraintEnd_toStartOf="@id/txt_breakfast_open_time_end"
+                app:layout_constraintStart_toEndOf="@id/txt_breakfast_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/txt_change_time_breakfast" />
 
-            <EditText
-                android:id="@+id/edit_breakfast_open_time_end"
+            <TextView
+                android:id="@+id/txt_breakfast_open_time_end"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:inputType="date|datetime"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
@@ -154,7 +153,8 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintBottom_toTopOf="@id/edit_breakfast_menu"
-                app:layout_constraintEnd_toEndOf="@id/edit_breakfast_open_time_end"
+                app:layout_constraintEnd_toEndOf="@id/txt_breakfast_open_time_end"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
                 app:layout_constraintTop_toBottomOf="@id/txt_change_time_breakfast" />
 
@@ -170,6 +170,7 @@
 
             <TextView
                 android:id="@+id/edit_breakfast_menu"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_btn"
@@ -178,10 +179,9 @@
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@id/view_breakfast_menu"
                 app:layout_constraintEnd_toEndOf="@id/view_breakfast_menu"
-                app:layout_constraintStart_toStartOf="@id/edit_breakfast_open_time_start"
+                app:layout_constraintStart_toStartOf="@id/txt_breakfast_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/view_breakfast_menu"
                 tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
-
 
             <View
                 android:id="@+id/line_1"
@@ -197,6 +197,7 @@
 
             <TextView
                 android:id="@+id/txt_change_time_lunch"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -205,14 +206,13 @@
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
                 app:layout_constraintTop_toBottomOf="@+id/line_1" />
 
-            <EditText
-                android:id="@+id/edit_lunch_open_time_start"
+            <TextView
+                android:id="@+id/txt_lunch_open_time_start"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:inputType="date|datetime"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
@@ -229,18 +229,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/str_swung_dash"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
-                app:layout_constraintEnd_toStartOf="@id/edit_lunch_open_time_end"
-                app:layout_constraintStart_toEndOf="@id/edit_lunch_open_time_start"
+                app:layout_constraintEnd_toStartOf="@id/txt_lunch_open_time_end"
+                app:layout_constraintStart_toEndOf="@id/txt_lunch_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch" />
 
-            <EditText
-                android:id="@+id/edit_lunch_open_time_end"
+            <TextView
+                android:id="@+id/txt_lunch_open_time_end"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:inputType="date|datetime"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
@@ -255,7 +254,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintBottom_toTopOf="@id/edit_lunch_menu"
-                app:layout_constraintEnd_toEndOf="@id/edit_lunch_open_time_end"
+                app:layout_constraintEnd_toEndOf="@id/txt_lunch_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
                 app:layout_constraintTop_toBottomOf="@id/txt_change_time_lunch" />
 
@@ -271,6 +270,7 @@
 
             <TextView
                 android:id="@+id/edit_lunch_menu"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_btn"
@@ -279,7 +279,7 @@
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@id/view_lunch_menu"
                 app:layout_constraintEnd_toEndOf="@id/view_lunch_menu"
-                app:layout_constraintStart_toStartOf="@id/edit_lunch_open_time_start"
+                app:layout_constraintStart_toStartOf="@id/txt_lunch_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/view_lunch_menu"
                 tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
 
@@ -297,6 +297,7 @@
 
             <TextView
                 android:id="@+id/txt_change_time_dinner"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -305,14 +306,13 @@
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
                 app:layout_constraintTop_toBottomOf="@+id/line_2" />
 
-            <EditText
-                android:id="@+id/edit_dinner_open_time_start"
+            <TextView
+                android:id="@+id/txt_dinner_open_time_start"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:inputType="date|datetime"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
@@ -329,18 +329,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/str_swung_dash"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
-                app:layout_constraintEnd_toStartOf="@id/edit_dinner_open_time_end"
-                app:layout_constraintStart_toEndOf="@id/edit_dinner_open_time_start"
+                app:layout_constraintEnd_toStartOf="@id/txt_dinner_open_time_end"
+                app:layout_constraintStart_toEndOf="@id/txt_dinner_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/txt_change_time_dinner" />
 
-            <EditText
-                android:id="@+id/edit_dinner_open_time_end"
+            <TextView
+                android:id="@+id/txt_dinner_open_time_end"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:inputType="date|datetime"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
@@ -355,7 +354,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintBottom_toBottomOf="@id/background_view"
-                app:layout_constraintEnd_toEndOf="@id/edit_dinner_open_time_end"
+                app:layout_constraintEnd_toEndOf="@id/txt_dinner_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_dinner"
                 app:layout_constraintTop_toBottomOf="@id/txt_change_time_dinner" />
 
@@ -371,6 +370,7 @@
 
             <TextView
                 android:id="@+id/edit_dinner_menu"
+                style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_btn"
@@ -379,7 +379,7 @@
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
                 app:layout_constraintEnd_toEndOf="@id/view_dinner_menu"
-                app:layout_constraintStart_toStartOf="@id/edit_dinner_open_time_start"
+                app:layout_constraintStart_toStartOf="@id/txt_dinner_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/view_dinner_menu"
                 tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
 

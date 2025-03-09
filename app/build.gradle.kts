@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -66,6 +66,14 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.mlkit.vision)
+
+    // Moshi
+    implementation (libs.moshi)
+    implementation (libs.moshi.kotlin)
+    ksp(libs.moshi.kotlin.codegen)
+    implementation (libs.converter.moshi)
+    implementation(libs.logging.interceptor)
+
 
     // Glide: 작동 안됨
     //    implementation(libs.glide)

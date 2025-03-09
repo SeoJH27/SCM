@@ -8,6 +8,7 @@ object utilAll {
 
     val blank = ""
     val nonData = "정보 없음"
+    val nonDate = "00:00"
 
     const val BASE_URL = "http://3.36.206.211:8080"
     const val photoFilePath = "photo.jpg"

@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="요일 변경"
+                android:text="@string/str_change_week"
                 app:backgroundTint="@color/grey_100"
                 app:layout_constraintBottom_toTopOf="@id/background_view"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -74,13 +74,13 @@
                 android:layout_marginTop="40dp"
                 android:text="@string/str_change_open_time"
                 app:layout_constraintBottom_toTopOf="@id/view_lunch_menu"
-                app:layout_constraintEnd_toStartOf="@id/edit_lunch_open_time_start"
+                app:layout_constraintEnd_toStartOf="@id/txt_lunch_open_time_start"
                 app:layout_constraintStart_toStartOf="@id/background_view"
                 app:layout_constraintTop_toTopOf="@+id/background_view"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <EditText
-                android:id="@+id/edit_lunch_open_time_start"
+                android:id="@+id/txt_lunch_open_time_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
@@ -103,12 +103,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/str_swung_dash"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
-                app:layout_constraintEnd_toStartOf="@id/edit_lunch_open_time_end"
-                app:layout_constraintStart_toEndOf="@id/edit_lunch_open_time_start"
+                app:layout_constraintEnd_toStartOf="@id/txt_lunch_open_time_end"
+                app:layout_constraintStart_toEndOf="@id/txt_lunch_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch" />
 
             <EditText
-                android:id="@+id/edit_lunch_open_time_end"
+                android:id="@+id/txt_lunch_open_time_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
@@ -130,7 +130,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="40dp"
                 app:layout_constraintBottom_toBottomOf="@id/edit_lunch_menu"
-                app:layout_constraintEnd_toEndOf="@id/edit_lunch_open_time_end"
+                app:layout_constraintEnd_toEndOf="@id/txt_lunch_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
                 app:layout_constraintTop_toBottomOf="@id/txt_change_time_lunch" />
 
@@ -153,7 +153,7 @@
                 android:padding="10dp"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="@id/view_lunch_menu"
-                app:layout_constraintStart_toStartOf="@id/edit_lunch_open_time_start"
+                app:layout_constraintStart_toStartOf="@id/txt_lunch_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/view_lunch_menu"
                 tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
 
