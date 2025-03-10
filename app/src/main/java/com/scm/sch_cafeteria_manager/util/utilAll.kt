@@ -1,8 +1,16 @@
 package com.scm.sch_cafeteria_manager.util
 
-import com.scm.sch_cafeteria_manager.data.Meal
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import android.util.Log
 import com.scm.sch_cafeteria_manager.data.dOw
+import com.scm.sch_cafeteria_manager.data.meals
+import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
+import kotlinx.coroutines.CoroutineStart
 import java.util.Calendar
+import java.util.Objects.isNull
+
 
 object utilAll {
 
@@ -16,14 +24,14 @@ object utilAll {
 
     // TODO : 비었을 때 사용. 더 적절한 용어 필요함.
     val emptyMEAL = listOf(
-        Meal(blank, blank, blank, nonData, nonData)
+        meals(blank, blank, blank, nonData, nonData)
     )
 
     fun setInquiryLink() {
         // TODO: 카카오톡 오픈채팅방 하이퍼링크
     }
 
-    fun doDayOfWeek(): String {
+    fun intToDayOfWeek(): String {
         val cal: Calendar = Calendar.getInstance()
         val nWeek: Int = cal.get(Calendar.DAY_OF_WEEK)
 
@@ -46,7 +54,26 @@ object utilAll {
         }
     }
 
-    fun weekToInt(){
+    fun stringToBitmap(img: String?): Bitmap?{
+        try{
+            val encodeByte = Base64.decode(img, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+        } catch (e: Exception){
+            Log.e("utilAll", "stringToBitmap - Error $e")
+            return null
+        }
+    }
 
+    fun combinMainAndSub(mainMenu: String?, subMenu: String?): String?{
+        if(isNull(mainMenu))
+            return null
+        else{
+            if(isNull(subMenu)){
+                return mainMenu?.replaceCommaToLinebreak()
+            } else{
+                val menu = mainMenu?.replaceCommaToLinebreak() + "\n" + subMenu?.replaceCommaToLinebreak()
+                return menu
+            }
+        }
     }
 }

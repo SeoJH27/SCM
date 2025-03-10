@@ -3,7 +3,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Meal(
+data class meals(
     val mealType: String?,
     val operatingStartTime: String?,
     val operatingEndTime: String?,
@@ -11,20 +11,16 @@ data class Meal(
     val subMenu: String?
 ): Parcelable
 
-data class meals(
-    val mealType: String,
-    val operatingStartTime: String,
-    val operatingEndTime: String,
-    val mainMenu: String,
-    val subMenu: String
-)
+@Parcelize
+data class dailyMeals(
+    val dayOfWeek: String,
+    val meals: List<meals?>
+): Parcelable
 
-//sealed class Meals{
-//    data class data(
-//        val mealType: String?,
-//        val operatingStartTime: String?,
-//        val operatingEndTime: String?,
-//        val mainMenu: String?,
-//        val subMenu: String?
-//    ): Meals()
-//}
+@Parcelize
+data class DetailMenu(
+    val restaurantOperatingStartTime: String,
+    val restaurantOperatingEndTime: String,
+    val dailyMeal: List<dailyMeal>,
+    val active: Boolean
+): Parcelable

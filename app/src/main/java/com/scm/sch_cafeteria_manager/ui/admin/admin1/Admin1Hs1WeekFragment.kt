@@ -20,23 +20,23 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.AdminData
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
-import com.scm.sch_cafeteria_manager.data.Daily
-import com.scm.sch_cafeteria_manager.data.Meal
+import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.MealType
+import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminHs1Binding
+import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
 import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
 import com.scm.sch_cafeteria_manager.util.fetchMealPlans
 import com.scm.sch_cafeteria_manager.util.uploadingMealPlans
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
+import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
 import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
-import com.squareup.moshi.JsonReader
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -46,9 +46,7 @@ class Admin1Hs1WeekFragment : Fragment() {
     private var _binding: FragmentAdminHs1Binding? = null
     private val binding get() = _binding!!
     private val args: Admin1Hs1WeekFragmentArgs by navArgs()
-    var data: AdminData? = null
-
-    var jsonReader: AdminData? = null
+    var jsonData: AdminData? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,57 +66,20 @@ class Admin1Hs1WeekFragment : Fragment() {
         }
     }
 
-    // 한 번 더 해당 요일이 맞는지 체크
-//    private fun checkDay() {
-//        if (data?.data.dailyMeals == null) {
-//            with(binding) {
-//                txtBreakfastOpenTimeStart.text = nonDate
-//                txtBreakfastOpenTimeEnd.text = nonDate
-//                editBreakfastMenu.text = blank
-//
-//                txtLunchOpenTimeStart.text = nonDate
-//                txtLunchOpenTimeEnd.text = nonDate
-//                editLunchMenu.text = blank
-//
-//                txtDinnerOpenTimeStart.text = nonDate
-//                txtDinnerOpenTimeEnd.text = nonDate
-//                editDinnerMenu.text = blank
-//            }
-//        } else if (data!!.data.dailyMeals!!.dayOfWeek == args.manageDate.week) {
-//            val meals = data!!.data.dailyMeals!!.meals
-//            with(binding) {
-//                toolbarAdminHs1.title = data!!.data.dailyMeals!!.dayOfWeek + " 수정"
-//
-//                txtBreakfastOpenTimeStart.text = meals[0].operatingStartTime ?: nonDate
-//                txtBreakfastOpenTimeEnd.text = meals[0].operatingEndTime ?: nonDate
-//                editBreakfastMenu.text = meals[0].mainMenu
-//
-//                txtLunchOpenTimeStart.text = meals[1].operatingStartTime ?: nonDate
-//                txtLunchOpenTimeEnd.text = meals[1].operatingEndTime ?: nonDate
-//                editLunchMenu.text = meals[1].mainMenu
-//
-//                txtDinnerOpenTimeStart.text = meals[2].operatingStartTime ?: nonDate
-//                txtDinnerOpenTimeEnd.text = meals[2].operatingEndTime ?: nonDate
-//                editDinnerMenu.text = meals[2].mainMenu
-//            }
-//        }
-//    }
-
+    // 서버로부터 data 받기
     private suspend fun fetchData() {
         binding.progressbar.visibility = View.VISIBLE // UI 블로킹 시작
 
-        Log.e("Admin1Hs1WeekFragment", "fetchData - prograssbar")
         lifecycleScope.launch {
             // Retrofit에서 데이터 가져오기
             try {
-                // TODO : Moshi 테스트중
-                jsonReader = fetchMealPlans(
+                jsonData = fetchMealPlans(
                     requireContext(),
                     CafeteriaData.HYANGSEOL1.cfName,
                     args.manageDate.week,
                     weekStartDate(args.manageDate.day)
                 )
-                Log.e("Admin1Hs1WeekFragment", "fetchAdmin1Hs1Menu: ${data?.data}")
+                Log.e("Admin1Hs1WeekFragment", "fetchAdmin1Hs1Menu: ${jsonData?.data?.dailyMeal}")
             } catch (e: Exception) {
                 Log.e(
                     "Admin1Hs1WeekFragment",
@@ -126,17 +87,14 @@ class Admin1Hs1WeekFragment : Fragment() {
                 )
                 errorToBack()
             }
-            Log.e("Admin1Hs1WeekFragment", "fetchAdmin1Hs1Menu")
 
-            if (checkData(data)) {
-                Log.e(
-                    "Admin1Hs1WeekFragment",
-                    "fetchAdmin1Hs1Menu: checkData - ${data?.data}"
-                )
-                setLayout()
+            // 가져온 데이터 체크
+            if (checkData(jsonData)) {
+                Log.e("Admin1Hs1WeekFragment", "Data check - Pass")
+                setLayout() // UI 세팅
             } else {
                 Toast.makeText(requireContext(), "데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
-                Log.e("Admin1Hs1WeekFragment", "fetchAdmin1Hs1Menu: errorToBack - $data")
+                Log.e("Admin1Hs1WeekFragment", "Data check - Fail: jsonData=${jsonData?.data?.dailyMeal}")
                 errorToBack()
             }
 
@@ -144,27 +102,67 @@ class Admin1Hs1WeekFragment : Fragment() {
         }
     }
 
+    // <editor-folder desc="setLayout">
     // 대기 상태 데이터 불러오기
     private fun setLayout() {
-        moshiData()
-//        checkDay()
-//        setPhotoBtnClick()
-//        setTimeChanger()
-//        setTextSaveBtnClick()
-//        setCheckImage()
-//        setBack()
+        checkDay()
+        setPhotoBtnClick()
+        setTimeChanger()
+        setTextSaveBtnClick()
+        setCheckImage()
+        setBack()
     }
 
-    private fun moshiData(){
-        val moshi = Moshi.Builder().build()
-        val jsonAdapter = moshi.adapter(Admin1Hs1WeekFragment::class.java)
+    // 한 번 더 해당 요일이 맞는지 체크 후 Layout 세팅
+    private fun checkDay() {
+        if (jsonData?.data?.dailyMeal == null) {
+            with(binding) {
+                txtBreakfastOpenTimeStart.text = nonDate
+                txtBreakfastOpenTimeEnd.text = nonDate
+                txtBreakfastMenu.text = blank
 
-        if (isNull(jsonReader)){
-            errorToBack()
-        }else{
+                txtLunchOpenTimeStart.text = nonDate
+                txtLunchOpenTimeEnd.text = nonDate
+                txtLunchMenu.text = blank
 
-            Log.e("Admin1Hs1WeekFragment", "Moshi Test : ${jsonReader?.data}")
-
+                txtDinnerOpenTimeStart.text = nonDate
+                txtDinnerOpenTimeEnd.text = nonDate
+                txtDinnerMenu.text = blank
+            }
+        } else if (jsonData!!.data.dailyMeal.dayOfWeek == args.manageDate.week) {
+            val meals = jsonData!!.data.dailyMeal.meals
+            with(binding) {
+                toolbarAdminHs1.title = jsonData!!.data.dailyMeal.dayOfWeek + " 수정"
+                // Breakfast
+                txtBreakfastOpenTimeStart.text = meals[0].operatingStartTime ?: nonDate
+                txtBreakfastOpenTimeEnd.text = meals[0].operatingEndTime ?: nonDate
+                var menu = combinMainAndSub(meals[0].mainMenu, meals[0].subMenu)
+                if(isNull(menu)) {
+                    txtBreakfastMenu.text = nonDate
+                    txtBreakfastMenu.setTextColor(resources.getColor(R.color.grey_300))
+                }
+                else
+                    txtBreakfastMenu.text = menu
+                // Lunch
+                txtLunchOpenTimeStart.text = meals[1].operatingStartTime ?: nonDate
+                txtLunchOpenTimeEnd.text = meals[1].operatingEndTime ?: nonDate
+                menu = combinMainAndSub(meals[1].mainMenu, meals[1].subMenu)
+                if(isNull(menu)){
+                    txtLunchMenu.text = nonDate
+                    txtLunchMenu.setTextColor(resources.getColor(R.color.grey_300))
+                }
+                else
+                    txtLunchMenu.text = menu
+                // Dinner
+                txtDinnerOpenTimeStart.text = meals[2].operatingStartTime ?: nonDate
+                txtDinnerOpenTimeEnd.text = meals[2].operatingEndTime ?: nonDate
+                menu = combinMainAndSub(meals[2].mainMenu, meals[2].subMenu)
+                if (isNull(menu)){
+                    txtDinnerMenu.text = nonDate
+                    txtDinnerMenu.setTextColor(resources.getColor(R.color.grey_300))
+                }else
+                    txtDinnerMenu.text = menu
+            }
         }
     }
 
@@ -199,6 +197,20 @@ class Admin1Hs1WeekFragment : Fragment() {
         }
     }
 
+    // 캐시 이미지 체크
+    private fun setCheckImage() {
+        binding.btnImage.setOnClickListener {
+            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+            if (file.exists()) {
+                popUpImage(file)
+            } else {
+                Toast.makeText(requireContext(), "찍은 사진이 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    // </editor-folder>
+
+    // <editor-folder desc="Save">
     // 서버로 전송 및 뒤로가기
     private fun setTextSaveBtnClick() {
         binding.btnUploadAllMenu.setOnClickListener {
@@ -221,6 +233,7 @@ class Admin1Hs1WeekFragment : Fragment() {
                                 "Admin1Hs1WeekFragment",
                                 "uploadingMealPlans - ${response?.code}"
                             )
+                            backToHome()
                         } catch (e: Exception) {
                             Log.e(
                                 "Admin1Hs1WeekFragment",
@@ -236,30 +249,31 @@ class Admin1Hs1WeekFragment : Fragment() {
         }
     }
 
+    // 전송을 위한 데이터 가져오기 TODO: 다시 재정리
     private fun getMenu(): requestDTO_dayOfWeek? {
         if (checkImg()) {
             with(binding) {
                 val body = requestDTO_dayOfWeek(
                     weekStartDate(args.manageDate.day),
-                    Daily(
+                    dailyMeals(
                         args.manageDate.week, listOf(
-                            Meal(
+                            meals(
                                 MealType.BREAKFAST.myNmae,
                                 txtBreakfastOpenTimeStart.text.toString(),
                                 txtBreakfastOpenTimeEnd.text.toString(),
-                                editBreakfastMenu.text.toString(),
+                                txtBreakfastMenu.text.toString(),
                                 blank
                             ),
-                            Meal(
+                            meals(
                                 MealType.LUNCH.myNmae, txtLunchOpenTimeStart.text.toString(),
-                                txtLunchOpenTimeEnd.text.toString(), editLunchMenu.text.toString(),
+                                txtLunchOpenTimeEnd.text.toString(), txtLunchMenu.text.toString(),
                                 blank
                             ),
-                            Meal(
+                            meals(
                                 MealType.DINNER.myNmae,
                                 txtDinnerOpenTimeStart.text.toString(),
                                 txtDinnerOpenTimeEnd.text.toString(),
-                                editDinnerMenu.text.toString(),
+                                txtDinnerMenu.text.toString(),
                                 blank
                             )
                         )
@@ -274,17 +288,12 @@ class Admin1Hs1WeekFragment : Fragment() {
         }
     }
 
-    // 캐시 이미지 체크
-    private fun setCheckImage() {
-        binding.btnImage.setOnClickListener {
-            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-            if (file.exists()) {
-                popUpImage(file)
-            } else {
-                Toast.makeText(requireContext(), "찍은 사진이 없습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
+    // 이미지 가져오기
+    private fun getImg(): Bitmap {
+        val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+        return BitmapFactory.decodeFile(file.absolutePath);
     }
+    // </editor-folder>
 
     // 찍은 사진 팝업으로 보여주기
     private fun popUpImage(file: File) {
@@ -305,12 +314,6 @@ class Admin1Hs1WeekFragment : Fragment() {
             )
         )
         builder.show()
-    }
-
-    // 이미지 가져오기
-    private fun getImg(): Bitmap {
-        val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-        return BitmapFactory.decodeFile(file.absolutePath);
     }
 
     // 해당 버튼에 해당하는 날짜 연산
@@ -353,16 +356,18 @@ class Admin1Hs1WeekFragment : Fragment() {
 
     }
 
-    // 데이터 Null-check
-    private fun checkData(data: AdminData?): Boolean {
-        return !(isNull(data) || isNull(data?.data))
-    }
-
+    // 이미지 체크
     private fun checkImg(): Boolean {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
         return file.exists()
     }
 
+    // 데이터 Null-check
+    private fun checkData(data: AdminData?): Boolean {
+        return !(isNull(data) || isNull(data?.data))
+    }
+
+    // <editor-folder desc="setBack">
     // 뒤로가기 버튼
     private fun setBack() {
         binding.toolbarAdminHs1.setNavigationOnClickListener {
@@ -379,6 +384,7 @@ class Admin1Hs1WeekFragment : Fragment() {
         }
     }
 
+    // 에러 시 뒤로가기
     private fun errorToBack() {
         Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_SHORT).show()
         backToHome()
@@ -388,6 +394,7 @@ class Admin1Hs1WeekFragment : Fragment() {
     private fun backToHome() {
         findNavController().navigateUp()
     }
+    // </editor-folder>
 
     override fun onDestroyView() {
         super.onDestroyView()

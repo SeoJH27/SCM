@@ -13,14 +13,14 @@ data class requestDTO_week(
 @Parcelize
 data class requestDTO_dayOfWeek(
     val weekStartDate: String,
-    val dailyMeals: Daily,
+    val dailyMeals: dailyMeals,
     val dailyMealImg: Bitmap
 ) : Parcelable
 
 @Parcelize
 data class requestDTO_week_master(
     val weekStartDate: String,
-    val dailyMeals: Daily,
+    val dailyMeals: dailyMeals,
 ) : Parcelable
 
 

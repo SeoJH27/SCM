@@ -51,22 +51,7 @@ interface ApiService_Admin {
 }
 
 object Retrofit_Admin {
-
     fun createApiService(context: Context): ApiService_Admin {
-        // Headers에 AuthInterceptor 추가
-//        val okHttpClient = OkHttpClient.Builder()
-//            .addInterceptor(AuthInterceptor_Admin(context))
-//            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            //.client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiService_Admin::class.java)
-    }
-
-    fun createApiService_test(context: Context): ApiService_Admin {
         // Headers에 AuthInterceptor 추가
 //        val okHttpClient = OkHttpClient.Builder()
 //            .addInterceptor(AuthInterceptor_Admin(context))
@@ -98,28 +83,32 @@ private class AuthInterceptor_Admin(private val context: Context) : Interceptor 
     }
 }
 
+//
+//                                            fetch (GET)
+//
+
 // 일주일 메뉴 불러오기
-suspend fun fetchWeekMealPlans(
-    context: Context,
-    weekStartDate: String,
-    restaurantName: String
-): AdminData? {
-    val requestDTO = mapOf(
-        "weekStartDate" to weekStartDate,
-        "restaurantName" to restaurantName
-    )
-
-    Log.e("fetchWeekMealPlans", "requestDTO: $requestDTO")
-
-    try {
-        val response = Retrofit_Admin.createApiService(context).getWeekMealPlans(requestDTO)
-        Log.e("fetchWeekMealPlans", "응답 데이터: ${response.message}")
-        return response
-    } catch (e: Exception) {
-        Log.e("fetchWeekMealPlans", "API 호출 실패: ${e.message}")
-        return null
-    }
-}
+//suspend fun fetchWeekMealPlans(
+//    context: Context,
+//    weekStartDate: String,
+//    restaurantName: String
+//): AdminData? {
+//    val requestDTO = mapOf(
+//        "weekStartDate" to weekStartDate,
+//        "restaurantName" to restaurantName
+//    )
+//
+//    Log.e("fetchWeekMealPlans", "requestDTO: $requestDTO")
+//
+//    try {
+//        val response = Retrofit_Admin.createApiService(context).getWeekMealPlans(requestDTO)
+//        Log.e("fetchWeekMealPlans", "응답 데이터: ${response.message}")
+//        return response
+//    } catch (e: Exception) {
+//        Log.e("fetchWeekMealPlans", "API 호출 실패: ${e.message}")
+//        return null
+//    }
+//}
 
 // 특정 요일 메뉴 불러오기
 suspend fun fetchMealPlans(
@@ -128,32 +117,33 @@ suspend fun fetchMealPlans(
     dayOfWeek: String,
     weekStartDate: String,
 ): AdminData? {
-
     val requestDTO = mapOf(
         "restaurantName" to restaurantName,
         "dayOfWeek" to dayOfWeek,
-        "weekStartDate" to weekStartDate
+        "weekStartDate" to "2025-03-03"
     )
     var value: AdminData? = null
 
-    //TODO: Moshi Test
     Log.e("fetchMealPlans", "requestDTO: $requestDTO")
     try {
-        val data = Retrofit_Admin.createApiService_test(context).getMealPlans(requestDTO)
+        val data = Retrofit_Admin.createApiService(context).getMealPlans(requestDTO)
 
+        // 데이터 체크: 데이터가 없으면 null 반환
         if (data.isSuccessful) {
-            val adminData: AdminData? = data.body()
+            value = data.body()
         }else{
             value = null
         }
-
-        Log.e("fetchMealPlans", "응답 데이터: ${data.body()?.data?.dailyMeal}")
-
+        Log.e("fetchMealPlans", "응답 데이터: ${value?.data?.dailyMeal}")
     } catch (e: Exception) {
         Log.e("fetchMealPlans", "API 호출 실패: ${e.message}")
     }
     return value
 }
+
+//
+//                                            Upload (POST)
+//
 
 // 일주일 메뉴 모두 업로드 하기
 suspend fun uploadingWeekMealPlans(

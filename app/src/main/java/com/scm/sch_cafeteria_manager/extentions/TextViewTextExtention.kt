@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.util.Log
 import android.widget.TextView
+import com.scm.sch_cafeteria_manager.R
 
 fun TextView.setTimePickerDialog(context: Context) {
     val alarmHour = 0
@@ -14,5 +15,5 @@ fun TextView.setTimePickerDialog(context: Context) {
     )
     timePickerDialog.show()
     Log.e("Admin1Hs1WeekFragment", "setTimePicker")
-    this.text = "$alarmHour+$alarmMinute"
+    this.text = String.format(resources.getString(R.string.timePickerText), alarmHour, alarmMinute)
 }

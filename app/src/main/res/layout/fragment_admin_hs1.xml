@@ -152,7 +152,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
-                app:layout_constraintBottom_toTopOf="@id/edit_breakfast_menu"
+                app:layout_constraintBottom_toTopOf="@id/txt_breakfast_menu"
                 app:layout_constraintEnd_toEndOf="@id/txt_breakfast_open_time_end"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
@@ -169,7 +169,7 @@
                 app:layout_constraintTop_toTopOf="@id/view_breakfast_menu" />
 
             <TextView
-                android:id="@+id/edit_breakfast_menu"
+                android:id="@+id/txt_breakfast_menu"
                 style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -253,7 +253,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="20dp"
-                app:layout_constraintBottom_toTopOf="@id/edit_lunch_menu"
+                app:layout_constraintBottom_toTopOf="@id/txt_lunch_menu"
                 app:layout_constraintEnd_toEndOf="@id/txt_lunch_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
                 app:layout_constraintTop_toBottomOf="@id/txt_change_time_lunch" />
@@ -269,7 +269,7 @@
                 app:layout_constraintTop_toTopOf="@id/view_lunch_menu" />
 
             <TextView
-                android:id="@+id/edit_lunch_menu"
+                android:id="@+id/txt_lunch_menu"
                 style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -369,7 +369,7 @@
                 app:layout_constraintTop_toTopOf="@id/view_dinner_menu" />
 
             <TextView
-                android:id="@+id/edit_dinner_menu"
+                android:id="@+id/txt_dinner_menu"
                 style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -389,7 +389,7 @@
                 android:layout_height="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_dinner_menu" />
+                app:layout_constraintTop_toBottomOf="@id/txt_dinner_menu" />
 
 
             <com.google.android.material.button.MaterialButton

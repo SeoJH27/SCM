@@ -8,7 +8,6 @@ data class D_API_Response(
     val data: DetailMenu
 )
 
-
 // 오늘의 메뉴 API Response
 data class TM_API_Response(
     val status: String,

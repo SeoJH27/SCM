@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.scm.sch_cafeteria_manager.data.D_API_Response
-import com.scm.sch_cafeteria_manager.data.Meal
+import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
@@ -17,10 +17,10 @@ class DetailStaffListAdapter(
     private val dayOfWeek: String
 ) : RecyclerView.Adapter<DetailStaffItemViewHolder>() {
 
-    private var MEAL: List<Meal?> = emptyList()
+    private var MEAL: List<meals?> = emptyList()
 
     init {
-        items.data.dailyMeals.forEach {
+        items.data.dailyMeal.forEach {
             if (it.dayOfWeek == dayOfWeek) {
                 if(it.meals.isEmpty()) MEAL = emptyMEAL
                 else MEAL = it.meals
@@ -65,7 +65,7 @@ class DetailStaffItemViewHolder(
     private val binding: ItemDetailMenuBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(meal: Meal?) {
+    fun bind(meal: meals?) {
         Log.e("DetailStaffListAdapter", "bind")
 
         with(binding) {

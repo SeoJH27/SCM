@@ -11,5 +11,5 @@ data class TodayMenu(
 @Parcelize
 data class Cafeteria(
     val restaurantName: String,
-    val meals: List<Meal?>
+    val meals: List<meals?>
 ): Parcelable

@@ -142,7 +142,7 @@
                 android:layout_height="80dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="40dp"
-                app:layout_constraintBottom_toBottomOf="@id/edit_lunch_menu"
+                app:layout_constraintBottom_toBottomOf="@id/txt_lunch_menu"
                 app:layout_constraintEnd_toEndOf="@id/txt_lunch_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
                 app:layout_constraintTop_toBottomOf="@id/txt_change_time_lunch" />
@@ -158,7 +158,7 @@
                 app:layout_constraintTop_toTopOf="@id/view_lunch_menu" />
 
             <EditText
-                android:id="@+id/edit_lunch_menu"
+                android:id="@+id/txt_lunch_menu"
                 android:layout_width="0dp"
                 style="@style/AppTextBody.15sp"
                 android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                 android:layout_height="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edit_lunch_menu" />
+                app:layout_constraintTop_toBottomOf="@id/txt_lunch_menu" />
 
 
             <com.google.android.material.button.MaterialButton

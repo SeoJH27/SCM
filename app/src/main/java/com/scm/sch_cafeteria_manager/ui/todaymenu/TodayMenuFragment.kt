@@ -1,6 +1,5 @@
 package com.scm.sch_cafeteria_manager.ui.todaymenu
 
-import android.icu.util.LocaleData
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,15 +13,12 @@ import com.google.android.material.tabs.TabLayout
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.TM_API_Response
-import com.scm.sch_cafeteria_manager.data.TodayMenu
 import com.scm.sch_cafeteria_manager.databinding.FragmentTodayMenuBinding
 import com.scm.sch_cafeteria_manager.util.fetchTodayMenu
-import com.scm.sch_cafeteria_manager.util.utilAll.doDayOfWeek
+import com.scm.sch_cafeteria_manager.util.utilAll.intToDayOfWeek
 import com.scm.sch_cafeteria_manager.util.utilAll.setInquiryLink
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
 import java.time.LocalDate
-import java.util.Locale
 import java.util.Objects.isNull
 
 class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
@@ -54,8 +50,8 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
             // Retrofit에서 데이터 가져오기
             try {
                 // 오늘 요일을 기반으로 불러오기
-                TODAYMENU = fetchTodayMenu(doDayOfWeek())
-                Log.e("DetailHs1Fragment", "fetchTodayMenu - TODAYMENU: $TODAYMENU, ${doDayOfWeek()}")
+                TODAYMENU = fetchTodayMenu(intToDayOfWeek())
+                Log.e("DetailHs1Fragment", "fetchTodayMenu - TODAYMENU: $TODAYMENU, ${intToDayOfWeek()}")
             } catch (e: Error) {
                 Log.e("TodayMenuFragment", "fetchData - e: $e")
             }

@@ -39,9 +39,9 @@ class AdminFragment : Fragment() {
     private var _binding: FragmentAdminBinding? = null
     private val binding get() = _binding!!
 
-    val formatter = DateTimeFormatter.ofPattern("dd")
+    private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd")
     private var authority = UserRole.ADMIN1 // 0: Master, 1: 총관리자, 2: 향설1관, 3: 교직원
-    var isTitleClick = true   // true: 향설 1관, false: 교직원 식당
+    private var isTitleClick = false   // true: 향설 1관, false: 교직원 식당
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,19 +70,26 @@ class AdminFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val days = getDates()
 
+        // 권한별 접근 제한
+        setAuthority(days)
         setManageDay(days)
         setTodayDate()
-        // 권한별 접근 제한
+        checkCacheImage()
+        setBackToHome()
+    }
+
+    // <editor-fold desc="setLayout">
+    // -----------------------------------------------------------------------------------------------
+
+    // 권한별 레이아웃 설정
+    private fun setAuthority(days: List<String>) {
         when (authority) {
             UserRole.MASTER -> setMaster(days[0])
             UserRole.ADMIN1 -> setAdmin1(days[0])
             UserRole.ADMIN2 -> setAdmin2(days[0])
             UserRole.ADMIN3 -> setAdmin3(days[0])
         }
-        checkCacheImage()
-        setBackToHome()
     }
-
 
     // 총관리자 레이아웃
     private fun setAdmin1(day: String) {
@@ -93,43 +100,8 @@ class AdminFragment : Fragment() {
             setTodayDate()
             setManageMenuNavigateTo("admin1Hs1", day)
 
-            viewAdminTitle.setOnClickListener {
-                setAdmin1TitleClick(day)
-            }
+            setChangeTitleAdmin(day)
         }
-    }
-
-    private fun setAdmin1TitleClick(day: String) {
-        with(binding) {
-            // 향설 1관
-            if (!isTitleClick) {
-                // 향설 1관으로 타이틀 변경
-                txtAdminTitle.text = getStr(R.string.str_hs1)
-                // 해당 날짜 표시 및 시간
-                setTodayDate()
-                // 세부 메뉴의 ClickListener
-                setManageMenuNavigateTo("admin1Hs1", day)
-                // 다음 타이틀 클릭 시
-                isTitleClick = false
-            }
-            // 교직원 식당
-            else {
-                // 교직원 식당으로 타이틀 변경
-                txtAdminTitle.text = getStr(R.string.str_staff)
-                // 해당 날짜 표시 및 시간
-                setTodayDate()
-                // 세부 메뉴의 ClickListener
-                setManageMenuNavigateTo("admin1Staff", day)
-                // 다음 타이틀 클릭 시
-                isTitleClick = true
-            }
-        }
-    }
-
-    private fun setTodayDate() {
-        binding.txtAdminDate.setText(
-            LocalDate.now().format(formatter) + "일 " + checkMealTimeHs1()
-        )
     }
 
     // 향설 1관 레이아웃
@@ -153,7 +125,6 @@ class AdminFragment : Fragment() {
             txtAdminTitle.text = getStr(R.string.str_staff)
             setTodayDate()
             setManageMenuNavigateTo("admin3", day)
-
         }
     }
 
@@ -170,12 +141,9 @@ class AdminFragment : Fragment() {
 
             setTodayDate()
             setTextUploadWeek("masterHs1All", day)
-            viewAdminTitle.setOnClickListener {
-                setMasterTitleClick(day)
-            }
+            setChangeTitleMaster(day)
         }
     }
-
 
     // Master 식당 제어
     private fun setMasterTitleClick(day: String) {
@@ -191,7 +159,9 @@ class AdminFragment : Fragment() {
                 // 세부 메뉴의 ClickListener
                 setManageMenuNavigateTo("masterHs1", day)
                 // 다음 타이틀 클릭 시
-                isTitleClick = false
+                isTitleClick = true
+                // 다시 Title 트리거 set
+                setChangeTitleMaster(day)
             }
             // 교직원 식당
             else {
@@ -204,9 +174,55 @@ class AdminFragment : Fragment() {
                 // 세부 메뉴의 ClickListener
                 setManageMenuNavigateTo("masterStaff", day)
                 // 다음 타이틀 클릭 시
-                isTitleClick = true
+                isTitleClick = false
+                // 다시 Title 트리거 set
+                setChangeTitleMaster(day)
             }
         }
+    }
+    // -----------------------------------------------------------------------------------------------
+    //</editor-fold>
+
+    // 제목 클릭 시 식당 변경
+    private fun setAdmin1TitleClick(day: String) {
+        with(binding) {
+            // 향설 1관
+            if (!isTitleClick) {
+                // 향설 1관으로 타이틀 변경
+                txtAdminTitle.text = getStr(R.string.str_hs1)
+                // 해당 날짜 표시 및 시간
+                setTodayDate()
+                // 세부 메뉴의 ClickListener
+                setManageMenuNavigateTo("admin1Hs1", day)
+                // 다음 타이틀 클릭 시
+                isTitleClick = true
+                // 다시 Title 트리거 set
+                setChangeTitleAdmin(day)
+            }
+            // 교직원 식당
+            else {
+                // 교직원 식당으로 타이틀 변경
+                txtAdminTitle.text = getStr(R.string.str_staff)
+                // 해당 날짜 표시 및 시간
+                setTodayDate()
+                // 세부 메뉴의 ClickListener
+                setManageMenuNavigateTo("admin1Staff", day)
+                // 다음 타이틀 클릭 시
+                isTitleClick = false
+                // 다시 Title 트리거 set
+                setChangeTitleAdmin(day)
+            }
+        }
+    }
+
+    // 세팅된 날짜 표시
+    private fun setTodayDate() {
+        if(!isTitleClick)
+            binding.txtAdminDate.text =
+                String.format(resources.getString(R.string.todayDate), LocalDate.now().format(formatter), checkMealTimeHs1())
+        else
+            binding.txtAdminDate.text =
+                String.format(resources.getString(R.string.todayDate), LocalDate.now().format(formatter), checkMealTimeStaff())
     }
 
     // 일주일 치 메뉴 보기 버튼 활성화
@@ -215,7 +231,6 @@ class AdminFragment : Fragment() {
             setManageMenuNavigateTo(destination, day)
         }
     }
-
 
     // 일주일 메뉴 네비게이션 설정
     private fun navigateTo(destination: String, date: manageDate) {
@@ -241,15 +256,15 @@ class AdminFragment : Fragment() {
         with(binding) {
             txtAdminDate
 
-            btnMonday.text = "월요일 (" + dayOfWeek[0] + "일)"
-            btnTuesday.text = "화요일 (" + dayOfWeek[1] + "일)"
-            btnWednesday.text = "수요일 (" + dayOfWeek[2] + "일)"
-            btnThursday.text = "목요일 (" + dayOfWeek[3] + "일)"
-            btnFriday.text = "금요일 (" + dayOfWeek[4] + "일)"
+            btnMonday.text = String.format(resources.getString(R.string.dayOfWeek), "월요일", dayOfWeek[0])
+            btnTuesday.text = String.format(resources.getString(R.string.dayOfWeek), "화요일", dayOfWeek[1])
+            btnWednesday.text = String.format(resources.getString(R.string.dayOfWeek), "수요일", dayOfWeek[2])
+            btnThursday.text = String.format(resources.getString(R.string.dayOfWeek), "목요일", dayOfWeek[3])
+            btnFriday.text = String.format(resources.getString(R.string.dayOfWeek), "금요일", dayOfWeek[4])
         }
     }
 
-    //TODO: 캐시 이미지 확인
+    //캐시 이미지 확인
     private fun checkCacheImage() {
         binding.ibShowImage.setOnClickListener {
             val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
@@ -261,6 +276,7 @@ class AdminFragment : Fragment() {
         }
     }
 
+    // 현재 저장된 이미지 팝업으로 띄우기
     private fun popUpImage(file: File) {
         val builder = Dialog(requireContext())
         builder.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -282,23 +298,48 @@ class AdminFragment : Fragment() {
         builder.show()
     }
 
-    // 오늘 날짜를 기준으로 해당 주의 월-일 날짜 구하기
-    fun getDates(): List<String> {
-        val today = LocalDate.now()
-        val m = today.with(DayOfWeek.MONDAY) // 이번 주 월요일
-        val t = today.with(DayOfWeek.TUESDAY) // 이번 주 월요일
-        val w = today.with(DayOfWeek.WEDNESDAY) // 이번 주 월요일
-        val th = today.with(DayOfWeek.THURSDAY) // 이번 주 월요일
-        val f = today.with(DayOfWeek.FRIDAY)   // 이번 주 금요일
+    // 식당 변경
+    private fun setChangeTitleAdmin(day: String) {
+        binding.viewAdminTitle.setOnClickListener {
+            setAdmin1TitleClick(day)
+        }
+    }
+    private fun setChangeTitleMaster(day: String) {
+        binding.viewAdminTitle.setOnClickListener {
+            setMasterTitleClick(day)
+        }
+    }
 
-        Log.e(
-            "AdminFrgment",
-            "getDates: ${m.format(formatter)}, ${t.format(formatter)}, ${w.format(formatter)}, ${
-                th.format(
-                    formatter
-                )
-            }, ${f.format(formatter)}"
+    // 오늘 날짜를 기준으로 해당 주의 월-금 날짜 구하기
+    private fun getDates(): List<String> {
+        val today = LocalDate.now()
+        val m: LocalDate
+        val t: LocalDate
+        val w: LocalDate
+        val th: LocalDate
+        val f: LocalDate
+
+        // 오늘이 토요일이나 일요일이면 다음 주로 세팅
+        if (today.dayOfWeek.name == dOw.SATURDAY.dName || today.dayOfWeek.name == dOw.SUNDAY.dName) {
+            m = today.with(DayOfWeek.MONDAY).plusWeeks(1) // 다음 주 월요일
+            t = today.with(DayOfWeek.TUESDAY).plusWeeks(1) // 다음 주 월요일
+            w = today.with(DayOfWeek.WEDNESDAY).plusWeeks(1) // 다음 주 월요일
+            th = today.with(DayOfWeek.THURSDAY).plusWeeks(1) // 다음 주 월요일
+            f = today.with(DayOfWeek.FRIDAY).plusWeeks(1)   // 다음 주 금요일
+        } else {
+            m = today.with(DayOfWeek.MONDAY) // 이번 주 월요일
+            t = today.with(DayOfWeek.TUESDAY) // 이번 주 월요일
+            w = today.with(DayOfWeek.WEDNESDAY) // 이번 주 월요일
+            th = today.with(DayOfWeek.THURSDAY) // 이번 주 월요일
+            f = today.with(DayOfWeek.FRIDAY)   // 이번 주 금요일
+        }
+
+        // Check
+        Log.e("AdminFrgment",
+            "getDates: ${m.format(formatter)}, ${t.format(formatter)}, ${w.format(formatter)}, ${th.format(formatter)}, ${f.format(formatter)}"
         )
+
+        // 날짜 리스트로 반환
         return listOf(
             m.format(formatter),
             t.format(formatter),
@@ -309,7 +350,7 @@ class AdminFragment : Fragment() {
     }
 
     // 세부 메뉴를 눌렀을 때
-    fun setManageMenuNavigateTo(
+    private fun setManageMenuNavigateTo(
         destination: String,  // 권한 별 프레그먼트
         day: String   // 일주일 날짜 모음
     ) {
@@ -338,7 +379,7 @@ class AdminFragment : Fragment() {
         }
     }
 
-
+    // <editor-fold desc="마감시간">
     // 향설 1관 마감 시간
     private fun checkMealTimeHs1(): String {
         val now = LocalTime.now()
@@ -367,7 +408,6 @@ class AdminFragment : Fragment() {
 
     }
 
-
     // 교직원 식당 마감 시간
     private fun checkMealTimeStaff(): String {
         val now = LocalTime.now()
@@ -378,37 +418,38 @@ class AdminFragment : Fragment() {
                     0
                 )
             ) -> "중식"  // 11:30 ~ 13:59
-            else -> ""
+            else -> "\n(식사 시간 아님)"
         }
     }
+    // </editor-fold>
 
-
+    // <editor-fold desc="setBack">
     // Back 네비게이션
     private fun setBackToHome() {
         binding.toolbarAdmin.setNavigationOnClickListener {
             backDialog()
         }
     }
-
-
     // 뒤로가기 전 알림
     private fun backDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage("뒤로가기 시 로그아웃 됩니다.\n홈 화면으로 돌아가시겠습니까?")
-            .setNegativeButton("취소") { dialog, which ->
+            .setNegativeButton("취소") { _, _ ->
                 // 취소 시 아무 액션 없음
             }
-            .setPositiveButton("확인") { dialog, which ->
+            .setPositiveButton("확인") { _, _ ->
                 backToHome()
             }
             .show()
     }
-
+    // 뒤로가기
     private fun backToHome() {
         startActivity(Intent(requireContext(), HomeActivity::class.java))
         requireActivity().finish()
     }
+    // </editor-fold>
 
+    // 리소스 안 텍스트 추출
     private fun getStr(id: Int): String {
         return resources.getString(id)
     }

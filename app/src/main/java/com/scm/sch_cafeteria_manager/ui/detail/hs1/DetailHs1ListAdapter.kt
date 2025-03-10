@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.scm.sch_cafeteria_manager.data.D_API_Response
 import com.scm.sch_cafeteria_manager.data.DetailMenu
-import com.scm.sch_cafeteria_manager.data.Meal
+import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
@@ -17,10 +17,10 @@ class DetailHs1ListAdapter(
     items: D_API_Response, private val dayOfWeek: String
 ) : RecyclerView.Adapter<DetailHs1ItemViewHolder>() {
 
-    private var MEAL: List<Meal?> = emptyList()
+    private var MEAL: List<meals?> = emptyList()
 
     init {
-        items.data.dailyMeals.forEach {
+        items.data.dailyMeal.forEach {
             if (it.dayOfWeek == dayOfWeek) {
                 if (it.meals.isEmpty()) MEAL = emptyMEAL
                 else MEAL = it.meals
@@ -62,7 +62,7 @@ class DetailHs1ItemViewHolder(
     private val binding: ItemDetailMenuBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(meal: Meal?) {
+    fun bind(meal: meals?) {
         Log.e("DetailHs1ListAdapter", "bind")
 
         with(binding) {
