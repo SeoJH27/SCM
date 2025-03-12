@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
-import com.scm.sch_cafeteria_manager.data.MasterData
+import com.scm.sch_cafeteria_manager.data.MasterResponse
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.MealType
 import com.scm.sch_cafeteria_manager.data.dailyMeals
@@ -32,7 +32,7 @@ class MasterHs1WeekFragment : Fragment() {
     private var _binding: FragmentMasterHs1Binding? = null
     private val binding get() = _binding!!
     private val args: MasterHs1WeekFragmentArgs by navArgs()
-    var jsonData: MasterData? = null
+    var jsonData: MasterResponse? = null
 
     var weekFlag: Boolean = false
     var dayOfWeekFlag: Boolean = false
@@ -217,7 +217,7 @@ class MasterHs1WeekFragment : Fragment() {
                     }
                     // 이미지가 보여야 함
                     else {
-                        imgMasterHs1.setImageBitmap(stringToBitmap(jsonData?.data?.weekMealImg))
+//                        imgMasterHs1.setImageBitmap(stringToBitmap(jsonData?.data?.weekMealImg))
                         weekFlag = true
                     }
                 } else {
@@ -239,7 +239,7 @@ class MasterHs1WeekFragment : Fragment() {
                     }
                     // 이미지가 보여야 함
                     else {
-                        imgMasterHs1.setImageBitmap(stringToBitmap(jsonData?.data?.weekMealImg))
+//                        imgMasterHs1.setImageBitmap(stringToBitmap(jsonData?.data?.weekMealImg))
                         dayOfWeekFlag = true
                     }
                 } else {
@@ -291,7 +291,7 @@ class MasterHs1WeekFragment : Fragment() {
     }
 
     // 데이터 Null-check
-    private fun checkData(data: MasterData?): Boolean {
+    private fun checkData(data: MasterResponse?): Boolean {
         return !(isNull(data) || isNull(data?.data))
     }
 

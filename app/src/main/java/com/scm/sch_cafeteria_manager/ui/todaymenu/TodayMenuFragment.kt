@@ -12,10 +12,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
-import com.scm.sch_cafeteria_manager.data.TM_API_Response
+import com.scm.sch_cafeteria_manager.data.UserTodayMenuResponse
 import com.scm.sch_cafeteria_manager.databinding.FragmentTodayMenuBinding
 import com.scm.sch_cafeteria_manager.util.fetchTodayMenu
-import com.scm.sch_cafeteria_manager.util.utilAll.intToDayOfWeek
+import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
 import com.scm.sch_cafeteria_manager.util.utilAll.setInquiryLink
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -25,7 +25,7 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
     private var _binding: FragmentTodayMenuBinding? = null
     private val binding get() = _binding!!
 
-    private var TODAYMENU: TM_API_Response? = null // JSON 데이터를 저장할 변수
+    private var TODAYMENU: UserTodayMenuResponse? = null // JSON 데이터를 저장할 변수
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,16 +49,17 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
         lifecycleScope.launch {
             // Retrofit에서 데이터 가져오기
             try {
-                // 오늘 요일을 기반으로 불러오기
-                TODAYMENU = fetchTodayMenu(intToDayOfWeek())
-                Log.e("DetailHs1Fragment", "fetchTodayMenu - TODAYMENU: $TODAYMENU, ${intToDayOfWeek()}")
+                val today = LocalDate.now().dayOfWeek.name
+                val date = getWeekDates()
+
+                TODAYMENU = fetchTodayMenu(today, date[0])
+                Log.e("DetailHs1Fragment", "fetchTodayMenu - TODAYMENU: ${TODAYMENU?.data}")
             } catch (e: Error) {
                 Log.e("TodayMenuFragment", "fetchData - e: $e")
+                errorToBack()
             }
-            Log.e("TodayMenuFragment", "fetchTodayMenu")
-
             // 데이터 배치
-            if (!isNull(TODAYMENU)) {
+            if (checkData(TODAYMENU)) {
                 Log.e("TodayMenuFragment", "!isNull(TODAYMENU) - TODAYMENU: $TODAYMENU")
                 setLayout()
             }
@@ -73,6 +74,7 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
         }
     }
 
+    // <editor-folder desc="setLayout">
     private fun setLayout() {
         setTab()
         viewClickListener()
@@ -88,7 +90,7 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
 //            tlTodayMemu.addTab(tlTodayMemu.newTab().setText(getStr(R.string.str_student_union)))
             tlTodayMemu.addTab(tlTodayMemu.newTab().setText(getStr(R.string.str_staff)))
         }
-        if (checkData()) {
+        if (checkData(TODAYMENU)) {
             Log.e("TodayMenuFragment", "setTab - checkData")
             backToHome()
         } else // init tab
@@ -101,11 +103,9 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     clickTab(tab)
                 }
-
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                     clickTab(tab)
                 }
-
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                     connectAdapter(getStr(R.string.str_hs1))
                 }
@@ -117,7 +117,7 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
     }
 
     private fun clickTab(tab: TabLayout.Tab?) {
-        if (checkData()) {
+        if (checkData(TODAYMENU)) {
             Log.e("TodayMenuFragment", "setTab - clickTab")
             backToHome()
         }
@@ -138,7 +138,7 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
     private fun connectAdapter(cf: String) {
         Log.e("TodayMenuFragment", "connectAdapter: TODAYMENU = $TODAYMENU")
 
-        if (checkData()) {
+        if (checkData(TODAYMENU)) {
             Log.e("TodayMenuFragment", "setTab - connectAdapter")
             backToHome()
         } else {
@@ -146,24 +146,28 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
                 TodayMenuListAdapter(TODAYMENU!!, cf)
         }
     }
+    // </editor-folder>
 
-    // 항목이 없으면 true
-    private fun checkData(): Boolean {
-        Log.e("TodayMenuFragment", "checkData")
-        if (isNull(TODAYMENU)) {
-            Toast.makeText(requireContext(), "데이터를 로드할 수 없습니다.", Toast.LENGTH_LONG).show()
-            return true
-        } else return false
-    }
-
+    // <editor-folder desc="setBack">
     private fun setBackToHome() {
         binding.tbTodayMenu.setNavigationOnClickListener {
             backToHome()
         }
     }
+    // 에러 시 뒤로가기
+    private fun errorToBack() {
+        Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_SHORT).show()
+        backToHome()
+    }
 
     private fun backToHome() {
         findNavController().navigateUp()
+    }
+    // </editor-folder>
+
+    // 데이터 Null-check
+    private fun checkData(data: UserTodayMenuResponse?): Boolean {
+        return !(isNull(data) || isNull(data?.data))
     }
 
     private fun getStr(id: Int): String{

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.scm.sch_cafeteria_manager.data.meals
-import com.scm.sch_cafeteria_manager.data.TM_API_Response
+import com.scm.sch_cafeteria_manager.data.UserTodayMenuResponse
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
@@ -13,7 +13,7 @@ import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
 import com.scm.sch_cafeteria_manager.util.utilAll.nonData
 
 class TodayMenuListAdapter(
-    items: TM_API_Response, private val restaurantName: String,
+    items: UserTodayMenuResponse, private val restaurantName: String,
 ) : RecyclerView.Adapter<TodayMenuItemViewHolder>() {
 
     private var MEAL: List<meals?> = emptyList()

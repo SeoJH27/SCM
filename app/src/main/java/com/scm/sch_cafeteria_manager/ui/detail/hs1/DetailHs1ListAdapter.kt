@@ -4,26 +4,24 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.scm.sch_cafeteria_manager.data.D_API_Response
-import com.scm.sch_cafeteria_manager.data.DetailMenu
+import com.scm.sch_cafeteria_manager.data.UserDetailResponse
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
-import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
-import com.scm.sch_cafeteria_manager.util.utilAll.blank
+import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
+import com.scm.sch_cafeteria_manager.util.utilAll.mealTypeToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.nonData
 
 class DetailHs1ListAdapter(
-    items: D_API_Response, private val dayOfWeek: String
+    items: UserDetailResponse, private val dayOfWeek: String
 ) : RecyclerView.Adapter<DetailHs1ItemViewHolder>() {
 
     private var MEAL: List<meals?> = emptyList()
 
     init {
-        items.data.dailyMeal.forEach {
+        items.data.dailyMeals.forEach {
             if (it.dayOfWeek == dayOfWeek) {
-                if (it.meals.isEmpty()) MEAL = emptyMEAL
-                else MEAL = it.meals
+                MEAL = it.meals.ifEmpty { emptyMEAL }
                 Log.e("DetailHs1ListAdapter", "init - $MEAL")
                 return@forEach
             }
@@ -66,12 +64,11 @@ class DetailHs1ItemViewHolder(
         Log.e("DetailHs1ListAdapter", "bind")
 
         with(binding) {
-            if (meal != null) {
-                txtTime.text = meal.mealType
-            } else txtTime.setText(blank)
-            if (meal != null) {
-                txtMenu.text = meal.mainMenu?.replaceCommaToLinebreak()
-            } else txtMenu.setText(nonData)
+            if (meal?.mealType != null) {
+                txtTime.text = mealTypeToKorean(meal.mealType)
+            } else txtTime.text = nonData
+
+            txtMenu.text = combinMainAndSub(meal?.mainMenu, meal?.subMenu) ?: nonData
         }
     }
 

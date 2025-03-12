@@ -42,6 +42,10 @@
             android:id="@+id/to_masterStaffAllWeek"
             app:destination="@id/masterStaffAllWeekFragment"
             app:popUpTo="@id/fragment_admin" />
+        <action
+            android:id="@+id/to_camera"
+            app:destination="@id/fragment_camera"
+            app:popUpTo="@id/fragment_admin" />
     </fragment>
 
     <fragment
@@ -115,11 +119,6 @@
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
     </fragment>
     <fragment
-        android:id="@+id/fragment_camera"
-        android:name="com.scm.sch_cafeteria_manager.ui.admin.CameraFragment"
-        android:label="CameraFragment"
-        tools:layout="@layout/fragment_camera" />
-    <fragment
         android:id="@+id/masterHs1AllWeekFragment"
         android:name="com.scm.sch_cafeteria_manager.ui.admin.master.MasterHs1AllWeekFragment"
         android:label="MasterHs1AllWeekFragment">
@@ -136,4 +135,13 @@
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
     </fragment>
 
+    <fragment
+        android:id="@+id/fragment_camera"
+        android:name="com.scm.sch_cafeteria_manager.ui.admin.CameraFragment"
+        android:label="CameraFragment"
+        tools:layout="@layout/fragment_camera" >
+        <argument
+            android:name="flag"
+            app:argType="boolean" />
+    </fragment>
 </navigation>

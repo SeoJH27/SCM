@@ -69,12 +69,13 @@
 
 
     <!--                  Extention                  -->
-    <string name="timePickerText">%1$d:%2$d</string>
+    <string name="timePickerText">%1$s:%2$s</string>
 
 
     <!--                  Format                  -->
     <string name="todayDate">%1$s일 %2$s</string>
     <string name="dayOfWeek">%1$s (%2$s일)</string>
+    <string name="timeTotime">%1$s ~ %2$s</string>
 
     <!--                  Description                  -->
     <string name="desc_sch_map">순천향대 학교 지도</string>

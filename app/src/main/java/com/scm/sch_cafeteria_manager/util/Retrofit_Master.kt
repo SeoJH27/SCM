@@ -3,9 +3,8 @@ package com.scm.sch_cafeteria_manager.util
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
-import com.scm.sch_cafeteria_manager.data.AdminData
-import com.scm.sch_cafeteria_manager.data.MasterData
-import com.scm.sch_cafeteria_manager.data.adminResponse
+import com.scm.sch_cafeteria_manager.data.MasterResponse
+import com.scm.sch_cafeteria_manager.data.api_response
 import com.scm.sch_cafeteria_manager.data.requestDTO_week_master
 import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import com.squareup.moshi.Moshi
@@ -25,15 +24,15 @@ import retrofit2.http.QueryMap
 interface ApiService_Master {
     @Headers("Content-Type: application/json")
     @POST("/api/master/meal-plans")
-    suspend fun getMealPlans(@QueryMap pendingDailyMealRequestDTO: Map<String, String>): Response<MasterData>
+    suspend fun getMealPlans(@QueryMap pendingDailyMealRequestDTO: Map<String, String>): Response<MasterResponse>
 
     @Headers("Content-Type: application/json")
     @POST("/api/master/week-meal-plans")
-    suspend fun getWeekMealPlans(@QueryMap pendingWeeklyMealRequestDTO : Map<String, String>): Response<MasterData>
+    suspend fun getWeekMealPlans(@QueryMap pendingWeeklyMealRequestDTO : Map<String, String>): Response<MasterResponse>
 
     @Headers("Content-Type: application/json")
     @POST("/api/admin/meal-plans/{restaurant-name}")
-    suspend fun setMealPlansMaster(@Path("restaurant-name") resName: String, @Body requestDTO_week_master: String): adminResponse
+    suspend fun setMealPlansMaster(@Path("restaurant-name") resName: String, @Body requestDTO_week_master: String): api_response
 }
 
 object Retrofit_Master {
@@ -77,12 +76,12 @@ suspend fun fetchWeekMealPlansMaster(
     context: Context,
     weekStartDate: String,
     restaurantName: String
-): MasterData? {
+): MasterResponse? {
     val requestDTO = mapOf(
         "weekStartDate" to weekStartDate,
         "restaurantName" to restaurantName
     )
-    var value: MasterData? = null
+    var value: MasterResponse? = null
     Log.e("fetchWeekMealPlansMaster", "requestDTO: $requestDTO")
     try {
         val response = Retrofit_Master.createApiService(context).getWeekMealPlans(requestDTO)
@@ -105,13 +104,13 @@ suspend fun fetchMealPlansMaster(
     weekStartDate: String,
     dayOfWeek: String,
     restaurantName: String
-): MasterData? {
+): MasterResponse? {
     val requestDTO = mapOf(
         "weekStartDate" to weekStartDate,
         "dayOfWeek" to dayOfWeek,
         "restaurantName" to restaurantName
     )
-    var value: MasterData? = null
+    var value: MasterResponse? = null
     Log.e("fetchMealPlansMaster", "requestDTO: $requestDTO")
     try {
         val response = Retrofit_Master.createApiService(context).getMealPlans(requestDTO)
@@ -137,7 +136,7 @@ suspend fun uploadingWeekMealPlansMaster(
     context: Context,
     restaurantName: String,
     body: requestDTO_week_master
-): adminResponse? {
+): api_response? {
     val jsonData = Gson().toJson(body) // data를 JSON으로 변환
 
     Log.e("uploadingWeekMealPlansMaster", "jsonData: $jsonData")

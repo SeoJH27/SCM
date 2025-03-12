@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import com.scm.sch_cafeteria_manager.data.AdminData
+import com.scm.sch_cafeteria_manager.data.AdminResponse
 import com.scm.sch_cafeteria_manager.databinding.FragmentMasterStaffBinding
 import kotlinx.coroutines.launch
 
@@ -15,7 +15,7 @@ class MasterStaffWeekFragment: Fragment() {
     private var _binding: FragmentMasterStaffBinding? = null
     private val binding get() = _binding!!
     private val args: MasterStaffAllWeekFragmentArgs by navArgs()
-    var data: AdminData? = null
+    var data: AdminResponse? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,

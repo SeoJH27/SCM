@@ -13,14 +13,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.scm.sch_cafeteria_manager.R
-import com.scm.sch_cafeteria_manager.data.D_API_Response
+import com.scm.sch_cafeteria_manager.data.CafeteriaData
+import com.scm.sch_cafeteria_manager.data.UserDetailResponse
 import com.scm.sch_cafeteria_manager.data.dOw
 import com.scm.sch_cafeteria_manager.databinding.FragmentDetailHs1Binding
 import com.scm.sch_cafeteria_manager.util.fetchDetailMenu
+import com.scm.sch_cafeteria_manager.util.utilAll.blank
+import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
+import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import com.scm.sch_cafeteria_manager.util.utilAll.setInquiryLink
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
-import java.time.LocalDate
 import java.util.Objects.isNull
 
 
@@ -28,7 +30,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
     private var _binding: FragmentDetailHs1Binding? = null
     private val binding get() = _binding!!
 
-    private var HS1: D_API_Response? = null // JSON 데이터를 저장할 변수
+    private var HS1: UserDetailResponse? = null // JSON 데이터를 저장할 변수
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,34 +49,32 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
     // 네트워크 통신 -> lifecycleScope로 제어
     private fun fetchData() {
         binding.prograssbar.visibility = View.VISIBLE
-
-        Log.e("DetailHs1Fragment", "fetchData - prograssbar")
         lifecycleScope.launch {
-            // Retrofit에서 데이터 가져오기 (true: hs1)
+            // Retrofit에서 데이터 가져오기
             try {
-                HS1 = fetchDetailMenu(true)
-                Log.e("DetailHs1Fragment", "fetchDetailMenu - HS1: $HS1")
+                val date = getWeekDates()
+                HS1 = fetchDetailMenu(CafeteriaData.HYANGSEOL1.cfName, getWeekStartDate(date[0]))
+                Log.e("DetailHs1Fragment", "fetchDetailMenu - HS1: ${HS1?.data?.dailyMeals}")
             } catch (e: Error) {
                 Log.e("DetailHs1Fragment", "fetchData - e: $e")
+                errorToBack()
             }
-            Log.e("DetailHs1Fragment", "fetchDetailMenu")
-
             // 데이터 배치
-            if (!isNull(HS1)) {
-                Log.e("DetailHs1Fragment", "!isNull(HS1) - HS1: $HS1")
+            if (checkData(HS1)) {
+                Log.e("DetailHs1Fragment", "checkData - HS1: ${HS1?.data?.dailyMeals}")
                 setLayout()
             }
             // 데이터를 불러올 수 없다는 알림과 함께 Back
             else {
-                Log.e("DetailHs1Fragment", "fetchData - Network Error")
+                Log.e("DetailHs1Fragment", "fetchData - ${HS1?.status}")
                 Toast.makeText(requireContext(), "데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
-                setBackToHome()
+                errorToBack()
             }
-
             binding.prograssbar.visibility = View.GONE
         }
     }
 
+    // <editor-folder desc="setLayout">
     private fun setLayout() {
         setTab()
         setTime()
@@ -118,35 +118,34 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
             tlDetailHs1.addTab(tlDetailHs1.newTab().setText("금요일"))
         }
 
-        if (checkData()) {
+        if (checkData(HS1)) {
+            // init tab
             Log.e("DetailHs1Fragment", "setTab - checkData")
-            backToHome()
-        } else // init tab
             connectAdapter(dOw.MONDAY.dName)
+        } else
+            backToHome()
     }
 
     // 시간 설정
+    // TODO: 적절히 변경
     private fun setTime() {
         with(binding) {
-            if (checkData()) {
-                editOperatingHours.setText("") // TODO: 적절히 변경
+            if (checkData(HS1)) {
+                editOperatingHours.text = String.format(
+                    resources.getString(R.string.timeTotime),
+                    HS1!!.data.restaurantOperatingStartTime, HS1!!.data.restaurantOperatingEndTime
+                )
             } else {
-                editOperatingHours.setText("${HS1!!.data.restaurantOperatingStartTime} ~ ${HS1!!.data.restaurantOperatingEndTime}")
+                editOperatingHours.text = blank
+
             }
         }
     }
 
-    // 항목이 없으면 true
-    private fun checkData(): Boolean {
-        Log.e("DetailHs1Fragment", "checkData")
-        if (isNull(HS1)) {
-            Toast.makeText(requireContext(), "데이터를 로드할 수 없습니다.", Toast.LENGTH_LONG).show()
-            return true
-        } else return false
-    }
+    // </editor-folder>
 
     private fun clickTab(tab: TabLayout.Tab?) {
-        if (checkData()) {
+        if (!checkData(HS1)) {
             Log.e("DetailHs1Fragment", "setTab - clickTab")
             backToHome()
         }
@@ -166,24 +165,32 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
 
     private fun connectAdapter(weekly: String) {
         Log.e("DetailHs1Fragment", "connectAdapter: HS1 = $HS1")
-        if (checkData()) {
-            Log.e("DetailHs1Fragment", "setTab - connectAdapter")
-            backToHome()
-        } else
+        if (checkData(HS1)) {
             binding.rvDetailHs1Menu.adapter =
                 DetailHs1ListAdapter(HS1!!, weekly)
+        } else {
+            Log.e("DetailHs1Fragment", "setTab - connectAdapter")
+            backToHome()
+        }
     }
 
+    // <editor-folder desc="setBack"
     private fun setBackToHome() {
         binding.toolbarDetailHs1.setNavigationOnClickListener {
             backToHome()
         }
     }
 
+    private fun errorToBack() {
+        Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_SHORT).show()
+        backToHome()
+    }
+
     private fun backToHome() {
         Log.e("DetailHs1Fragment", "backToHome")
         findNavController().navigateUp()
     }
+    // </editor-folder>
 
     private fun setLocationHyperLink() {
         Log.e("DetailHs1Fragment", "setLocationHyperLink")
@@ -191,6 +198,11 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
         val url = "https://naver.me/5mId7mbJ"
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
+    }
+
+    // 데이터 Null-check
+    private fun checkData(data: UserDetailResponse?): Boolean {
+        return !(isNull(data) || isNull(data?.data))
     }
 
     override fun onDestroyView() {

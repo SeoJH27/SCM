@@ -15,24 +15,24 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
+import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.databinding.FragmentCameraBinding
+import com.scm.sch_cafeteria_manager.util.RotateBitmap
 import java.io.File
 import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
+import com.scm.sch_cafeteria_manager.util.utilAll.weekFilePath
 import java.util.Objects.isNull
 
 class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
+    private val args: CameraFragmentArgs by navArgs()
 
     private var imageCapture: ImageCapture? = null
     private var capturedPhotoFile: File? = null  // 저장할 파일 변수
@@ -99,6 +99,7 @@ class CameraFragment : Fragment() {
             btnPhotoCancel.setOnClickListener {
                 ivCamera.visibility = View.GONE
                 viewCamera.visibility = View.VISIBLE
+                deleteCacheFile()
                 setCaptureBtn()
             }
         }
@@ -110,24 +111,24 @@ class CameraFragment : Fragment() {
         Log.e("CameraFragment", "setSaveBtn")
         binding.btnPhotoSave.setOnClickListener {
             // 캐시가 있으면 true
-            if (isNull(isCacheFileExists())) {
+            if (isNull(isCacheFileExists(args.flag))) {
                 Toast.makeText(requireContext(), "사진을 찍지 않았습니다.", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(requireContext(), "사진 전송 완료", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "사진 저장 완료", Toast.LENGTH_LONG).show()
                 backToHome()
             }
         }
     }
 
     // 카메라를 세팅하여 PreviewView에 실행
-    fun startCamera() {
+    private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
             // 카메라의 수명 주기를 수명 주기 소유자에게 바인딩
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(binding.viewCamera.surfaceProvider)
+                it.surfaceProvider = binding.viewCamera.surfaceProvider
             }
 
             imageCapture = ImageCapture.Builder()
@@ -150,15 +151,21 @@ class CameraFragment : Fragment() {
     }
 
     // 찍은 사진 저장
-    fun takePhoto() {
+    private fun takePhoto() {
         Log.e("CameraFragment", "imageCapture: $imageCapture")
-        //imageCapture가 null이 아니라도 바인딩이 실패했을 수 있으므로 체크
+        //imageCapture 가 null 아니라도 바인딩이 실패했을 수 있으므로 체크
         if (imageCapture == null) {
             startCamera()
             return
         }
+        val path: String
+        if (args.flag){
+            path = photoFilePath
+        } else{
+            path = weekFilePath
+        }
 
-        val photoFile = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+        val photoFile = File(requireContext().externalCacheDirs?.firstOrNull(), path)
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
         Log.e("CameraFragment", "capturedPhotoFile: $capturedPhotoFile")
 
@@ -186,31 +193,39 @@ class CameraFragment : Fragment() {
 
     private fun displayCapturedPhoto(photoFile: File) {
         val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+        val exif = ExifInterface(photoFile)
+        val orientation = exif.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_UNDEFINED)
 
-        // TODO: 사진 돌려놓기
+        val b = RotateBitmap(bitmap, orientation)
 
         with(binding) {
-            ivCamera.setImageBitmap(bitmap)
+            ivCamera.setImageBitmap(b)
             ivCamera.visibility = View.VISIBLE
             viewCamera.visibility = View.GONE  // 사진이 보이도록 프리뷰 숨김
         }
     }
 
     // 캐시 확인
-    fun isCacheFileExists(): Boolean {
-        val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+    private fun isCacheFileExists(flag: Boolean): Boolean {
+        val file: File
+        if (flag)
+            file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+        else
+            file = File(requireContext().externalCacheDirs?.firstOrNull(), weekFilePath)
         return file.exists()
     }
 
     // 사진 삭제
-    fun deleteCacheFile(): Boolean {
+    private fun deleteCacheFile(): Boolean {
         try {
             val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
             file.delete()
         } catch (e: Exception) {
             Log.e("CameraFragment", "사진 저장 실패: ", e)
         }
-        return isCacheFileExists()
+        return isCacheFileExists(args.flag)
     }
 
     private fun setBack() {
@@ -218,10 +233,10 @@ class CameraFragment : Fragment() {
             // 저장을 누르지 않았을 경우 경고 후 Back
             MaterialAlertDialogBuilder(requireContext())
                 .setMessage("뒤로가기 시 저장이 되지 않습니다.\n관리자 홈 화면으로 돌아가시겠습니까?")
-                .setNegativeButton("취소") { dialog, which ->
+                .setNegativeButton("취소") { _, _ ->
                     // 취소 시 아무 액션 없음
                 }
-                .setPositiveButton("확인") { dialog, which ->
+                .setPositiveButton("확인") { _, _ ->
                     Log.e("CameraFragment", "사진 삭제")
                     cancleBackToHome()
                 }

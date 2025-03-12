@@ -4,26 +4,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.scm.sch_cafeteria_manager.data.D_API_Response
+import com.scm.sch_cafeteria_manager.R
+import com.scm.sch_cafeteria_manager.data.UserDetailResponse
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
-import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
-import com.scm.sch_cafeteria_manager.util.utilAll.blank
+import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
+import com.scm.sch_cafeteria_manager.util.utilAll.mealTypeToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.nonData
 
 class DetailStaffListAdapter(
-    items: D_API_Response,
+    items: UserDetailResponse,
     private val dayOfWeek: String
 ) : RecyclerView.Adapter<DetailStaffItemViewHolder>() {
 
     private var MEAL: List<meals?> = emptyList()
 
     init {
-        items.data.dailyMeal.forEach {
+        items.data.dailyMeals.forEach {
             if (it.dayOfWeek == dayOfWeek) {
-                if(it.meals.isEmpty()) MEAL = emptyMEAL
-                else MEAL = it.meals
+                MEAL = it.meals.ifEmpty { emptyMEAL }
                 Log.e("DetailStaffListAdapter", "init - $MEAL")
                 return@forEach
             }
@@ -57,25 +57,28 @@ class DetailStaffListAdapter(
         Log.e("DetailStaffListAdapter", "getItemCount")
         return if (MEAL.isEmpty()) 1 else MEAL.size
     }
-
-
 }
 
 class DetailStaffItemViewHolder(
     private val binding: ItemDetailMenuBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-
     fun bind(meal: meals?) {
         Log.e("DetailStaffListAdapter", "bind")
 
         with(binding) {
+            val grey = binding.root.resources.getColor(R.color.grey_300)
             if (meal != null) {
-                txtTime.text = meal.mealType
-            } else txtTime.setText(blank)
+                txtTime.text = mealTypeToKorean(meal.mealType)
+            } else {
+                txtTime.text = nonData
+                txtTime.setTextColor(grey)
+            }
             if (meal != null) {
-                txtMenu.text = meal.mainMenu?.replaceCommaToLinebreak()
-            } else
-                txtMenu.setText(nonData)
+                txtMenu.text = combinMainAndSub(meal.mainMenu, meal.subMenu)
+            } else {
+                txtMenu.text = nonData
+                txtMenu.setTextColor(grey)
+            }
         }
     }
 
