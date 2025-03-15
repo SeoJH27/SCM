@@ -21,6 +21,7 @@ import com.scm.sch_cafeteria_manager.databinding.FragmentMasterHs1Binding
 import com.scm.sch_cafeteria_manager.util.fetchMealPlansMaster
 import com.scm.sch_cafeteria_manager.util.uploadingWeekMealPlansMaster
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
+import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
 import com.scm.sch_cafeteria_manager.util.utilAll.stringToBitmap
 import kotlinx.coroutines.launch
@@ -62,7 +63,7 @@ class MasterHs1WeekFragment : Fragment() {
             try {
                 jsonData = fetchMealPlansMaster(
                     requireContext(),
-                    weekStartDate(args.manageDate.day),
+                    getWeekStartDate(args.manageDate.day),
                     args.manageDate.week,
                     CafeteriaData.HYANGSEOL1.cfName
                 )
@@ -70,7 +71,7 @@ class MasterHs1WeekFragment : Fragment() {
             } catch (e: Exception) {
                 Log.e(
                     "MasterHs1WeekFragment",
-                    "fetchMealPlansMaster Exception: $e, ${weekStartDate(args.manageDate.week)}, ${args.manageDate.day}"
+                    "fetchMealPlansMaster Exception: $e, ${getWeekStartDate(args.manageDate.week)}, ${args.manageDate.day}"
                 )
                 errorToBack()
             }
@@ -103,15 +104,15 @@ class MasterHs1WeekFragment : Fragment() {
             with(binding) {
                 txtBreakfastOpenTimeStart.text = nonDate
                 txtBreakfastOpenTimeEnd.text = nonDate
-                txtBreakfastMenu.setText(blank)
+                edBreakfastMenu.setText(blank)
 
                 txtLunchOpenTimeStart.text = nonDate
                 txtLunchOpenTimeEnd.text = nonDate
-                txtLunchMenu.setText(blank)
+                edLunchMenu.setText(blank)
 
                 txtDinnerOpenTimeStart.text = nonDate
                 txtDinnerOpenTimeEnd.text = nonDate
-                txtDinnerMenu.setText(blank)
+                edDinnerMenu.setText(blank)
             }
         }
         else if (jsonData!!.data.dailyMeal.dayOfWeek == args.manageDate.week) {
@@ -119,15 +120,15 @@ class MasterHs1WeekFragment : Fragment() {
             with(binding) {
                 txtBreakfastOpenTimeStart.text = meals[0].operatingStartTime
                 txtBreakfastOpenTimeEnd.text = meals[0].operatingEndTime
-                txtBreakfastMenu.setText(meals[0].mainMenu)
+                edBreakfastMenu.setText(meals[0].mainMenu)
 
                 txtLunchOpenTimeStart.text = meals[1].operatingStartTime
                 txtLunchOpenTimeEnd.text = meals[1].operatingEndTime
-                txtLunchMenu.setText(meals[1].mainMenu)
+                edLunchMenu.setText(meals[1].mainMenu)
 
                 txtDinnerOpenTimeStart.text = meals[2].operatingStartTime
                 txtDinnerOpenTimeEnd.text = meals[2].operatingEndTime
-                txtDinnerMenu.setText(meals[2].mainMenu)
+                edDinnerMenu.setText(meals[2].mainMenu)
             }
         } else {
             errorToBack()
@@ -174,25 +175,25 @@ class MasterHs1WeekFragment : Fragment() {
     private fun getMenu(): requestDTO_week_master {
         with(binding) {
             val body = requestDTO_week_master(
-                weekStartDate(args.manageDate.day),
+                getWeekStartDate(args.manageDate.day),
                 dailyMeals(
                     args.manageDate.week, listOf(
                         meals(
                             MealType.BREAKFAST.myNmae, txtBreakfastOpenTimeStart.text.toString(),
                             txtBreakfastOpenTimeEnd.text.toString(),
-                            txtBreakfastMenu.text.toString(),
+                            edBreakfastMenu.text.toString(),
                             blank
                         ),
                         meals(
                             MealType.LUNCH.myNmae, txtLunchOpenTimeStart.text.toString(),
                             txtLunchOpenTimeEnd.text.toString(),
-                            txtLunchMenu.text.toString(),
+                            edLunchMenu.text.toString(),
                             blank
                         ),
                         meals(
                             MealType.DINNER.myNmae, txtDinnerOpenTimeStart.text.toString(),
                             txtDinnerOpenTimeEnd.text.toString(),
-                            txtDinnerMenu.text.toString(),
+                            edDinnerMenu.text.toString(),
                             blank
                         )
                     )
@@ -205,7 +206,7 @@ class MasterHs1WeekFragment : Fragment() {
     // </editor-folder>
 
     // <editor-folder desc="Image">
-    //일주일 이미지 불러오기
+    //일주일 이미지 불러 오기
     private fun setCheckWeekImg() {
         with(binding) {
             btnWeek.setOnClickListener {
@@ -250,45 +251,6 @@ class MasterHs1WeekFragment : Fragment() {
     }
     // </editor-folder>
 
-    // 해당 버튼에 해당하는 날짜 연산
-    private fun weekStartDate(week: String): String {
-        val today = LocalDate.now()
-        val formatterDay = DateTimeFormatter.ofPattern("dd")
-        val formatterMonth = DateTimeFormatter.ofPattern("MM")
-        val formatterYear = DateTimeFormatter.ofPattern("yyyy")
-
-        val nowDay = today.format(formatterDay).toInt()
-        val nowMonth = today.format(formatterMonth).toInt()
-        val nowYear = today.format(formatterYear).toInt()
-
-        // 현 시점보다 선택한 날짜가 다음 달인지 체크
-        if (week.toInt() > nowDay && nowDay > 20) {
-            // 다음 달이 다음 년도면
-            return if (today.format(formatterMonth).toInt() == 12) {
-                LocalDate.of(
-                    nowYear + 1,
-                    nowMonth + 1,
-                    week.toInt()
-                ).toString()
-            }
-            // 이번 년도면
-            else
-                LocalDate.of(
-                    nowYear,
-                    nowMonth + 1,
-                    week.toInt()
-                ).toString()
-
-        }
-        // 현재 달과 같다면
-        else
-            return LocalDate.of(
-                nowYear,
-                nowMonth,
-                week.toInt()
-            ).toString()
-
-    }
 
     // 데이터 Null-check
     private fun checkData(data: MasterResponse?): Boolean {
@@ -296,15 +258,15 @@ class MasterHs1WeekFragment : Fragment() {
     }
 
     // <editor-folder desc="setBack">
-    // 뒤로가기 버튼
+    // 뒤로 가기 버튼
     private fun setBack() {
         // 저장을 누르지 않았을 경우 경고 후 Back
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage("뒤로가기 시 저장이 되지 않습니다.\n관리자 홈 화면으로 돌아가시겠습니까?")
-            .setNegativeButton("취소") { dialog, which ->
+            .setMessage("뒤로 가기 시 저장이 되지 않습니다.\n관리자 홈 화면으로 돌아가시겠습니까?")
+            .setNegativeButton("취소") { _, _ ->
                 // 취소 시 아무 액션 없음
             }
-            .setPositiveButton("확인") { dialog, which ->
+            .setPositiveButton("확인") { _, _ ->
                 backToHome()
             }
             .show()
@@ -315,7 +277,7 @@ class MasterHs1WeekFragment : Fragment() {
         backToHome()
     }
 
-    // 뒤로가기
+    // 뒤로 가기
     private fun backToHome() {
         findNavController().navigateUp()
     }

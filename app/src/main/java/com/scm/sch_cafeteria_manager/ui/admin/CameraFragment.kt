@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -16,8 +17,10 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -43,6 +46,15 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().supportFragmentManager.popBackStack() // Fragment A로 돌아가기
+                }
+            })
+
         return binding.root
     }
 
@@ -111,11 +123,11 @@ class CameraFragment : Fragment() {
         Log.e("CameraFragment", "setSaveBtn")
         binding.btnPhotoSave.setOnClickListener {
             // 캐시가 있으면 true
-            if (isNull(isCacheFileExists(args.flag))) {
+            if (isNull(isCacheFileExists())) {
                 Toast.makeText(requireContext(), "사진을 찍지 않았습니다.", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(requireContext(), "사진 저장 완료", Toast.LENGTH_LONG).show()
-                backToHome()
+                returnToAdminFragment()
             }
         }
     }
@@ -158,12 +170,15 @@ class CameraFragment : Fragment() {
             startCamera()
             return
         }
-        val path: String
-        if (args.flag){
-            path = photoFilePath
-        } else{
-            path = weekFilePath
-        }
+
+        // TODO: Admin1StaffWeekFragment - Fragment 간 이동 Test
+        val path: String = photoFilePath
+//            if (args.flag) {
+//                photoFilePath
+//
+//            } else {
+//                weekFilePath
+//            }
 
         val photoFile = File(requireContext().externalCacheDirs?.firstOrNull(), path)
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -196,7 +211,8 @@ class CameraFragment : Fragment() {
         val exif = ExifInterface(photoFile)
         val orientation = exif.getAttributeInt(
             ExifInterface.TAG_ORIENTATION,
-            ExifInterface.ORIENTATION_UNDEFINED)
+            ExifInterface.ORIENTATION_UNDEFINED
+        )
 
         val b = RotateBitmap(bitmap, orientation)
 
@@ -208,26 +224,44 @@ class CameraFragment : Fragment() {
     }
 
     // 캐시 확인
-    private fun isCacheFileExists(flag: Boolean): Boolean {
-        val file: File
-        if (flag)
-            file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-        else
-            file = File(requireContext().externalCacheDirs?.firstOrNull(), weekFilePath)
+    private fun isCacheFileExists(): Boolean {
+        // TODO: Admin1StaffWeekFragment - Fragment 간 이동 Test
+//        val file: File = getFile(args.flag)
+        val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+
         return file.exists()
     }
 
     // 사진 삭제
     private fun deleteCacheFile(): Boolean {
         try {
+            // TODO: Admin1StaffWeekFragment - Fragment 간 이동 Test
+//            val file: File = getFile(args.flag)
             val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+
             file.delete()
         } catch (e: Exception) {
-            Log.e("CameraFragment", "사진 저장 실패: ", e)
+            Log.e("CameraFragment", "사진 삭제 실패: ", e)
         }
-        return isCacheFileExists(args.flag)
+        return isCacheFileExists()
     }
 
+    private fun getFile(flag: Boolean): File {
+        val file: File =
+            if (flag)
+                File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+            else
+                File(requireContext().externalCacheDirs?.firstOrNull(), weekFilePath)
+        return file
+    }
+
+    private fun returnToAdminFragment() {
+        setFragmentResult("weekCamera", bundleOf("resultKey" to "dataReceived"))
+        backToHome() // Fragment A로 돌아가기
+    }
+
+
+    // <editor-folder desc="setBack">
     private fun setBack() {
         binding.toolbarCamera.setNavigationOnClickListener {
             // 저장을 누르지 않았을 경우 경고 후 Back
@@ -245,17 +279,19 @@ class CameraFragment : Fragment() {
     }
 
     private fun backToHome() {
+        //requireActivity().supportFragmentManager.popBackStack() // Fragment A로 돌아가기
+        // TODO: Admin1StaffWeekFragment - Fragment 간 이동 Test
         findNavController().navigateUp()
     }
 
     private fun cancleBackToHome() {
         if (deleteCacheFile()) {
-            findNavController().navigateUp()
-
+            backToHome()
         } else {
-            findNavController().navigateUp()
+            backToHome()
         }
     }
+    // </editor-folder>
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->

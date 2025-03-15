@@ -23,13 +23,13 @@ object utilAll {
     val nonData = "정보 없음"
     val nonDate = "00:00"
 
-    const val BASE_URL = "http://3.36.164.150:8080"
+    const val BASE_URL = "http://192.168.1.8:8080"
     const val photoFilePath = "photo.jpg"
     const val weekFilePath = "week.jpg"
 
     // TODO : 비었을 때 사용. 더 적절한 용어 필요함.
     val emptyMEAL = listOf(
-        meals(blank, blank, blank, null, null)
+        meals(blank, blank, blank, blank, blank)
     )
 
     fun setInquiryLink() {
@@ -41,7 +41,7 @@ object utilAll {
         try{
             val encodeByte = Base64.decode(img, Base64.DEFAULT)
 //            val fileOutputStream = FileOutputStream(file)
-//            fileOutputStream.write(encodeByte) // ✅ 파일 저장
+//            fileOutputStream.write(encodeByte) // 파일 저장
 //            fileOutputStream.close()
 
             return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)

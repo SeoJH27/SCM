@@ -267,10 +267,10 @@ class Admin1Hs1WeekFragment : Fragment() {
                                 getWeekStartDate(getWeekDates()[0]),
                                 menu
                             )
-                            Log.e(
-                                "Admin1Hs1WeekFragment",
-                                "uploadingMealPlans - ${response?.message}"
-                            )
+//                            Log.e(
+//                                "Admin1Hs1WeekFragment",
+//                                "uploadingMealPlans - ${response?.message}"
+//                            )
                             cancleImg()
                             backToHome()
                         } catch (e: Exception) {
@@ -343,7 +343,7 @@ class Admin1Hs1WeekFragment : Fragment() {
     // <editor-folder desc="Image">
     // 찍은 사진 팝업으로 보여주기
     private fun popUpImage(file: File) {
-        //TODO: 이미지 테스트
+        //TODO: 여백 누르면 사라지게 만들기
         val img = jsonData?.data?.weekMealImg
         Log.e("popUpImage", "$img")
 
@@ -399,13 +399,13 @@ class Admin1Hs1WeekFragment : Fragment() {
         }
     }
 
-    // 에러 시 뒤로가기
+    // 에러 시 뒤로 가기
     private fun errorToBack() {
         Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_SHORT).show()
         backToHome()
     }
 
-    // 뒤로가기
+    // 뒤로 가기
     private fun backToHome() {
         findNavController().navigateUp()
     }

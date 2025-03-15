@@ -110,7 +110,7 @@ suspend fun fetchMealPlansMaster(
         "dayOfWeek" to dayOfWeek,
         "restaurantName" to restaurantName
     )
-    var value: MasterResponse? = null
+    var value: MasterResponse?
     Log.e("fetchMealPlansMaster", "requestDTO: $requestDTO")
     try {
         val response = Retrofit_Master.createApiService(context).getMealPlans(requestDTO)
@@ -123,6 +123,7 @@ suspend fun fetchMealPlansMaster(
         Log.e("fetchMealPlansMaster", "응답 데이터: ${value?.data?.dailyMeal}")
     } catch (e: Exception) {
         Log.e("fetchMealPlansMaster", "API 호출 실패: ${e.message}")
+        value = null
     }
     return value
 }

@@ -17,7 +17,7 @@ import retrofit2.http.POST
 
 interface ApiService_login {
     @Headers("Content-Type: application/json")
-    @POST("/reissue") // 로그인 API 엔드 포인트 // TODO: 설정 안함
+    @POST("/login") // 로그인 API 엔드 포인트 // TODO: 설정 안함
     fun login(@Body request: loginRequest) : Call<loginResponse>
 }
 

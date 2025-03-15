@@ -95,10 +95,11 @@
         <argument
             android:name="manageDate"
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
-        <action
-            android:id="@+id/admin1Staff_to_camera"
-            app:destination="@id/fragment_camera"
-            app:popUpTo="@id/admin1StaffWeekFragment" />
+
+
+
+
+
     </fragment>
     <fragment
         android:id="@+id/masterHs1WeekFragment"

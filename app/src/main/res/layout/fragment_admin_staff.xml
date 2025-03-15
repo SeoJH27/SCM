@@ -34,7 +34,7 @@
             android:layout_height="0dp">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_upload_week"
+                android:id="@+id/btn_capture_image"
                 style="@style/btnStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,6 +44,18 @@
                 app:layout_constraintBottom_toTopOf="@id/background_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/btn_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/desc_btn_cache_image"
+                android:src="@drawable/ic_image"
+                app:backgroundTint="@color/grey_100"
+                app:layout_constraintBottom_toTopOf="@id/background_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_capture_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
@@ -56,7 +68,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/space_lunch_menu_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_upload_week" />
+                app:layout_constraintTop_toBottomOf="@id/btn_capture_image" />
 
             <TextView
                 android:id="@+id/txt_change_time_lunch"
@@ -98,7 +110,7 @@
                 app:layout_constraintStart_toEndOf="@id/txt_lunch_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch" />
 
-            <EditText
+            <TextView
                 android:id="@+id/txt_lunch_open_time_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

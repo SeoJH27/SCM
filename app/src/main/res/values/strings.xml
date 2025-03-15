@@ -90,4 +90,5 @@
     <string name="desc_iv_camera_capture">카메라로 촬영한 이미지를 미리볼 수 있는 뷰</string>
     <string name="desc_btn_cache_image">마지막 저장된 사진을 볼 수 있는 버튼</string>
     <string name="str_change_week">요일 변경</string>
+    <string name="str_enter_menu">메뉴 입력</string>
 </resources>

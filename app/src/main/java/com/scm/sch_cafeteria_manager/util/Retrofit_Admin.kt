@@ -6,23 +6,34 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.scm.sch_cafeteria_manager.data.AdminResponse
 import com.scm.sch_cafeteria_manager.data.api_response
+import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
 import com.scm.sch_cafeteria_manager.data.requestDTO_week
 import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
 import okhttp3.Response as okResponse
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
+import java.util.concurrent.TimeUnit
 
 interface ApiService_Admin {
     @Headers("Content-Type: application/json")
@@ -33,20 +44,23 @@ interface ApiService_Admin {
 //    @GET("/api/admin/week-meal-plans")
 //    suspend fun getWeekMealPlans(@QueryMap pendingWeeklyMealRequestDTO: Map<String, String>): AdminData
 
-    @Headers("Content-Type: application/json")
+    @Multipart
     @POST("/api/admin/week-meal-plans/{restaurant-name}")
     suspend fun setWeekMealPlans(
         @Path("restaurant-name") resName: String,
-        @Body requestDTO_dayOfWeek: String
-    ): Response<AdminResponse>
+        @Part("weekStartDate") weekStartDate: RequestBody,
+        @Part("dailyMeals") dailyMeals: RequestBody,
+        @Part weeklyMealImg: MultipartBody.Part
+//        @Body requestDTO_week: String
+    ): Call<AdminResponse>
 
     @Headers("Content-Type: application/json")
     @POST("/api/admin/meal-plans/{restaurant-name}/{day-of-week}")
     suspend fun setMealPlans(
         @Path("restaurant-name") resName: String,
         @Path("day-of-week") dayOfWeek: String,
-        @Body requestDTO_week: String
-    ): Response<AdminResponse>
+        @Body requestDTO_dayOfWeek: String
+    ): Call<AdminResponse>
 }
 
 object Retrofit_Admin {
@@ -56,13 +70,19 @@ object Retrofit_Admin {
 //            .addInterceptor(AuthInterceptor_Admin(context))
 //            .build()
 
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(150, TimeUnit.SECONDS)
+            .readTimeout(100, TimeUnit.SECONDS)
+            .writeTimeout(100, TimeUnit.SECONDS)
+            .build()
+
         val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            //.client(okHttpClient)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -130,7 +150,7 @@ suspend fun fetchMealPlans(
         // 데이터 체크: 데이터가 없으면 null 반환
         if (data.isSuccessful) {
             value = data.body()
-        }else{
+        } else {
             value = null
         }
         Log.e("fetchMealPlans", "응답 데이터: ${value?.data?.dailyMeal}")
@@ -149,29 +169,43 @@ suspend fun fetchMealPlans(
 suspend fun uploadingWeekMealPlans(
     context: Context,
     restaurantName: String,
-    body: requestDTO_week
-): AdminResponse? {
+    weekStartDate: String,
+    dM: dailyMeals,
+    weeklyMealImg: MultipartBody.Part,
+) {
     val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory()) // Kotlin 지원
         .build()
-    val jsonAdapter = moshi.adapter(requestDTO_week::class.java)
-    val jsonData = jsonAdapter.toJson(body) // data를 JSON으로 변환
+    val jsonAdapter = moshi.adapter(dailyMeals::class.java)
+    val jsonData = jsonAdapter.toJson(dM) // data를 JSON으로 변환
+
+    val ws = RequestBody.create(MediaType.parse("application/json", jsonData))
 
     Log.e("uploadingWeekMealPlans", "jsonData: ${jsonData}")
 
-
-    var code: Int? = null
+    var error: String? = null
 
     try {
         val response =
-            Retrofit_Admin.createApiService(context).setWeekMealPlans(restaurantName, jsonData)
-        Log.e("uploadingWeekMealPlans", "응답 데이터: ${response.message()}")
-        code = response.code()
-        return response.body()
+            Retrofit_Admin.createApiService(context)
+                .setWeekMealPlans(restaurantName, weekStartDate, jsonData, weeklyMealImg).enqueue(object : Callback<AdminResponse>{
+                    override fun onResponse(
+                        call: Call<AdminResponse>,
+                        response: Response<AdminResponse>
+                    ) {
+                        Log.e("uploadingWeekMealPlans", "응답 데이터: ${response.message()}")
+                    }
+
+                    override fun onFailure(call: Call<AdminResponse>, t: Throwable) {
+                        Log.e("uploadingWeekMealPlans", "API 호출 실패: $t")
+                    }
+                    }
+                )
+//        Log.e("uploadingWeekMealPlans", "응답 데이터: ${response.request()}")
+//        error = response..toString()
     } catch (e: Exception) {
-        Log.e("uploadingWeekMealPlans", "API 호출 실패: $code")
-        Toast.makeText(context, "전송 실패: 에러 코드 $code", Toast.LENGTH_SHORT).show()
-        return null
+        Log.e("uploadingWeekMealPlans", "API 호출 실패: $e")
+        Toast.makeText(context, "전송 실패: $e", Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -182,7 +216,7 @@ suspend fun uploadingMealPlans(
     restaurantName: String,
     dayOfWeek: String,
     body: requestDTO_dayOfWeek
-): AdminResponse? {
+) {
     val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory()) // Kotlin 지원
         .build()
@@ -190,16 +224,15 @@ suspend fun uploadingMealPlans(
     val jsonData = jsonAdapter.toJson(body) // data를 JSON으로 변환
 
     Log.e("uploadingMealPlans", "jsonData=\n$jsonData")
-        var code: Int? = null
+    var error: String? = null
     try {
         val response =
-            Retrofit_Admin.createApiService(context).setMealPlans(restaurantName, dayOfWeek, jsonData)
-        Log.e("uploadingMealPlans", "응답 데이터: ${response.message()}")
-        code = response.code()
-        return response.body()
+            Retrofit_Admin.createApiService(context)
+                .setMealPlans(restaurantName, dayOfWeek, jsonData)
+        Log.e("uploadingMealPlans", "응답 데이터: ${response.request()}")
+        error = response.timeout().toString()
     } catch (e: Exception) {
-        Log.e("uploadingMealPlans", "API 호출 실패: $code")
-        Toast.makeText(context, "전송 실패: 에러 코드 $code", Toast.LENGTH_SHORT).show()
-        return null
+        Log.e("uploadingMealPlans", "API 호출 실패: $error")
+        Toast.makeText(context, "전송 실패: 에러 코드 $error", Toast.LENGTH_SHORT).show()
     }
 }
