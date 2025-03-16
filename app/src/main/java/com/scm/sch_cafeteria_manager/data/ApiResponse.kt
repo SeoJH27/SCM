@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
+import java.io.File
 
 // 디테일 API Response
 @JsonClass(generateAdapter = true)
@@ -30,8 +31,17 @@ data class AdminResponse(
 ): Parcelable
 
 @Parcelize
+data class weekAdmin(
+    val weekMealImg: String,         // 주간 식단 이미지 경로
+    val weekStartDate: String,
+    val dailyMeal: List<dailyMeal>    // 일일 식단 정보
+): Parcelable
+
+
+@Parcelize
 data class dataAdmin(
     val weekMealImg: String,         // 주간 식단 이미지 경로
+    val weekStartDate: String,
     val dailyMeal: dailyMeal    // 일일 식단 정보
 ): Parcelable
 

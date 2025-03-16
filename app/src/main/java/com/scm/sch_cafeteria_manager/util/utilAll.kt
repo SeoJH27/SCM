@@ -23,13 +23,17 @@ object utilAll {
     val nonData = "정보 없음"
     val nonDate = "00:00"
 
-    const val BASE_URL = "http://192.168.1.8:8080"
+    const val BASE_URL = "http://192.168.1.43:8080"
     const val photoFilePath = "photo.jpg"
     const val weekFilePath = "week.jpg"
 
     // TODO : 비었을 때 사용. 더 적절한 용어 필요함.
     val emptyMEAL = listOf(
         meals(blank, blank, blank, blank, blank)
+    )
+
+    val dummyMEAL = listOf(
+        meals(MealType.BREAKFAST.myNmae, "00:00", "00:00", "mainMenu", "테스트")
     )
 
     fun setInquiryLink() {

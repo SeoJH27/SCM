@@ -3,6 +3,8 @@ package com.scm.sch_cafeteria_manager.ui.admin
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -27,13 +29,13 @@ import com.scm.sch_cafeteria_manager.data.UserRole
 import com.scm.sch_cafeteria_manager.data.dOw
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.manageDate
-import com.scm.sch_cafeteria_manager.data.requestDTO_week
+import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminBinding
 import com.scm.sch_cafeteria_manager.extentions.toEnumOrNull
 import com.scm.sch_cafeteria_manager.ui.home.HomeActivity
 import com.scm.sch_cafeteria_manager.util.cacheHelper
-import com.scm.sch_cafeteria_manager.util.uploadingMealPlans
 import com.scm.sch_cafeteria_manager.util.uploadingWeekMealPlans
+import com.scm.sch_cafeteria_manager.util.utilAll.dummyMEAL
 import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
 import com.scm.sch_cafeteria_manager.util.utilAll.fileToBase64
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
@@ -41,13 +43,12 @@ import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
 import com.scm.sch_cafeteria_manager.util.utilAll.weekFilePath
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.ByteArrayOutputStream
 import java.io.File
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -145,21 +146,33 @@ class AdminFragment : Fragment() {
     private fun uploadingWeekPhoto(day: String) {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), weekFilePath)
         if (file.exists()) {
-            val menu = dailyMeals(
-                        dOw.MONDAY.dName,
-                        emptyMEAL
-                )
+            val menu = listOf(dailyMeals(
+                        dOw.MONDAY.dName, dummyMEAL
+                ))
             binding.progressbar.visibility = View.VISIBLE
             lifecycleScope.launch {
                 try {
-                    val fileImage = file.asRequestBody("image/jpg".toMediaTypeOrNull())
-                    val multiFile = MultipartBody.Part.createFormData("weeklyMealImg", file.name, fileImage)
+//                    val fileImage = fileToBase64(file).toRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+//                    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+//                    val byteArrayOutputStream= ByteArrayOutputStream()
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+//                    val byteArray = byteArrayOutputStream.toByteArray()
+//                    val fileImage = byteArray.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+                    val fileImage = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    Log.e("AdminFragment", "fileImage: $fileImage")
+
+                    val title = if (!isTitleClick) CafeteriaData.HYANGSEOL1.cfName else CafeteriaData.FACULTY.cfName
+
+                    val multiFile = MultipartBody.Part.createFormData("weeklyMealImg", "photo", fileImage)
+
                     val response = uploadingWeekMealPlans(
                         requireContext(),
-                        binding.txtAdminTitle.text.toString(),
+                        title,
                         getWeekStartDate(day),
                         menu,
-                        multiFile
+                        file
                     )
 //                    if (response?.status != "200") {
 //                        Log.e(
@@ -420,6 +433,7 @@ class AdminFragment : Fragment() {
         destination: String,  // 권한 별 프레그먼트
         day: String   // 일주일 날짜 모음
     ) {
+        // TODO: navagating 없애야함
         with(binding) {
             btnMonday.setOnClickListener {
                 navigateTo(destination, manageDate(dOw.MONDAY.dName, day))

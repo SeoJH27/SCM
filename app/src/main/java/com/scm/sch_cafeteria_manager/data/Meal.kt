@@ -8,11 +8,11 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class meals(
-    @Json(name = "mealType") val mealType: String?,
-    @Json(name = "operatingStartTime") val operatingStartTime: String?,
-    @Json(name = "operatingEndTime") val operatingEndTime: String?,
-    @Json(name = "mainMenu") val mainMenu: String?,
-    @Json(name = "subMenu") val subMenu: String?
+    @Json(name = "mealType") val mealType: String,
+    @Json(name = "operatingStartTime") val operatingStartTime: String,
+    @Json(name = "operatingEndTime") val operatingEndTime: String,
+    @Json(name = "mainMenu") val mainMenu: String,
+    @Json(name = "subMenu") val subMenu: String
 ): Parcelable
 
 @Parcelize

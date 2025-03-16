@@ -7,16 +7,22 @@ import com.google.gson.Gson
 import com.scm.sch_cafeteria_manager.data.AdminResponse
 import com.scm.sch_cafeteria_manager.data.api_response
 import com.scm.sch_cafeteria_manager.data.dailyMeals
+import com.scm.sch_cafeteria_manager.data.dataAdmin
 import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
 import com.scm.sch_cafeteria_manager.data.requestDTO_week
+import com.scm.sch_cafeteria_manager.data.weekAdmin
 import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import okhttp3.Response as okResponse
@@ -31,8 +37,10 @@ import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.PartMap
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 interface ApiService_Admin {
@@ -51,8 +59,7 @@ interface ApiService_Admin {
         @Part("weekStartDate") weekStartDate: RequestBody,
         @Part("dailyMeals") dailyMeals: RequestBody,
         @Part weeklyMealImg: MultipartBody.Part
-//        @Body requestDTO_week: String
-    ): Call<AdminResponse>
+    ): Call<weekAdmin>
 
     @Headers("Content-Type: application/json")
     @POST("/api/admin/meal-plans/{restaurant-name}/{day-of-week}")
@@ -83,7 +90,6 @@ object Retrofit_Admin {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(ApiService_Admin::class.java)
@@ -170,39 +176,55 @@ suspend fun uploadingWeekMealPlans(
     context: Context,
     restaurantName: String,
     weekStartDate: String,
-    dM: dailyMeals,
-    weeklyMealImg: MultipartBody.Part,
+    dM: List<dailyMeals>,
+    weeklyMealImg: File,
 ) {
     val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory()) // Kotlin 지원
         .build()
-    val jsonAdapter = moshi.adapter(dailyMeals::class.java)
-    val jsonData = jsonAdapter.toJson(dM) // data를 JSON으로 변환
+    // daily
+    val type = Types.newParameterizedType(List::class.java, dailyMeals::class.java)
+    val jsonAdapter = moshi.adapter<List<dailyMeals>>(type)
+    val jsonData = jsonAdapter.toJson(dM)
+    val meal = jsonData.toRequestBody("application/json".toMediaTypeOrNull())
+//    val meal = MultipartBody.Part.createFormData("dailyMeals", jsonData)
 
-    val ws = RequestBody.create(MediaType.parse("application/json", jsonData))
+    // start date
+    val adapter = moshi.adapter(String::class.java)
+    val data = adapter.toJson(weekStartDate)
+    val startDate = data.toRequestBody("application/json".toMediaTypeOrNull())
+//    val startDate = MultipartBody.Part.createFormData("weekStartDate", weekStartDate)
 
-    Log.e("uploadingWeekMealPlans", "jsonData: ${jsonData}")
+//    val textHashMap = hashMapOf<String, MultipartBody.Part>()
+//    textHashMap["weekStartDate"] = startDate
+//    textHashMap["dailyMeals"] = meal
 
-    var error: String? = null
+    // image
+    val fileImage = weeklyMealImg.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+    Log.e("AdminFragment", "fileImage: $fileImage")
+    val multiFile = MultipartBody.Part.createFormData("weeklyMealImg", "photo", fileImage)
+
+
+    Log.e("uploadingWeekMealPlans", "List<dailyMeals>: ${jsonData}"
+                                         +"\nweekStartDate: $data")
 
     try {
         val response =
             Retrofit_Admin.createApiService(context)
-                .setWeekMealPlans(restaurantName, weekStartDate, jsonData, weeklyMealImg).enqueue(object : Callback<AdminResponse>{
+                .setWeekMealPlans(restaurantName, startDate, meal, multiFile)
+                .enqueue(object : Callback<weekAdmin>{
                     override fun onResponse(
-                        call: Call<AdminResponse>,
-                        response: Response<AdminResponse>
+                        call: Call<weekAdmin>,
+                        response: Response<weekAdmin>
                     ) {
+
                         Log.e("uploadingWeekMealPlans", "응답 데이터: ${response.message()}")
                     }
-
-                    override fun onFailure(call: Call<AdminResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<weekAdmin>, t: Throwable) {
                         Log.e("uploadingWeekMealPlans", "API 호출 실패: $t")
                     }
                     }
                 )
-//        Log.e("uploadingWeekMealPlans", "응답 데이터: ${response.request()}")
-//        error = response..toString()
     } catch (e: Exception) {
         Log.e("uploadingWeekMealPlans", "API 호출 실패: $e")
         Toast.makeText(context, "전송 실패: $e", Toast.LENGTH_SHORT).show()

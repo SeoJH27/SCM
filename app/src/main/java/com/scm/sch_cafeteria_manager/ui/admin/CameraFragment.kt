@@ -172,7 +172,7 @@ class CameraFragment : Fragment() {
         }
 
         // TODO: Admin1StaffWeekFragment - Fragment 간 이동 Test
-        val path: String = photoFilePath
+        val path: String = weekFilePath
 //            if (args.flag) {
 //                photoFilePath
 //
