@@ -28,6 +28,7 @@ import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.MealType
 import com.scm.sch_cafeteria_manager.data.dailyMeals
+import com.scm.sch_cafeteria_manager.data.dataAdmin
 import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminHs1Binding
 import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
@@ -52,7 +53,7 @@ class Admin1Hs1WeekFragment : Fragment() {
     private var _binding: FragmentAdminHs1Binding? = null
     private val binding get() = _binding!!
     private val args: Admin1Hs1WeekFragmentArgs by navArgs()
-    var jsonData: AdminResponse? = null
+    var jsonData: dataAdmin? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,8 +85,8 @@ class Admin1Hs1WeekFragment : Fragment() {
                     CafeteriaData.HYANGSEOL1.cfName,
                     args.manageDate.week,
                     getWeekStartDate(args.manageDate.day)
-                )
-                Log.e("Admin1Hs1WeekFragment", "fetchAdmin1Hs1Menu: ${jsonData?.data?.dailyMeal}")
+                )?.data
+                Log.e("Admin1Hs1WeekFragment", "fetchAdmin1Hs1Menu: ${jsonData?.dailyMeal}")
             } catch (e: Exception) {
                 Log.e(
                     "Admin1Hs1WeekFragment",
@@ -102,7 +103,7 @@ class Admin1Hs1WeekFragment : Fragment() {
                 Toast.makeText(requireContext(), "데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
                 Log.e(
                     "Admin1Hs1WeekFragment",
-                    "Data check - Fail: jsonData=${jsonData?.data?.dailyMeal}"
+                    "Data check - Fail: jsonData=${jsonData?.dailyMeal}"
                 )
                 errorToBack()
             }
@@ -125,7 +126,7 @@ class Admin1Hs1WeekFragment : Fragment() {
     // 한 번 더 해당 요일이 맞는지 체크 후 Layout 세팅
     private fun checkDay() {
         // 데이터가 아예 없는 경우
-        if (jsonData?.data?.dailyMeal == null) {
+        if (jsonData?.dailyMeal == null) {
             with(binding) {
                 txtBreakfastOpenTimeStart.text = nonDate
                 txtBreakfastOpenTimeEnd.text = nonDate
@@ -141,11 +142,11 @@ class Admin1Hs1WeekFragment : Fragment() {
             }
         }
         // 데이터 상 날짜 더블 체크
-        else if (jsonData!!.data.dailyMeal.dayOfWeek == args.manageDate.week) {
-            val meals = jsonData!!.data.dailyMeal.meals
+        else if (jsonData!!.dailyMeal.dayOfWeek == args.manageDate.week) {
+            val meals = jsonData!!.dailyMeal.meals
             with(binding) {
                 toolbarAdminHs1.title =
-                    dayOfWeekToKorean(jsonData!!.data.dailyMeal.dayOfWeek) + " 수정"
+                    dayOfWeekToKorean(jsonData!!.dailyMeal.dayOfWeek) + " 수정"
                 var menu: String?
                 if (meals.size > 0) {
                     // Breakfast
@@ -344,7 +345,7 @@ class Admin1Hs1WeekFragment : Fragment() {
     // 찍은 사진 팝업으로 보여주기
     private fun popUpImage(file: File) {
         //TODO: 여백 누르면 사라지게 만들기
-        val img = jsonData?.data?.weekMealImg
+        val img = jsonData?.weekMealImg
         Log.e("popUpImage", "$img")
 
         val builder = Dialog(requireContext())
@@ -354,7 +355,9 @@ class Admin1Hs1WeekFragment : Fragment() {
         }
         val imageView = ImageView(requireContext())
 //        imageView.setImageURI(file.toUri())
+//        imageView.setImageBitmap(stringToBitmap(img))
         imageView.setImageBitmap(stringToBitmap(img))
+
         builder.addContentView(
             imageView, RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -378,8 +381,8 @@ class Admin1Hs1WeekFragment : Fragment() {
     // </editor-folder>
 
     // 데이터 Null-check
-    private fun checkData(data: AdminResponse?): Boolean {
-        return !(isNull(data) || isNull(data?.data))
+    private fun checkData(data: dataAdmin?): Boolean {
+        return !(isNull(data) || isNull(data))
     }
 
     // <editor-folder desc="setBack">

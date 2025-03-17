@@ -10,24 +10,27 @@ import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import retrofit2.Response
 import okhttp3.Response as okResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
+import java.util.concurrent.TimeUnit
 
 interface ApiService_Master {
     @Headers("Content-Type: application/json")
-    @POST("/api/master/meal-plans")
+    @GET("/api/master/meal-plans")
     suspend fun getMealPlans(@QueryMap pendingDailyMealRequestDTO: Map<String, String>): Response<MasterResponse>
 
     @Headers("Content-Type: application/json")
-    @POST("/api/master/week-meal-plans")
+    @GET("/api/master/week-meal-plans")
     suspend fun getWeekMealPlans(@QueryMap pendingWeeklyMealRequestDTO : Map<String, String>): Response<MasterResponse>
 
     @Headers("Content-Type: application/json")
@@ -41,14 +44,19 @@ object Retrofit_Master {
 //        val okHttpClient = OkHttpClient.Builder()
 //            .addInterceptor(AuthInterceptor_Master(context))
 //            .build()
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(150, TimeUnit.SECONDS)
+            .readTimeout(100, TimeUnit.SECONDS)
+            .writeTimeout(100, TimeUnit.SECONDS)
+            .build()
+
         val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            //.client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(ApiService_Master::class.java)
@@ -72,31 +80,31 @@ private class AuthInterceptor_Master(private val context: Context) : Interceptor
 //
 
 // 일주일 메뉴 불러오기
-suspend fun fetchWeekMealPlansMaster(
-    context: Context,
-    weekStartDate: String,
-    restaurantName: String
-): MasterResponse? {
-    val requestDTO = mapOf(
-        "weekStartDate" to weekStartDate,
-        "restaurantName" to restaurantName
-    )
-    var value: MasterResponse? = null
-    Log.e("fetchWeekMealPlansMaster", "requestDTO: $requestDTO")
-    try {
-        val response = Retrofit_Master.createApiService(context).getWeekMealPlans(requestDTO)
-        // 데이터 체크: 데이터가 없으면 null 반환
-        if (response.isSuccessful) {
-            value = response.body()
-        }else{
-            value = null
-        }
-        Log.e("fetchWeekMealPlansMaster", "응답 데이터: ${value?.data?.dailyMeal}")
-    } catch (e: Exception) {
-        Log.e("fetchWeekMealPlansMaster", "API 호출 실패: ${e.message}")
-    }
-    return value
-}
+//suspend fun fetchWeekMealPlansMaster(
+//    context: Context,
+//    weekStartDate: String,
+//    restaurantName: String
+//): MasterResponse? {
+//    val requestDTO = mapOf(
+//        "weekStartDate" to weekStartDate,
+//        "restaurantName" to restaurantName
+//    )
+//    var value: MasterResponse? = null
+//    Log.e("fetchWeekMealPlansMaster", "requestDTO: $requestDTO")
+//    try {
+//        val response = Retrofit_Master.createApiService(context).getWeekMealPlans(requestDTO)
+//        // 데이터 체크: 데이터가 없으면 null 반환
+//        if (response.isSuccessful) {
+//            value = response.body()
+//        }else{
+//            value = null
+//        }
+//        Log.e("fetchWeekMealPlansMaster", "응답 데이터: ${value?.data?.dailyMeal}")
+//    } catch (e: Exception) {
+//        Log.e("fetchWeekMealPlansMaster", "API 호출 실패: ${e.message}")
+//    }
+//    return value
+//}
 
 // 특정 요일 메뉴 불러오기
 suspend fun fetchMealPlansMaster(
@@ -106,9 +114,9 @@ suspend fun fetchMealPlansMaster(
     restaurantName: String
 ): MasterResponse? {
     val requestDTO = mapOf(
+        "restaurantName" to restaurantName,
         "weekStartDate" to weekStartDate,
-        "dayOfWeek" to dayOfWeek,
-        "restaurantName" to restaurantName
+        "dayOfWeek" to dayOfWeek
     )
     var value: MasterResponse?
     Log.e("fetchMealPlansMaster", "requestDTO: $requestDTO")

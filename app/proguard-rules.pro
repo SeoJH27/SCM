@@ -26,3 +26,10 @@
 # Reflection을 사용하는 라이브러리 보호
 -keep class java.lang.invoke.** { *; }
 -keep class sun.misc.** { *; }
+
+# Moshi 관련 클래스 최적화 방지
+-keepclassmembers class * {
+    @com.squareup.moshi.JsonClass *;
+}
+
+-keep class com.scm.sch_cafeteria_manager.data.weekAdmin { *; }

@@ -2,6 +2,7 @@ package com.scm.sch_cafeteria_manager.util
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Environment
 import android.util.Base64
 import android.util.Log
 import com.scm.sch_cafeteria_manager.data.MealType
@@ -11,6 +12,7 @@ import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.InputStream
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -23,7 +25,7 @@ object utilAll {
     val nonData = "정보 없음"
     val nonDate = "00:00"
 
-    const val BASE_URL = "http://192.168.1.43:8080"
+    const val BASE_URL = "http://192.168.1.10:8080"
     const val photoFilePath = "photo.jpg"
     const val weekFilePath = "week.jpg"
 
@@ -33,7 +35,7 @@ object utilAll {
     )
 
     val dummyMEAL = listOf(
-        meals(MealType.BREAKFAST.myNmae, "00:00", "00:00", "mainMenu", "테스트")
+        meals(MealType.BREAKFAST.myNmae, "00:00", "00:00", "테스트", "테스트")
     )
 
     fun setInquiryLink() {
@@ -47,13 +49,82 @@ object utilAll {
 //            val fileOutputStream = FileOutputStream(file)
 //            fileOutputStream.write(encodeByte) // 파일 저장
 //            fileOutputStream.close()
+            if (isNull(encodeByte)) {
+                Log.e("utilAll", "stringToBitmap - Error $encodeByte")
+                return null
+            } else Log.e("utilAll", "stringToBitmap - size: ${encodeByte.size}")
 
-            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+            // 1단계: 먼저 크기만 확인하기 위한 디코딩 (inJustDecodeBounds = true)
+            val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+            BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size, options)
+            // 2단계: 적절한 축소 비율 계산
+            options.inSampleSize = calculateInSampleSize(options, 100, 100)
+            // 3단계: 실제로 이미지 디코딩 (inJustDecodeBounds = false)
+            options.inJustDecodeBounds = false
+
+            val bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size, options)
+            if (isNull(bitmap)) {
+                Log.e("utilAll", "stringToBitmap - Error $bitmap")
+                return null
+            } else Log.e("utilAll", "stringToBitmap - size: ${bitmap.width} x ${bitmap.height}")
+
+            return bitmap
         } catch (e: Exception){
             Log.e("utilAll", "stringToBitmap - Error $e")
             return null
         }
     }
+    fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        val height = options.outHeight
+        val width = options.outWidth
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight = height / 2
+            val halfWidth = width / 2
+
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+        return inSampleSize
+    }
+
+    // String to File
+    fun StringToFile(img: String?): File?{
+        return try {
+            val encodeByte = Base64.decode(img, Base64.DEFAULT)
+            if (isNull(encodeByte)) {
+                Log.e("utilAll", "stringToBitmap - Error $encodeByte")
+                return null
+            } else Log.e("utilAll", "stringToBitmap - size: ${encodeByte.size}")
+
+            // 2. 저장할 디렉토리 설정 (예: /storage/emulated/0/Download/)
+            val downloadsDir =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val file = File(downloadsDir, "0_test.jpg")
+
+            // 3. ByteArray를 파일로 저장
+            FileOutputStream(file).use { it.write(encodeByte) }
+            file
+        } catch (e: Exception){
+            Log.e("utilAll", "stringToBitmap - Error $e")
+            null
+        }
+    }
+
+//    // File to Bitmap
+//    fun fileToBitmap(file: File): Bitmap? {
+//        return try {
+//            val inputStream = FileInputStream(file)
+//            BitmapFactory.decodeStream(inputStream)
+//        } catch (e: Exception) {
+//            Log.e("utilAll", "fileToBitmap - Error $e")
+//            null
+//        }
+//    }
+
 
     // File to Base64
     fun fileToBase64(file: File): String {
@@ -62,6 +133,21 @@ object utilAll {
         inputStream.close()
         return Base64.encodeToString(bytes, Base64.DEFAULT) // Base64로 변환
     }
+
+    fun saveFileToInternalStorage(inputStream: InputStream, fileName: String, directory: File): File? {
+        return try {
+            val file = File(directory, fileName)
+            val outputStream = FileOutputStream(file)
+            inputStream.copyTo(outputStream)
+            outputStream.close()
+            inputStream.close()
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 
     // 메뉴를 합치는 함수
     fun combinMainAndSub(mainMenu: String?, subMenu: String?): String?{

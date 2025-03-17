@@ -30,25 +30,37 @@ data class AdminResponse(
     val data: dataAdmin
 ): Parcelable
 
+
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class WeekAdminResponse(
+    val status: String,
+    val message: String,
+    val data: weekAdmin
+): Parcelable
+
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class weekAdmin(
-    val weekMealImg: String,         // 주간 식단 이미지 경로
-    val weekStartDate: String,
-    val dailyMeal: List<dailyMeal>    // 일일 식단 정보
+    @Json(name = "weekStartDate") val weekStartDate: String?,
+    @Json(name = "dailyMeal") val dailyMeal: List<dailyMeal>?,    // 일일 식단 정보
+    @Json(name = "weekMealImg") val weekMealImg: String         // 주간 식단 이미지 경로
 ): Parcelable
+
+
 
 
 @Parcelize
 data class dataAdmin(
-    val weekMealImg: String,         // 주간 식단 이미지 경로
-    val weekStartDate: String,
-    val dailyMeal: dailyMeal    // 일일 식단 정보
+    @Json(name = "weekMealImg") val weekMealImg: String,         // 주간 식단 이미지 경로
+    @Json(name = "dailyMeal") val dailyMeal: dailyMeal    // 일일 식단 정보
 ): Parcelable
 
 @Parcelize
 data class dailyMeal(
-    val dayOfWeek: String,
-    val meals: List<meals>
+    @Json(name = "dayOfWeek") val dayOfWeek: String,
+    @Json(name = "meals") val meals: List<meals>
 ): Parcelable
 
 
@@ -61,7 +73,7 @@ data class MasterResponse(
 ): Parcelable
 @Parcelize
 data class dataMaster(
-    val dayMealImg: String,
+    val dayMealImg: String?,
     val weekMealImg: String,
     val dailyMeal: dailyMeal
 ): Parcelable

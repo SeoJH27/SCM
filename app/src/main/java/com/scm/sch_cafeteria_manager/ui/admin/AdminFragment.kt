@@ -152,20 +152,7 @@ class AdminFragment : Fragment() {
             binding.progressbar.visibility = View.VISIBLE
             lifecycleScope.launch {
                 try {
-//                    val fileImage = fileToBase64(file).toRequestBody("multipart/form-data".toMediaTypeOrNull())
-
-//                    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-//                    val byteArrayOutputStream= ByteArrayOutputStream()
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-//                    val byteArray = byteArrayOutputStream.toByteArray()
-//                    val fileImage = byteArray.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-
-                    val fileImage = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                    Log.e("AdminFragment", "fileImage: $fileImage")
-
                     val title = if (!isTitleClick) CafeteriaData.HYANGSEOL1.cfName else CafeteriaData.FACULTY.cfName
-
-                    val multiFile = MultipartBody.Part.createFormData("weeklyMealImg", "photo", fileImage)
 
                     val response = uploadingWeekMealPlans(
                         requireContext(),
@@ -243,8 +230,9 @@ class AdminFragment : Fragment() {
             btnUploadWeek.visibility = View.GONE
 
             setTodayDate()
-            setTextUploadWeek("masterHs1All", day)
+//            setTextUploadWeek("masterHs1", day)
             setChangeTitleMaster(day)
+            setManageMenuNavigateTo("masterHs1", day)
         }
     }
 
@@ -258,7 +246,7 @@ class AdminFragment : Fragment() {
                 // 해당 날짜 표시 및 시간
                 setTodayDate()
                 // 일주일 치 업로드 버튼
-                setTextUploadWeek("masterHs1All", day)
+//                setTextUploadWeek("masterHs1", day)
                 // 세부 메뉴의 ClickListener
                 setManageMenuNavigateTo("masterHs1", day)
                 // 다음 타이틀 클릭 시
@@ -273,7 +261,7 @@ class AdminFragment : Fragment() {
                 // 해당 날짜 표시 및 시간
                 setTodayDate()
                 // 일주일 치 업로드 버튼
-                setTextUploadWeek("masterStaff", day)
+//                setTextUploadWeek("masterStaff", day)
                 // 세부 메뉴의 ClickListener
                 setManageMenuNavigateTo("masterStaff", day)
                 // 다음 타이틀 클릭 시
@@ -334,12 +322,12 @@ class AdminFragment : Fragment() {
                 )
     }
 
-    // 일주일 치 메뉴 보기 버튼 활성화
-    private fun setTextUploadWeek(destination: String, day: String) {
-        binding.btnUploadWeek.setOnClickListener {
-            setManageMenuNavigateTo(destination, day)
-        }
-    }
+//    // 일주일 치 메뉴 보기 버튼 활성화
+//    private fun setTextUploadWeek(destination: String, day: String) {
+//        binding.btnUploadWeek.setOnClickListener {
+//
+//        }
+//    }
 
     // 식당 변경
     private fun setChangeTitleAdmin(day: String) {
@@ -370,8 +358,6 @@ class AdminFragment : Fragment() {
             "admin3" -> AdminFragmentDirections.toAdmin3(date)
             "masterHs1" -> AdminFragmentDirections.toMasterHs1(date)
             "masterStaff" -> AdminFragmentDirections.toMasterStaff(date)
-            "masterHs1All" -> AdminFragmentDirections.toMasterHs1AllWeek(date)
-            "masterStaffAll" -> AdminFragmentDirections.toMasterStaffAllWeek(date)
             "weekCamera" -> AdminFragmentDirections.toCamera(false)
             else -> throw IllegalArgumentException("Invalid button config: $destination")
         }
