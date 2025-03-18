@@ -18,7 +18,7 @@ data class meals(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class dailyMeals(
-    @Json(name = "dayOfWeek") val dayOfWeek: String,
+    @Json(name = "dayOfWeek") val dayOfWeek: String?,
     @Json(name = "meals") val meals: List<meals?>
 ): Parcelable
 

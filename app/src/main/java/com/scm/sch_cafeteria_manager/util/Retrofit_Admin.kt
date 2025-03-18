@@ -195,7 +195,7 @@ suspend fun uploadingWeekMealPlans(
 //    textHashMap["dailyMeals"] = meal
 
     // image
-    val fileImage = weeklyMealImg.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+    val fileImage = weeklyMealImg.asRequestBody("image/jpeg".toMediaTypeOrNull())
     val multiFile = MultipartBody.Part.createFormData("weeklyMealImg", "photo", fileImage)
 
     Log.e("uploadingWeekMealPlans", "List<dailyMeals>: $meal"

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_master_hs1">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -68,11 +69,11 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/desc_img_hs1"
                 android:scaleType="fitCenter"
+                android:src="@drawable/ic_map"
                 app:layout_constraintBottom_toTopOf="@id/background_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_week"
-                android:src="@drawable/ic_map" />
+                app:layout_constraintTop_toBottomOf="@id/btn_week" />
 
             <View
                 android:id="@+id/background_view"
@@ -80,8 +81,9 @@
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="10dp"
                 android:background="@drawable/bg_admin_background"
-                app:layout_constraintBottom_toBottomOf="@id/space_dinner_menu_bottom"
+                app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.473"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_master_hs1" />
 
@@ -91,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/str_change_open_time"
                 app:layout_constraintBottom_toTopOf="@id/view_breakfast_menu"
                 app:layout_constraintStart_toStartOf="@id/background_view"
@@ -106,12 +108,12 @@
                 android:backgroundTint="@color/grey_100"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
+                android:text="08:00"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
                 app:layout_constraintEnd_toStartOf="@id/txt_breakfast_time_to_time"
                 app:layout_constraintStart_toEndOf="@id/txt_change_time_breakfast"
                 app:layout_constraintTop_toTopOf="@id/txt_change_time_breakfast"
-                tools:ignore="LabelFor"
-                tools:text="08:00" />
+                tools:ignore="LabelFor" />
 
             <TextView
                 android:id="@+id/txt_breakfast_time_to_time"
@@ -133,19 +135,20 @@
                 android:backgroundTint="@color/grey_100"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
+                android:text="10:00"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
                 app:layout_constraintEnd_toEndOf="@id/background_view"
                 app:layout_constraintStart_toEndOf="@id/txt_breakfast_time_to_time"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_breakfast"
-                tools:text="19:00" />
+                app:layout_constraintTop_toTopOf="@id/txt_change_time_breakfast" />
 
             <View
                 android:id="@+id/view_breakfast_menu"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintBottom_toTopOf="@id/ed_breakfast_menu"
                 app:layout_constraintEnd_toEndOf="@id/txt_breakfast_open_time_end"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
                 app:layout_constraintTop_toBottomOf="@id/txt_change_time_breakfast" />
 
@@ -168,8 +171,8 @@
                 android:autofillHints=""
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:inputType=""
                 android:hint="@string/str_enter_menu"
+                android:inputType=""
                 android:padding="10dp"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@id/view_breakfast_menu"
@@ -183,7 +186,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="40dp"
-                android:layout_marginVertical="10dp"
                 android:background="@color/grey_300"
                 app:layout_constraintBottom_toTopOf="@id/txt_change_time_lunch"
                 app:layout_constraintEnd_toEndOf="@id/background_view"
@@ -210,12 +212,12 @@
                 android:backgroundTint="@color/grey_100"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
+                android:text="08:00"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
                 app:layout_constraintEnd_toStartOf="@id/txt_lunch_time_to_time"
                 app:layout_constraintStart_toEndOf="@id/txt_change_time_lunch"
                 app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch"
-                tools:ignore="LabelFor"
-                tools:text="08:00" />
+                tools:ignore="LabelFor" />
 
             <TextView
                 android:id="@+id/txt_lunch_time_to_time"
@@ -237,17 +239,17 @@
                 android:backgroundTint="@color/grey_100"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
+                android:text="10:00"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
                 app:layout_constraintEnd_toEndOf="@id/background_view"
                 app:layout_constraintStart_toEndOf="@id/txt_lunch_time_to_time"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch"
-                tools:text="19:00" />
+                app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch" />
 
             <View
                 android:id="@+id/view_lunch_menu"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintBottom_toTopOf="@id/ed_lunch_menu"
                 app:layout_constraintEnd_toEndOf="@id/txt_lunch_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
@@ -272,8 +274,8 @@
                 android:autofillHints=""
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
-                android:inputType=""
                 android:hint="@string/str_enter_menu"
+                android:inputType=""
                 android:padding="10dp"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@id/view_lunch_menu"
@@ -287,7 +289,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="40dp"
-                android:layout_marginVertical="10dp"
                 android:background="@color/grey_300"
                 app:layout_constraintBottom_toTopOf="@id/txt_change_time_dinner"
                 app:layout_constraintEnd_toEndOf="@id/background_view"
@@ -314,12 +315,12 @@
                 android:backgroundTint="@color/grey_100"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
+                android:text="08:00"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
                 app:layout_constraintEnd_toStartOf="@id/txt_dinner_time_to_time"
                 app:layout_constraintStart_toEndOf="@id/txt_change_time_dinner"
                 app:layout_constraintTop_toTopOf="@id/txt_change_time_dinner"
-                tools:ignore="LabelFor"
-                tools:text="08:00" />
+                tools:ignore="LabelFor" />
 
             <TextView
                 android:id="@+id/txt_dinner_time_to_time"
@@ -341,17 +342,17 @@
                 android:backgroundTint="@color/grey_100"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
+                android:text="10:00"
                 app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
                 app:layout_constraintEnd_toEndOf="@id/background_view"
                 app:layout_constraintStart_toEndOf="@id/txt_dinner_time_to_time"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_dinner"
-                tools:text="19:00" />
+                app:layout_constraintTop_toTopOf="@id/txt_change_time_dinner" />
 
             <View
                 android:id="@+id/view_dinner_menu"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="@id/background_view"
                 app:layout_constraintEnd_toEndOf="@id/txt_dinner_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_dinner"
@@ -378,20 +379,13 @@
                 android:backgroundTint="@color/grey_100"
                 android:inputType=""
                 android:padding="10dp"
+                android:layout_marginVertical="20dp"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
                 app:layout_constraintEnd_toEndOf="@id/view_dinner_menu"
                 app:layout_constraintStart_toStartOf="@id/txt_dinner_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/view_dinner_menu"
                 tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
-
-            <Space
-                android:id="@+id/space_dinner_menu_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ed_dinner_menu" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_upload_all_menu"
@@ -404,7 +398,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/space_dinner_menu_bottom" />
+                app:layout_constraintTop_toBottomOf="@id/background_view" />
 
             <ProgressBar
                 android:id="@+id/progressbar"

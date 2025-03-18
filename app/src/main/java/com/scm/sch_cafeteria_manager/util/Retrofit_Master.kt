@@ -5,7 +5,8 @@ import android.util.Log
 import com.google.gson.Gson
 import com.scm.sch_cafeteria_manager.data.MasterResponse
 import com.scm.sch_cafeteria_manager.data.api_response
-import com.scm.sch_cafeteria_manager.data.requestDTO_week_master
+import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
+import com.scm.sch_cafeteria_manager.data.requestDTO_master
 import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -34,8 +35,8 @@ interface ApiService_Master {
     suspend fun getWeekMealPlans(@QueryMap pendingWeeklyMealRequestDTO : Map<String, String>): Response<MasterResponse>
 
     @Headers("Content-Type: application/json")
-    @POST("/api/admin/meal-plans/{restaurant-name}")
-    suspend fun setMealPlansMaster(@Path("restaurant-name") resName: String, @Body requestDTO_week_master: String): api_response
+    @POST("/api/master/meal-plans/{restaurant-name}")
+    suspend fun setMealPlansMaster(@Path("restaurant-name") resName: String, @Body requestDTO_master: String): api_response
 }
 
 object Retrofit_Master {
@@ -140,22 +141,27 @@ suspend fun fetchMealPlansMaster(
 //                                            Upload (POST)
 //
 
-// 일주일 메뉴 불러오기
-suspend fun uploadingWeekMealPlansMaster(
+// 특정 요일 메뉴 보내기
+suspend fun uploadingMealPlansMaster(
     context: Context,
     restaurantName: String,
-    body: requestDTO_week_master
+    body: requestDTO_master
 ): api_response? {
-    val jsonData = Gson().toJson(body) // data를 JSON으로 변환
 
-    Log.e("uploadingWeekMealPlansMaster", "jsonData: $jsonData")
+    val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory()) // Kotlin 지원
+        .build()
+    val jsonAdapter = moshi.adapter(requestDTO_master::class.java)
+    val jsonData = jsonAdapter.toJson(body) // data를 JSON으로 변환
+
+    Log.e("uploadingMealPlansMaster", "jsonData: $jsonData")
 
     try {
         val response = Retrofit_Master.createApiService(context).setMealPlansMaster(restaurantName, jsonData)
-        Log.e("uploadingWeekMealPlansMaster", "응답 데이터: $response")
+        Log.e("uploadingMealPlansMaster", "응답 데이터: ${response.message}")
         return response
     } catch (e: Exception) {
-        Log.e("uploadingWeekMealPlansMaster", "API 호출 실패: ${e.message}")
+        Log.e("uploadingMealPlansMaster", "API 호출 실패: ${e.message}")
         return null
     }
 }

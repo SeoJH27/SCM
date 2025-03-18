@@ -76,8 +76,7 @@ dependencies {
     implementation(libs.logging.interceptor)
 
 
-    // Glide: 작동 안됨
-    //    implementation(libs.glide)
-    //    kapt(libs.lifecycle.compiler)
-    //    kapt(libs.glide.compiler)
+    // Glide
+    implementation (libs.github.glide)
+    annotationProcessor (libs.compiler.v4142)
 }

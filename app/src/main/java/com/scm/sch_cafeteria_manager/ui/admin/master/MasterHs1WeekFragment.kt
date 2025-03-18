@@ -1,18 +1,19 @@
 package com.scm.sch_cafeteria_manager.ui.admin.master
 
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
@@ -20,25 +21,20 @@ import com.scm.sch_cafeteria_manager.data.MasterResponse
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.MealType
 import com.scm.sch_cafeteria_manager.data.dailyMeals
-import com.scm.sch_cafeteria_manager.data.dataMaster
-import com.scm.sch_cafeteria_manager.data.requestDTO_week_master
+import com.scm.sch_cafeteria_manager.data.requestDTO_master
 import com.scm.sch_cafeteria_manager.databinding.FragmentMasterHs1Binding
+import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
 import com.scm.sch_cafeteria_manager.util.fetchMealPlansMaster
-import com.scm.sch_cafeteria_manager.util.uploadingWeekMealPlansMaster
-import com.scm.sch_cafeteria_manager.util.utilAll.StringToFile
+import com.scm.sch_cafeteria_manager.util.uploadingMealPlansMaster
+import com.scm.sch_cafeteria_manager.util.utilAll.stringToFile
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
 import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.dayOfWeekToKorean
+import com.scm.sch_cafeteria_manager.util.utilAll.fileToBitmap
+import com.scm.sch_cafeteria_manager.util.utilAll.getUriFromByteArray
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
-import com.scm.sch_cafeteria_manager.util.utilAll.saveFileToInternalStorage
-import com.scm.sch_cafeteria_manager.util.utilAll.stringToBitmap
 import kotlinx.coroutines.launch
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import java.nio.charset.StandardCharsets
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Objects.isNull
 
 class MasterHs1WeekFragment : Fragment() {
@@ -105,6 +101,7 @@ class MasterHs1WeekFragment : Fragment() {
     // 대기 상태 데이터 불러오기
     private fun setLayout() {
         checkDay()
+        setTimeChanger()
         setTextSaveBtnClick()
         setCheckWeekImg()
         setCheckDayOfWeekImg()
@@ -113,8 +110,13 @@ class MasterHs1WeekFragment : Fragment() {
 
     // 한 번 더 해당 요일이 맞는지 체크 후 Layout 세팅
     private fun checkDay() {
-        if (jsonData?.data?.dailyMeal == null) {
-            with(binding) {
+        with(binding) {
+            toolbarAdminHs1.title =
+                dayOfWeekToKorean(jsonData!!.data.dailyMeal.dayOfWeek) + " 수정"
+            btnCurrentDay.text = dayOfWeekToKorean(jsonData!!.data.dailyMeal.dayOfWeek)
+
+            if (jsonData?.data?.dailyMeal == null) {
+
                 txtBreakfastOpenTimeStart.text = nonDate
                 txtBreakfastOpenTimeEnd.text = nonDate
                 edBreakfastMenu.setText(blank)
@@ -126,12 +128,10 @@ class MasterHs1WeekFragment : Fragment() {
                 txtDinnerOpenTimeStart.text = nonDate
                 txtDinnerOpenTimeEnd.text = nonDate
                 edDinnerMenu.setText(blank)
-            }
-        } else if (jsonData!!.data.dailyMeal.dayOfWeek == args.manageDate.week) {
-            val meals = jsonData!!.data.dailyMeal.meals
-            with(binding) {
-                toolbarAdminHs1.title =
-                    dayOfWeekToKorean(jsonData!!.data.dailyMeal.dayOfWeek) + " 수정"
+
+            } else if (jsonData!!.data.dailyMeal.dayOfWeek == args.manageDate.week) {
+                val meals = jsonData!!.data.dailyMeal.meals
+
                 var menu: String?
                 if (meals.size > 0) {
                     txtBreakfastOpenTimeStart.text = meals[0].operatingStartTime
@@ -165,18 +165,45 @@ class MasterHs1WeekFragment : Fragment() {
                     } else {
                         edDinnerMenu.setText(menu)
                     }
+                } else {
+
                 }
+
+            } else {
+                errorToBack()
+                Log.e("MasterHs1WeekFragment", "setLayout - 요일이 맞지 않음")
             }
-        } else {
-            errorToBack()
-            Log.e("MasterHs1WeekFragment", "setLayout - 요일이 맞지 않음")
+        }
+    }
+
+    // 시간 선택 세팅
+    private fun setTimeChanger() {
+        with(binding) {
+            txtBreakfastOpenTimeStart.setOnClickListener {
+                txtBreakfastOpenTimeStart.setTimePickerDialog(requireContext())
+            }
+            txtBreakfastOpenTimeEnd.setOnClickListener {
+                txtBreakfastOpenTimeEnd.setTimePickerDialog(requireContext())
+            }
+            txtLunchOpenTimeStart.setOnClickListener {
+                txtLunchOpenTimeStart.setTimePickerDialog(requireContext())
+            }
+            txtLunchOpenTimeEnd.setOnClickListener {
+                txtLunchOpenTimeEnd.setTimePickerDialog(requireContext())
+            }
+            txtDinnerOpenTimeStart.setOnClickListener {
+                txtDinnerOpenTimeStart.setTimePickerDialog(requireContext())
+            }
+            txtDinnerOpenTimeEnd.setOnClickListener {
+                txtDinnerOpenTimeEnd.setTimePickerDialog(requireContext())
+            }
         }
     }
 
     // 서버로 전송 및 뒤로가기
     private fun setTextSaveBtnClick() {
         binding.btnUploadAllMenu.setOnClickListener {
-            uploadingWeekMealPlansMaster()
+            uploadingMealPlans()
             backToHome()
         }
     }
@@ -185,20 +212,20 @@ class MasterHs1WeekFragment : Fragment() {
     // <editor-folder desc="Save">
     // 텍스트 업로드
     // TODO: 버튼 없음, test 필요
-    private fun uploadingWeekMealPlansMaster() {
+    private fun uploadingMealPlans() {
         with(binding) {
             progressbar.visibility = View.VISIBLE // UI 블로킹 시작
             Log.e("MasterHs1WeekFragment", "uploadingWeekMealPlansMaster - prograssbar")
             lifecycleScope.launch {
                 try {
-                    val response = uploadingWeekMealPlansMaster(
+                    val response = uploadingMealPlansMaster(
                         requireContext(),
                         CafeteriaData.HYANGSEOL1.cfName,
                         getMenu()
                     )
                     Log.e(
                         "MasterHs1WeekFragment",
-                        "uploadingWeekMealPlansMaster - ${response?.code}"
+                        "uploadingWeekMealPlansMaster - ${response}"
                     )
                 } catch (e: Exception) {
                     Log.e(
@@ -213,9 +240,9 @@ class MasterHs1WeekFragment : Fragment() {
         }
     }
 
-    private fun getMenu(): requestDTO_week_master {
+    private fun getMenu(): requestDTO_master {
         with(binding) {
-            val body = requestDTO_week_master(
+            return requestDTO_master(
                 getWeekStartDate(args.manageDate.day),
                 dailyMeals(
                     args.manageDate.week, listOf(
@@ -239,9 +266,7 @@ class MasterHs1WeekFragment : Fragment() {
                         )
                     )
                 )
-
             )
-            return body
         }
     }
     // </editor-folder>
@@ -251,32 +276,69 @@ class MasterHs1WeekFragment : Fragment() {
     private fun setCheckWeekImg() {
         with(binding) {
             btnWeek.setOnClickListener {
-                if (checkData(jsonData)) {
-                    // 이미지가 사라져야 함
-                    if (weekFlag) {
-                        imgMasterHs1.setImageResource(R.drawable.ic_map)
-                        imgMasterHs1.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-                        imgMasterHs1.requestLayout()
-                        weekFlag = false
-                    }
-                    // 이미지가 보여야 함
-                    else {
-                        if (jsonData?.data?.weekMealImg != null) {
-                            val file = StringToFile(jsonData?.data?.weekMealImg)
-                            if (file != null) {
-                                println("📂: ${file.absolutePath}")
+                try {
+                    if (checkData(jsonData)) {
+                        // 이미지가 사라져야 함
+                        if (weekFlag) {
+                            Glide.with(requireContext())
+                                .load(R.drawable.ic_map.toDrawable())
+                                .into(imgMasterHs1)
+                            imgMasterHs1.layoutParams = ConstraintLayout.LayoutParams(
+                                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                                ConstraintLayout.LayoutParams.WRAP_CONTENT
+                            ).apply {
+                                setMargins(30, 30, 30, 30)
+                                bottomToTop = backgroundView.id
+                                endToEnd = fragmentMasterHs1.id
+                                startToStart = fragmentMasterHs1.id
+                                topToBottom = btnWeek.id
                             }
-//                            imgMasterHs1.setImageBitmap(stringToBitmap(jsonData?.data?.weekMealImg))
-                            imgMasterHs1.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
                             imgMasterHs1.requestLayout()
+                            imgMasterHs1.visibility = View.INVISIBLE
 
-                            weekFlag = true
-                        } else
-                            Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG)
-                                .show()
+                            weekFlag = false
+                        }
+                        // 이미지가 보여야 함
+                        else {
+                            if (jsonData?.data?.weekMealImg != null) {
+                                val encodeByte =
+                                    Base64.decode(jsonData?.data?.weekMealImg, Base64.DEFAULT)
+                                Log.e(
+                                    "MasterHs1WeekFragment",
+                                    "setCheckWeekImg - encodeByte: ${encodeByte.toString(Charsets.UTF_8)}"
+                                )
+
+                                Glide.with(requireContext())
+                                    .load("data:image/png;base64,${encodeByte.toString(Charsets.UTF_8)}")
+                                    .into(imgMasterHs1)
+
+                                imgMasterHs1.layoutParams = ConstraintLayout.LayoutParams(
+                                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+                                ).apply {
+                                    setMargins(30, 30, 30, 30)
+                                    bottomToTop = backgroundView.id
+                                    endToEnd = fragmentMasterHs1.id
+                                    startToStart = fragmentMasterHs1.id
+                                    topToBottom = btnWeek.id
+                                }
+                                imgMasterHs1.requestLayout()
+                                imgMasterHs1.invalidate()     // UI 갱신
+
+                                weekFlag = true
+                            } else
+                                Toast.makeText(
+                                    requireContext(),
+                                    "저장된 이미지가 없습니다.",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG).show()
                     }
-                } else {
-                    Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG).show()
+                } catch (e: Exception) {
+                    Log.e("MasterHs1WeekFragment", "setCheckWeekImg - Error $e")
                 }
             }
         }
@@ -284,29 +346,29 @@ class MasterHs1WeekFragment : Fragment() {
 
     // 해당 요일 이미지 불러오기
     private fun setCheckDayOfWeekImg() {
-        with(binding) {
-            btnCurrentDay.setOnClickListener {
-                if (checkData(jsonData)) {
-                    // 이미지가 사라져야 함
-                    if (dayOfWeekFlag) {
-                        imgMasterHs1.setImageDrawable(R.drawable.ic_map.toDrawable())
-                        dayOfWeekFlag = false
-                    }
-                    // 이미지가 보여야 함
-                    else {
-                        if (jsonData?.data?.weekMealImg != null) {
-//                            imgMasterHs1.setImageBitmap(stringToBitmap(jsonData?.data?.weekMealImg))
-                            dayOfWeekFlag = true
-
-                        } else
-                            Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG)
-                                .show()
-                    }
-                } else {
-                    Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
+//        with(binding) {
+//            btnCurrentDay.setOnClickListener {
+//                if (checkData(jsonData)) {
+//                    // 이미지가 사라져야 함
+//                    if (dayOfWeekFlag) {
+//                        imgMasterHs1.setImageDrawable(R.drawable.ic_map.toDrawable())
+//                        dayOfWeekFlag = false
+//                    }
+//                    // 이미지가 보여야 함
+//                    else {
+//                        if (jsonData?.data?.weekMealImg != null) {
+////                            imgMasterHs1.setImageBitmap(stringToBitmap(jsonData?.data?.weekMealImg))
+//                            dayOfWeekFlag = true
+//
+//                        } else
+//                            Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG)
+//                                .show()
+//                    }
+//                } else {
+//                    Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG).show()
+//                }
+//            }
+//        }
     }
     // </editor-folder>
 
