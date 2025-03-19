@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 class MasterStaffWeekFragment: Fragment() {
     private var _binding: FragmentMasterStaffBinding? = null
     private val binding get() = _binding!!
-    private val args: MasterStaffAllWeekFragmentArgs by navArgs()
     var data: AdminResponse? = null
 
     override fun onCreateView(

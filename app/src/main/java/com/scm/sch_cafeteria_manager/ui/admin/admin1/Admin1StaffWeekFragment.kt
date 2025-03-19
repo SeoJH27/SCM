@@ -19,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.R
-import com.scm.sch_cafeteria_manager.data.AdminResponse
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.MealType
 import com.scm.sch_cafeteria_manager.data.dailyMeals
@@ -28,7 +27,6 @@ import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminStaffBinding
 import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
-import com.scm.sch_cafeteria_manager.ui.admin.CameraFragment
 import com.scm.sch_cafeteria_manager.util.fetchMealPlans
 import com.scm.sch_cafeteria_manager.util.uploadingMealPlans
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
@@ -72,6 +70,8 @@ class Admin1StaffWeekFragment : Fragment() {
     // 서버로부터 data 받기
     private suspend fun fetchData() {
         binding.progressbar.visibility = View.VISIBLE // UI 블로킹 시작
+        binding.progressbarBackground.visibility = View.VISIBLE
+        binding.progressbarBackground.isClickable = true
 
         lifecycleScope.launch {
             // Retrofit에서 데이터 가져오기
@@ -103,8 +103,8 @@ class Admin1StaffWeekFragment : Fragment() {
                 )
                 errorToBack()
             }
-
             binding.progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
+            binding.progressbarBackground.visibility = View.GONE
         }
     }
 
@@ -160,10 +160,7 @@ class Admin1StaffWeekFragment : Fragment() {
     private fun setPhotoBtnClick() {
         // TODO: camera
         binding.btnCaptureImage.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_camera, CameraFragment())
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(Admin1Hs1WeekFragmentDirections.admin1Hs1ToCamera(false))
         }
     }
 
@@ -245,7 +242,7 @@ class Admin1StaffWeekFragment : Fragment() {
                             args.manageDate.week,
                             listOf(
                                 meals(
-                                    MealType.LUNCH.myNmae,
+                                    MealType.LUNCH.myName,
                                     txtLunchOpenTimeStart.text.toString(),
                                     txtLunchOpenTimeEnd.text.toString(),
                                     txtLunchMenu.text.toString(),

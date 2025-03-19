@@ -48,22 +48,21 @@
         app:layout_constraintHorizontal_bias="0.58"
         app:layout_constraintStart_toStartOf="@id/img_sch_map"
         app:layout_constraintTop_toTopOf="@id/img_sch_map"
-        app:layout_constraintVertical_bias="0.28"
-        />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_hs2"
-        android:layout_width="70dp"
-        android:layout_height="35dp"
-        android:background="@drawable/bg_map_button"
-        app:layout_constraintBottom_toBottomOf="@id/img_sch_map"
-        app:layout_constraintEnd_toEndOf="@id/img_sch_map"
-        app:layout_constraintHorizontal_bias="0.55"
-        app:layout_constraintStart_toStartOf="@id/img_sch_map"
-        app:layout_constraintTop_toTopOf="@id/img_sch_map"
-        app:layout_constraintVertical_bias="0.13"
-        />
-
+        app:layout_constraintVertical_bias="0.28" />
+    <!--
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_hs2"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_map_button"
+            app:layout_constraintBottom_toBottomOf="@id/img_sch_map"
+            app:layout_constraintEnd_toEndOf="@id/img_sch_map"
+            app:layout_constraintHorizontal_bias="0.55"
+            app:layout_constraintStart_toStartOf="@id/img_sch_map"
+            app:layout_constraintTop_toTopOf="@id/img_sch_map"
+            app:layout_constraintVertical_bias="0.13"
+            />
+    -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_staff"
         android:layout_width="45dp"
@@ -74,22 +73,21 @@
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="@id/img_sch_map"
         app:layout_constraintTop_toTopOf="@id/img_sch_map"
-        app:layout_constraintVertical_bias="0.53"
-        />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_student_union"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:background="@drawable/bg_map_button"
-        app:layout_constraintBottom_toBottomOf="@id/img_sch_map"
-        app:layout_constraintEnd_toEndOf="@id/img_sch_map"
-        app:layout_constraintHorizontal_bias="0.485"
-        app:layout_constraintStart_toStartOf="@id/img_sch_map"
-        app:layout_constraintTop_toTopOf="@id/img_sch_map"
-        app:layout_constraintVertical_bias="0.55"
-        />
-
+        app:layout_constraintVertical_bias="0.53" />
+    <!--
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_student_union"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_map_button"
+            app:layout_constraintBottom_toBottomOf="@id/img_sch_map"
+            app:layout_constraintEnd_toEndOf="@id/img_sch_map"
+            app:layout_constraintHorizontal_bias="0.485"
+            app:layout_constraintStart_toStartOf="@id/img_sch_map"
+            app:layout_constraintTop_toTopOf="@id/img_sch_map"
+            app:layout_constraintVertical_bias="0.55"
+            />
+    -->
     <ImageView
         android:id="@+id/ic_map"
         android:layout_width="wrap_content"

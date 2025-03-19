@@ -36,7 +36,6 @@ class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
     private val args: CameraFragmentArgs by navArgs()
-
     private var imageCapture: ImageCapture? = null
     private var capturedPhotoFile: File? = null  // 저장할 파일 변수
 
@@ -47,14 +46,16 @@ class CameraFragment : Fragment() {
     ): View {
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
 
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    requireActivity().supportFragmentManager.popBackStack() // Fragment A로 돌아가기
-                }
-            })
-
+        if (args.flag) {
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        requireActivity().supportFragmentManager.popBackStack() // Fragment A로 돌아가기
+                    }
+                })
+        }
+        Log.e("CameraFragment", "Check - ${args.flag}")
         return binding.root
     }
 
@@ -71,16 +72,16 @@ class CameraFragment : Fragment() {
         setBack()
     }
 
+    // <editor-fold desc="setLayout">
+    // 촬영 버튼 활성화
     private fun setCaptureBtn() {
         Log.e("CameraFragment", "setCaptureBtn")
 
         with(binding) {
             // 취소 버튼 비활성화
             btnPhotoCancel.visibility = View.GONE
-            btnPhotoCancel.focusable = View.NOT_FOCUSABLE
             // 저장 버튼 비활성화
             btnPhotoSave.visibility = View.GONE
-            btnPhotoSave.focusable = View.NOT_FOCUSABLE
             // 촬영 버튼 활성화
             btnPhotoCapture.visibility = View.VISIBLE
             btnPhotoCapture.focusable = View.FOCUSABLE
@@ -93,6 +94,7 @@ class CameraFragment : Fragment() {
         }
     }
 
+    // 취소 & 저장 버튼 활성화
     private fun setCancleBtn() {
         Log.e("CameraFragment", "setCancleBtn")
 
@@ -102,10 +104,8 @@ class CameraFragment : Fragment() {
             btnPhotoCapture.focusable = View.NOT_FOCUSABLE
             // 취소 버튼 활성화
             btnPhotoCancel.visibility = View.VISIBLE
-            btnPhotoCancel.focusable = View.FOCUSABLE
             // 저장 버튼 활성화
             btnPhotoSave.visibility = View.VISIBLE
-            btnPhotoSave.focusable = View.FOCUSABLE
 
             // 취소 클릭 시
             btnPhotoCancel.setOnClickListener {
@@ -118,7 +118,7 @@ class CameraFragment : Fragment() {
         setSaveBtn()
     }
 
-    // 저장 버튼
+    // 저장 버튼 클릭 리스너
     private fun setSaveBtn() {
         Log.e("CameraFragment", "setSaveBtn")
         binding.btnPhotoSave.setOnClickListener {
@@ -131,25 +131,23 @@ class CameraFragment : Fragment() {
             }
         }
     }
+    // </editor-fold>
 
+    // <editor-fold desc="setCamera">
     // 카메라를 세팅하여 PreviewView에 실행
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
         cameraProviderFuture.addListener({
             // 카메라의 수명 주기를 수명 주기 소유자에게 바인딩
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build().also {
                 it.surfaceProvider = binding.viewCamera.surfaceProvider
             }
-
             imageCapture = ImageCapture.Builder()
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY) // 빠른 촬영 모드
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY) // 빠른 촬영 모드
                 .setTargetRotation(requireView().display.rotation) // 회전 설정
                 .build()
-
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
@@ -170,16 +168,14 @@ class CameraFragment : Fragment() {
             startCamera()
             return
         }
+        // path check
+        val path: String
+        if (args.flag) {
+            path = weekFilePath
 
-        // TODO: Admin1StaffWeekFragment - Fragment 간 이동 Test
-        val path: String = weekFilePath
-//            if (args.flag) {
-//                photoFilePath
-//
-//            } else {
-//                weekFilePath
-//            }
-
+        } else {
+            path = photoFilePath
+        }
         val photoFile = File(requireContext().externalCacheDirs?.firstOrNull(), path)
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
         Log.e("CameraFragment", "capturedPhotoFile: $capturedPhotoFile")
@@ -206,14 +202,15 @@ class CameraFragment : Fragment() {
         }
     }
 
+    // 찍은 사진 display
     private fun displayCapturedPhoto(photoFile: File) {
         val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+        // 이미지 돌리기
         val exif = ExifInterface(photoFile)
         val orientation = exif.getAttributeInt(
             ExifInterface.TAG_ORIENTATION,
             ExifInterface.ORIENTATION_UNDEFINED
         )
-
         val b = RotateBitmap(bitmap, orientation)
 
         with(binding) {
@@ -222,23 +219,18 @@ class CameraFragment : Fragment() {
             viewCamera.visibility = View.GONE  // 사진이 보이도록 프리뷰 숨김
         }
     }
+    // </editor-fold>
 
     // 캐시 확인
     private fun isCacheFileExists(): Boolean {
-        // TODO: Admin1StaffWeekFragment - Fragment 간 이동 Test
-//        val file: File = getFile(args.flag)
-        val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-
+        val file: File = getFile(args.flag)
         return file.exists()
     }
 
     // 사진 삭제
     private fun deleteCacheFile(): Boolean {
         try {
-            // TODO: Admin1StaffWeekFragment - Fragment 간 이동 Test
-//            val file: File = getFile(args.flag)
-            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-
+            val file: File = getFile(args.flag)
             file.delete()
         } catch (e: Exception) {
             Log.e("CameraFragment", "사진 삭제 실패: ", e)
@@ -246,20 +238,21 @@ class CameraFragment : Fragment() {
         return isCacheFileExists()
     }
 
+    // path 확인
     private fun getFile(flag: Boolean): File {
         val file: File =
             if (flag)
-                File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-            else
                 File(requireContext().externalCacheDirs?.firstOrNull(), weekFilePath)
+            else
+                File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
         return file
     }
 
+    // flag 확인 후 적절한 back 세팅
     private fun returnToAdminFragment() {
-        setFragmentResult("weekCamera", bundleOf("resultKey" to "dataReceived"))
+//        if (args.flag) setFragmentResult("weekCamera", bundleOf("resultKey" to "dataReceived"))
         backToHome() // Fragment A로 돌아가기
     }
-
 
     // <editor-folder desc="setBack">
     private fun setBack() {
@@ -279,9 +272,10 @@ class CameraFragment : Fragment() {
     }
 
     private fun backToHome() {
-        //requireActivity().supportFragmentManager.popBackStack() // Fragment A로 돌아가기
-        // TODO: Admin1StaffWeekFragment - Fragment 간 이동 Test
-        findNavController().navigateUp()
+//        if (args.flag)
+//            requireActivity().supportFragmentManager.popBackStack() // Fragment A로 돌아가기
+//        else
+            findNavController().navigateUp()
     }
 
     private fun cancleBackToHome() {
@@ -293,6 +287,7 @@ class CameraFragment : Fragment() {
     }
     // </editor-folder>
 
+    // 권한 체크
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -301,7 +296,6 @@ class CameraFragment : Fragment() {
                 Toast.makeText(requireContext(), "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
             }
         }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

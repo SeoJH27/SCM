@@ -15,6 +15,7 @@ data class meals(
     @Json(name = "subMenu") val subMenu: String
 ): Parcelable
 
+// admin
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class dailyMeals(

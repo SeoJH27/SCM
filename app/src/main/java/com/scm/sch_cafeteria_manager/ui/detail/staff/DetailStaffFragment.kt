@@ -49,7 +49,9 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
 
     // 네트워크 통신 -> lifecycleScope로 제어
     private fun fetchData() {
-        binding.prograssbar.visibility = View.VISIBLE
+        binding.progressbar.visibility = View.VISIBLE // UI 블로킹 시작
+        binding.progressbarBackground.visibility = View.VISIBLE
+        binding.progressbarBackground.isClickable = true
         lifecycleScope.launch {
             // Retrofit에서 데이터 가져오기
             try {
@@ -71,8 +73,8 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
                 Toast.makeText(requireContext(), "데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
                 backToHome()
             }
-
-            binding.prograssbar.visibility = View.GONE
+            binding.progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
+            binding.progressbarBackground.visibility = View.GONE
         }
     }
 

@@ -2,25 +2,30 @@ package com.scm.sch_cafeteria_manager.util
 
 import android.content.Context
 import android.util.Log
-import com.google.gson.Gson
+import com.scm.sch_cafeteria_manager.data.AdminResponse
 import com.scm.sch_cafeteria_manager.data.MasterResponse
-import com.scm.sch_cafeteria_manager.data.api_response
-import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
+import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.requestDTO_master
 import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.adapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import okhttp3.Response as okResponse
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import java.util.concurrent.TimeUnit
@@ -30,13 +35,21 @@ interface ApiService_Master {
     @GET("/api/master/meal-plans")
     suspend fun getMealPlans(@QueryMap pendingDailyMealRequestDTO: Map<String, String>): Response<MasterResponse>
 
-    @Headers("Content-Type: application/json")
-    @GET("/api/master/week-meal-plans")
-    suspend fun getWeekMealPlans(@QueryMap pendingWeeklyMealRequestDTO : Map<String, String>): Response<MasterResponse>
+//    @Headers("Content-Type: application/json")
+//    @GET("/api/master/week-meal-plans")
+//    suspend fun getWeekMealPlans(@QueryMap pendingWeeklyMealRequestDTO : Map<String, String>): Response<MasterResponse>
 
-    @Headers("Content-Type: application/json")
+//    @Headers("Content-Type: application/json")
+//    @POST("/api/master/meal-plans/{restaurant-name}")
+//    suspend fun setMealPlansMaster(@Path("restaurant-name") resName: String, @Body requestDTO_master: String): AdminResponse?
+
+    @Multipart
     @POST("/api/master/meal-plans/{restaurant-name}")
-    suspend fun setMealPlansMaster(@Path("restaurant-name") resName: String, @Body requestDTO_master: String): api_response
+    suspend fun setMealPlansMaster(
+        @Path("restaurant-name") resName: String,
+        @Part("weekStartDate") weekStartDate: RequestBody,
+        @Part("dailyMeals") dailyMeals: RequestBody
+    ): AdminResponse?
 }
 
 object Retrofit_Master {
@@ -126,7 +139,7 @@ suspend fun fetchMealPlansMaster(
         // 데이터 체크: 데이터가 없으면 null 반환
         if (response.isSuccessful) {
             value = response.body()
-        }else{
+        } else {
             value = null
         }
         Log.e("fetchMealPlansMaster", "응답 데이터: ${value?.data?.dailyMeal}")
@@ -146,19 +159,26 @@ suspend fun uploadingMealPlansMaster(
     context: Context,
     restaurantName: String,
     body: requestDTO_master
-): api_response? {
+): AdminResponse? {
 
     val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory()) // Kotlin 지원
         .build()
-    val jsonAdapter = moshi.adapter(requestDTO_master::class.java)
-    val jsonData = jsonAdapter.toJson(body) // data를 JSON으로 변환
 
-    Log.e("uploadingMealPlansMaster", "jsonData: $jsonData")
+    // daily
+    val jsonAdapter = moshi.adapter(dailyMeals::class.java)
+    val jsonData = jsonAdapter.toJson(body.dailyMeals)
+    val mealData = jsonData.toRequestBody("application/json".toMediaTypeOrNull())
+
+    // start date
+    val startDateData = body.weekStartDate.toRequestBody("application/json".toMediaTypeOrNull())
+
+    Log.e("uploadingMealPlansMaster", "Data: $mealData, $startDateData")
 
     try {
-        val response = Retrofit_Master.createApiService(context).setMealPlansMaster(restaurantName, jsonData)
-        Log.e("uploadingMealPlansMaster", "응답 데이터: ${response.message}")
+        val response = Retrofit_Master.createApiService(context)
+            .setMealPlansMaster(restaurantName, startDateData, mealData)
+        Log.e("uploadingMealPlansMaster", "응답 데이터: ${response?.message}")
         return response
     } catch (e: Exception) {
         Log.e("uploadingMealPlansMaster", "API 호출 실패: ${e.message}")

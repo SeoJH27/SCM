@@ -7,15 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.MasterResponse
 import com.scm.sch_cafeteria_manager.data.meals
@@ -26,12 +24,9 @@ import com.scm.sch_cafeteria_manager.databinding.FragmentMasterHs1Binding
 import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
 import com.scm.sch_cafeteria_manager.util.fetchMealPlansMaster
 import com.scm.sch_cafeteria_manager.util.uploadingMealPlansMaster
-import com.scm.sch_cafeteria_manager.util.utilAll.stringToFile
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
 import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.dayOfWeekToKorean
-import com.scm.sch_cafeteria_manager.util.utilAll.fileToBitmap
-import com.scm.sch_cafeteria_manager.util.utilAll.getUriFromByteArray
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
 import kotlinx.coroutines.launch
@@ -42,9 +37,7 @@ class MasterHs1WeekFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: MasterHs1WeekFragmentArgs by navArgs()
     var jsonData: MasterResponse? = null
-
     var weekFlag: Boolean = false
-    var dayOfWeekFlag: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,6 +59,8 @@ class MasterHs1WeekFragment : Fragment() {
 
     private fun fetchData() {
         binding.progressbar.visibility = View.VISIBLE // UI 블로킹 시작
+        binding.progressbarBackground.visibility = View.VISIBLE
+        binding.progressbarBackground.isClickable = true
         Log.e("MasterHs1WeekFragment", "fetchData - prograssbar")
         lifecycleScope.launch {
             try {
@@ -94,6 +89,7 @@ class MasterHs1WeekFragment : Fragment() {
                 errorToBack()
             }
             binding.progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
+            binding.progressbarBackground.visibility = View.GONE
         }
     }
 
@@ -165,9 +161,7 @@ class MasterHs1WeekFragment : Fragment() {
                     } else {
                         edDinnerMenu.setText(menu)
                     }
-                } else {
-
-                }
+                } else { }
 
             } else {
                 errorToBack()
@@ -204,7 +198,6 @@ class MasterHs1WeekFragment : Fragment() {
     private fun setTextSaveBtnClick() {
         binding.btnUploadAllMenu.setOnClickListener {
             uploadingMealPlans()
-            backToHome()
         }
     }
     // </editor-folder>
@@ -215,6 +208,8 @@ class MasterHs1WeekFragment : Fragment() {
     private fun uploadingMealPlans() {
         with(binding) {
             progressbar.visibility = View.VISIBLE // UI 블로킹 시작
+            binding.progressbarBackground.visibility = View.VISIBLE
+            binding.progressbarBackground.isClickable = true
             Log.e("MasterHs1WeekFragment", "uploadingWeekMealPlansMaster - prograssbar")
             lifecycleScope.launch {
                 try {
@@ -225,8 +220,11 @@ class MasterHs1WeekFragment : Fragment() {
                     )
                     Log.e(
                         "MasterHs1WeekFragment",
-                        "uploadingWeekMealPlansMaster - ${response}"
+                        "uploadingWeekMealPlansMaster - ${response?.message}"
                     )
+                    progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
+                    binding.progressbarBackground.visibility = View.GONE
+                    backToHome()
                 } catch (e: Exception) {
                     Log.e(
                         "MasterHs1WeekFragment",
@@ -235,7 +233,6 @@ class MasterHs1WeekFragment : Fragment() {
                     errorToBack()
                 }
                 Log.e("MasterHs1WeekFragment", "uploadingWeekMealPlansMaster")
-                progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
             }
         }
     }
@@ -247,19 +244,19 @@ class MasterHs1WeekFragment : Fragment() {
                 dailyMeals(
                     args.manageDate.week, listOf(
                         meals(
-                            MealType.BREAKFAST.myNmae, txtBreakfastOpenTimeStart.text.toString(),
+                            MealType.BREAKFAST.myName, txtBreakfastOpenTimeStart.text.toString(),
                             txtBreakfastOpenTimeEnd.text.toString(),
                             edBreakfastMenu.text.toString(),
                             blank
                         ),
                         meals(
-                            MealType.LUNCH.myNmae, txtLunchOpenTimeStart.text.toString(),
+                            MealType.LUNCH.myName, txtLunchOpenTimeStart.text.toString(),
                             txtLunchOpenTimeEnd.text.toString(),
                             edLunchMenu.text.toString(),
                             blank
                         ),
                         meals(
-                            MealType.DINNER.myNmae, txtDinnerOpenTimeStart.text.toString(),
+                            MealType.DINNER.myName, txtDinnerOpenTimeStart.text.toString(),
                             txtDinnerOpenTimeEnd.text.toString(),
                             edDinnerMenu.text.toString(),
                             blank
@@ -280,22 +277,7 @@ class MasterHs1WeekFragment : Fragment() {
                     if (checkData(jsonData)) {
                         // 이미지가 사라져야 함
                         if (weekFlag) {
-                            Glide.with(requireContext())
-                                .load(R.drawable.ic_map.toDrawable())
-                                .into(imgMasterHs1)
-                            imgMasterHs1.layoutParams = ConstraintLayout.LayoutParams(
-                                ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                                ConstraintLayout.LayoutParams.WRAP_CONTENT
-                            ).apply {
-                                setMargins(30, 30, 30, 30)
-                                bottomToTop = backgroundView.id
-                                endToEnd = fragmentMasterHs1.id
-                                startToStart = fragmentMasterHs1.id
-                                topToBottom = btnWeek.id
-                            }
-                            imgMasterHs1.requestLayout()
-                            imgMasterHs1.visibility = View.INVISIBLE
-
+                            imgMasterHs1.visibility = View.GONE
                             weekFlag = false
                         }
                         // 이미지가 보여야 함
@@ -310,20 +292,24 @@ class MasterHs1WeekFragment : Fragment() {
 
                                 Glide.with(requireContext())
                                     .load("data:image/png;base64,${encodeByte.toString(Charsets.UTF_8)}")
+                                    .override(450, 650)
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .centerCrop()
                                     .into(imgMasterHs1)
+                                imgMasterHs1.visibility = View.VISIBLE
 
-                                imgMasterHs1.layoutParams = ConstraintLayout.LayoutParams(
-                                    ConstraintLayout.LayoutParams.MATCH_PARENT,
-                                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-                                ).apply {
-                                    setMargins(30, 30, 30, 30)
-                                    bottomToTop = backgroundView.id
-                                    endToEnd = fragmentMasterHs1.id
-                                    startToStart = fragmentMasterHs1.id
-                                    topToBottom = btnWeek.id
-                                }
-                                imgMasterHs1.requestLayout()
-                                imgMasterHs1.invalidate()     // UI 갱신
+//                                imgMasterHs1.layoutParams = ConstraintLayout.LayoutParams(
+//                                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+//                                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+//                                ).apply {
+//                                    setMargins(30, 30, 30, 30)
+//                                    bottomToTop = backgroundView.id
+//                                    endToEnd = fragmentMasterHs1.id
+//                                    startToStart = fragmentMasterHs1.id
+//                                    topToBottom = btnWeek.id
+//                                }
+//                                imgMasterHs1.requestLayout()
+//                                imgMasterHs1.invalidate()     // UI 갱신
 
                                 weekFlag = true
                             } else

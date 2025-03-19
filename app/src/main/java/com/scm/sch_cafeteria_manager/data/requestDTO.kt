@@ -24,14 +24,6 @@ data class requestDTO_dayOfWeek(
 
 @Parcelize
 data class requestDTO_master(
-    val weekStartDate: String?,
+    val weekStartDate: String,
     val dailyMeals: dailyMeals?,
-) : Parcelable
-
-
-@Parcelize
-data class pendingDailyMealRequestDTO(
-    val restaurantName: String,
-    val dayOfWeek: String,
-    val weekStartDate: String
 ) : Parcelable

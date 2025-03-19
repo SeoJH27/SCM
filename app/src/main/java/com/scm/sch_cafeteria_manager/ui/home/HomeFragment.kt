@@ -30,15 +30,15 @@ class HomeFragment : Fragment() {
             btnHs1.setOnClickListener {
                 navigateTo("hs1")
             }
-            btnHs2.setOnClickListener {
-                navigateTo("hs2")
-            }
+//            btnHs2.setOnClickListener {
+//                navigateTo("hs2")
+//            }
             btnStaff.setOnClickListener {
                 navigateTo("staff")
             }
-            btnStudentUnion.setOnClickListener {
-                navigateTo("student")
-            }
+//            btnStudentUnion.setOnClickListener {
+//                navigateTo("student")
+//            }
             icMap.setOnClickListener {
                 navigateTo("todaymenu")
             }

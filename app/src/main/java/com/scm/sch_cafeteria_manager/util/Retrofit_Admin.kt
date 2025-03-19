@@ -218,6 +218,7 @@ suspend fun uploadingWeekMealPlans(
 //                    }
 //                    }
 //                )
+        Log.e("uploadingWeekMealPlans", "응답 데이터: ${response.message}")
     } catch (e: Exception) {
         Log.e("uploadingWeekMealPlans", "API 호출 실패: $e")
         Toast.makeText(context, "전송 실패: $e", Toast.LENGTH_SHORT).show()

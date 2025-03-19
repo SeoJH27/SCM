@@ -21,7 +21,6 @@ data class UserTodayMenuResponse(
     val data: List<Cafeteria>
 )
 
-
 // fetch시 사용하는 AdminResponse
 @Parcelize
 data class AdminResponse(
@@ -29,8 +28,6 @@ data class AdminResponse(
     val message: String,
     val data: dataAdmin
 ): Parcelable
-
-
 
 @JsonClass(generateAdapter = true)
 @Parcelize
@@ -47,9 +44,6 @@ data class weekAdmin(
     @Json(name = "dailyMeal") val dailyMeal: List<dailyMeal>?,    // 일일 식단 정보
     @Json(name = "weekMealImg") val weekMealImg: String         // 주간 식단 이미지 경로
 ): Parcelable
-
-
-
 
 @Parcelize
 data class dataAdmin(
@@ -71,6 +65,7 @@ data class MasterResponse(
     val message: String,
     val data: dataMaster
 ): Parcelable
+
 @Parcelize
 data class dataMaster(
     val dayMealImg: String?,

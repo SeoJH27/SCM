@@ -24,12 +24,24 @@ enum class dOw(
 }
 
 enum class MealType(
-    val myNmae: String,
+    val myName: String,
     val korName: String
 
 ){
     BREAKFAST("BREAKFAST", "조식"),
     LUNCH("LUNCH", "중식"),
     DINNER("DINNER", "석식")
+}
+
+enum class NavAdmin(
+    val navName: String
+){
+    admin1Hs1("admin1Hs1"),
+    admin1Staff("admin1Staff"),
+    admin2("admin2"),
+    admin3("admin3"),
+    masterHs1("masterHs1"),
+    masterStaff("masterStaff"),
+    weekCamera("weekCamera")
 }
 

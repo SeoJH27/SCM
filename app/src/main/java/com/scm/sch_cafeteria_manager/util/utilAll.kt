@@ -1,10 +1,7 @@
 package com.scm.sch_cafeteria_manager.util
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Environment
 import android.util.Base64
 import android.util.Log
 import com.scm.sch_cafeteria_manager.data.MealType
@@ -13,8 +10,6 @@ import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.InputStream
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -27,7 +22,7 @@ object utilAll {
     val nonData = "정보 없음"
     val nonDate = "00:00"
 
-    const val BASE_URL = "http://192.168.1.4:8080"
+    const val BASE_URL = "http://192.168.1.40:8080"
     const val photoFilePath = "photo.jpg"
     const val weekFilePath = "week.jpg"
 
@@ -37,7 +32,7 @@ object utilAll {
     )
 
     val dummyMEAL = listOf(
-        meals(MealType.BREAKFAST.myNmae, "00:00", "00:00", "테스트", "테스트")
+        meals(MealType.BREAKFAST.myName, "00:00", "00:00", "테스트", "테스트")
     )
 
     fun setInquiryLink() {
@@ -68,66 +63,6 @@ object utilAll {
         }
     }
 
-    fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
-        val height = options.outHeight
-        val width = options.outWidth
-        var inSampleSize = 1
-
-        if (height > reqHeight || width > reqWidth) {
-            val halfHeight = height / 2
-            val halfWidth = width / 2
-
-            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2
-            }
-        }
-        return inSampleSize
-    }
-
-    // String to File
-    fun stringToFile(img: String?): File? {
-        return try {
-            val encodeByte = Base64.decode(img, Base64.DEFAULT)
-            if (isNull(encodeByte)) {
-                Log.e("utilAll", "stringToBitmap - Error: ${encodeByte.size}")
-                null
-            } else {
-                Log.e("utilAll", "stringToBitmap - encodeByte size: ${encodeByte.size}")
-
-                // 2. 저장할 디렉토리 설정 (예: /storage/emulated/0/Download/)
-                val downloadsDir =
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                val file = File(downloadsDir, "0_text.jpg")
-
-                // 3. ByteArray를 파일로 저장
-                FileOutputStream(file).use { it.write(encodeByte) }
-                Log.e("utilAll", "stringToBitmap - path: ${file.absolutePath}")
-
-                file
-            }
-        } catch (e: Exception) {
-            Log.e("utilAll", "stringToBitmap - Error $e")
-            null
-        }
-    }
-
-    // File to Bitmap
-    fun fileToBitmap(file: File?): Bitmap? {
-        return if (file != null) {
-            try {
-                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                Log.e("utilAll", "fileToBitmap - size: ${bitmap.width} x ${bitmap.height}")
-                bitmap
-            } catch (e: Exception) {
-                Log.e("utilAll", "fileToBitmap - Error $e")
-                null
-            }
-        } else {
-            Log.e("utilAll", "fileToBitmap - Error: file null")
-            null
-        }
-    }
-
     // File to Base64
     fun fileToBase64(file: File): String {
         val inputStream = FileInputStream(file)
@@ -136,50 +71,12 @@ object utilAll {
         return Base64.encodeToString(bytes, Base64.DEFAULT) // Base64로 변환
     }
 
-    fun saveFileToInternalStorage(
-        inputStream: InputStream,
-        fileName: String,
-        directory: File
-    ): File? {
-        return try {
-            val file = File(directory, fileName)
-            val outputStream = FileOutputStream(file)
-            inputStream.copyTo(outputStream)
-            outputStream.close()
-            inputStream.close()
-            file
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    fun getUriFromByteArray(context: Context, byteArray: ByteArray): Uri {
-        // Set directory
-        val dir = File(context.getExternalFilesDir(null).toString() + "/YOUR_DIR")
-        if(! dir.exists()){
-            dir.mkdir()
-        }
-
-        // 2. 저장할 디렉토리 설정 (예: /storage/emulated/0/Download/)
-        val downloadsDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(downloadsDir, "0_text.txt")
-
-        // Write bytes to the file
-        val os = FileOutputStream(file)
-        os.write(byteArray)
-        os.close()
-
-        return Uri.fromFile(file)
-    }
-
     // 메뉴를 합치는 함수
     fun combinMainAndSub(mainMenu: String?, subMenu: String?): String? {
         if (isNull(mainMenu))
             return null
         else {
-            if (isNull(subMenu)) {
+            if (isNull(subMenu) || subMenu == blank) {
                 return mainMenu?.replaceCommaToLinebreak()
             } else {
                 val menu =
@@ -275,20 +172,21 @@ object utilAll {
 
     }
 
-    // 영어인 mealType을 한국어로 변환
+    // mealType을 한국어로 변환
     fun mealTypeToKorean(mealType: String?): String {
         if (isNull(mealType))
             return blank
-        if (mealType == MealType.BREAKFAST.myNmae)
+        if (mealType == MealType.BREAKFAST.myName)
             return MealType.BREAKFAST.korName
-        else if (mealType == MealType.LUNCH.myNmae)
+        else if (mealType == MealType.LUNCH.myName)
             return MealType.LUNCH.korName
-        else if (mealType == MealType.DINNER.myNmae)
+        else if (mealType == MealType.DINNER.myName)
             return MealType.DINNER.korName
         else
             return blank
     }
 
+    // dayOfWeek를 한국어로 변환
     fun dayOfWeekToKorean(dayOfWeek: String): String {
         var result = dayOfWeek
         if (isNull(dayOfWeek))

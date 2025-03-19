@@ -48,7 +48,10 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
 
     // 네트워크 통신 -> lifecycleScope로 제어
     private fun fetchData() {
-        binding.prograssbar.visibility = View.VISIBLE
+        binding.progressbar.visibility = View.VISIBLE
+        binding.progressbarBackground.visibility = View.VISIBLE
+        binding.progressbarBackground.isClickable = true
+
         lifecycleScope.launch {
             // Retrofit에서 데이터 가져오기
             try {
@@ -70,7 +73,8 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
                 Toast.makeText(requireContext(), "데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
                 errorToBack()
             }
-            binding.prograssbar.visibility = View.GONE
+            binding.progressbar.visibility = View.GONE
+            binding.progressbarBackground.visibility = View.GONE
         }
     }
 

@@ -5,8 +5,8 @@
     android:id="@+id/layout_camera"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_camera"
@@ -15,25 +15,28 @@
         android:background="@color/transparency"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_camera"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/transparency"
-            app:navigationIcon="@drawable/ic_arrow_back" />
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.camera.view.PreviewView
         android:id="@+id/view_camera"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@id/btn_photo_save"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar_camera"
         tools:visibility="invisible" />
 
     <ImageView
@@ -53,29 +56,27 @@
         style="@style/btnStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/black"
         android:text="@string/str_capture"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_camera" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_photo_cancel"
         style="@style/btnStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:backgroundTint="@color/grey_300"
         android:focusable="false"
         android:text="@string/str_cancle"
         android:textColor="@color/white"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_photo_save"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_camera" />
+        app:layout_constraintTop_toTopOf="@id/btn_photo_capture" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_photo_save"

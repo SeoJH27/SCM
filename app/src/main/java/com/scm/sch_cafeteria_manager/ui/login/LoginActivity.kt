@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun test() {
-        cacheHelper.saveToCache(this@LoginActivity, "authority", UserRole.MASTER)
+        cacheHelper.saveToCache(this@LoginActivity, "authority", UserRole.ADMIN1)
         startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
         finish()
     }

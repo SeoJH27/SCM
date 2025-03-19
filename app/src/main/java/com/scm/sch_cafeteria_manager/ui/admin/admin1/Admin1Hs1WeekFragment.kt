@@ -1,12 +1,9 @@
 package com.scm.sch_cafeteria_manager.ui.admin.admin1
 
 import android.app.Dialog
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,14 +13,12 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.R
-import com.scm.sch_cafeteria_manager.data.AdminResponse
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.MealType
@@ -44,9 +39,7 @@ import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
 import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
 import com.scm.sch_cafeteria_manager.util.utilAll.stringToBitmap
 import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileInputStream
 import java.util.Objects.isNull
 
 class Admin1Hs1WeekFragment : Fragment() {
@@ -76,6 +69,8 @@ class Admin1Hs1WeekFragment : Fragment() {
     // 서버로부터 data 받기
     private suspend fun fetchData() {
         binding.progressbar.visibility = View.VISIBLE // UI 블로킹 시작
+        binding.progressbarBackground.visibility = View.VISIBLE
+        binding.progressbarBackground.isClickable = true
 
         lifecycleScope.launch {
             // Retrofit에서 데이터 가져오기
@@ -107,8 +102,8 @@ class Admin1Hs1WeekFragment : Fragment() {
                 )
                 errorToBack()
             }
-
             binding.progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
+            binding.progressbarBackground.visibility = View.GONE
         }
     }
 
@@ -207,7 +202,7 @@ class Admin1Hs1WeekFragment : Fragment() {
     // 촬영하여 등록 버튼 누를 시 -> 촬영
     private fun setPhotoBtnClick() {
         binding.btnUploadWeek.setOnClickListener {
-            findNavController().navigate(Admin1Hs1WeekFragmentDirections.admin1Hs1ToCamera(true))
+            findNavController().navigate(Admin1Hs1WeekFragmentDirections.admin1Hs1ToCamera(false))
         }
     }
 
@@ -300,21 +295,21 @@ class Admin1Hs1WeekFragment : Fragment() {
                             args.manageDate.week,
                             listOf(
                                 meals(
-                                    MealType.BREAKFAST.myNmae,
+                                    MealType.BREAKFAST.myName,
                                     txtBreakfastOpenTimeStart.text.toString(),
                                     txtBreakfastOpenTimeEnd.text.toString(),
                                     txtBreakfastMenu.text.toString(),
                                     blank
                                 ),
                                 meals(
-                                    MealType.LUNCH.myNmae,
+                                    MealType.LUNCH.myName,
                                     txtLunchOpenTimeStart.text.toString(),
                                     txtLunchOpenTimeEnd.text.toString(),
                                     txtLunchMenu.text.toString(),
                                     blank
                                 ),
                                 meals(
-                                    MealType.DINNER.myNmae,
+                                    MealType.DINNER.myName,
                                     txtDinnerOpenTimeStart.text.toString(),
                                     txtDinnerOpenTimeEnd.text.toString(),
                                     txtDinnerMenu.text.toString(),

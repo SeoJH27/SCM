@@ -88,7 +88,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/bg_admin_background"
-                app:layout_constraintBottom_toBottomOf="@id/space_dinner_menu_bottom"
+                app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_upload_week" />
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/str_change_open_time"
                 app:layout_constraintBottom_toTopOf="@id/view_breakfast_menu"
                 app:layout_constraintStart_toStartOf="@id/background_view"
@@ -151,7 +151,7 @@
                 android:id="@+id/view_breakfast_menu"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintBottom_toTopOf="@id/txt_breakfast_menu"
                 app:layout_constraintEnd_toEndOf="@id/txt_breakfast_open_time_end"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -188,7 +188,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="40dp"
-                android:layout_marginVertical="10dp"
                 android:background="@color/grey_300"
                 app:layout_constraintBottom_toTopOf="@id/txt_change_time_lunch"
                 app:layout_constraintEnd_toEndOf="@id/background_view"
@@ -252,7 +251,7 @@
                 android:id="@+id/view_lunch_menu"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintBottom_toTopOf="@id/txt_lunch_menu"
                 app:layout_constraintEnd_toEndOf="@id/txt_lunch_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
@@ -300,7 +299,7 @@
                 style="@style/AppTextBody.15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/str_change_open_time"
                 app:layout_constraintBottom_toTopOf="@id/view_dinner_menu"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
@@ -352,7 +351,7 @@
                 android:id="@+id/view_dinner_menu"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintBottom_toBottomOf="@id/background_view"
                 app:layout_constraintEnd_toEndOf="@id/txt_dinner_open_time_end"
                 app:layout_constraintStart_toStartOf="@id/txt_change_time_dinner"
@@ -376,21 +375,13 @@
                 android:background="@drawable/bg_btn"
                 android:backgroundTint="@color/grey_100"
                 android:padding="10dp"
+                android:layout_marginVertical="10dp"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
                 app:layout_constraintEnd_toEndOf="@id/view_dinner_menu"
                 app:layout_constraintStart_toStartOf="@id/txt_dinner_open_time_start"
                 app:layout_constraintTop_toTopOf="@id/view_dinner_menu"
                 tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
-
-            <Space
-                android:id="@+id/space_dinner_menu_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_dinner_menu" />
-
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_upload_all_menu"
@@ -400,19 +391,33 @@
                 android:layout_marginVertical="30dp"
                 android:text="@string/str_save"
                 app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/space_dinner_menu_bottom" />
+                app:layout_constraintTop_toBottomOf="@id/background_view" />
 
             <ProgressBar
                 android:id="@+id/progressbar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:elevation="4dp"
+                android:progressBackgroundTint="@color/white"
+                android:progressTint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/progressbarBackground"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#63000000"
+                android:elevation="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
