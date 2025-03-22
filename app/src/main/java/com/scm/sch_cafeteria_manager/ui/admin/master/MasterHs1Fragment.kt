@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,6 +19,7 @@ import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.MasterResponse
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.MealType
+import com.scm.sch_cafeteria_manager.data.ShareViewModel
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.requestDTO_master
 import com.scm.sch_cafeteria_manager.databinding.FragmentMasterHs1Binding
@@ -32,12 +34,14 @@ import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
 import kotlinx.coroutines.launch
 import java.util.Objects.isNull
 
-class MasterHs1WeekFragment : Fragment() {
+class MasterHs1Fragment : Fragment() {
     private var _binding: FragmentMasterHs1Binding? = null
     private val binding get() = _binding!!
-    private val args: MasterHs1WeekFragmentArgs by navArgs()
+    private val args: MasterHs1FragmentArgs by navArgs()
+
     var jsonData: MasterResponse? = null
     var weekFlag: Boolean = false
+    var dayOfWeekFlag: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -112,7 +116,6 @@ class MasterHs1WeekFragment : Fragment() {
             btnCurrentDay.text = dayOfWeekToKorean(jsonData!!.data.dailyMeal.dayOfWeek)
 
             if (jsonData?.data?.dailyMeal == null) {
-
                 txtBreakfastOpenTimeStart.text = nonDate
                 txtBreakfastOpenTimeEnd.text = nonDate
                 edBreakfastMenu.setText(blank)
@@ -124,7 +127,6 @@ class MasterHs1WeekFragment : Fragment() {
                 txtDinnerOpenTimeStart.text = nonDate
                 txtDinnerOpenTimeEnd.text = nonDate
                 edDinnerMenu.setText(blank)
-
             } else if (jsonData!!.data.dailyMeal.dayOfWeek == args.manageDate.week) {
                 val meals = jsonData!!.data.dailyMeal.meals
 
@@ -161,7 +163,19 @@ class MasterHs1WeekFragment : Fragment() {
                     } else {
                         edDinnerMenu.setText(menu)
                     }
-                } else { }
+                } else {
+                    txtBreakfastOpenTimeStart.text = nonDate
+                    txtBreakfastOpenTimeEnd.text = nonDate
+                    edBreakfastMenu.setText(blank)
+
+                    txtLunchOpenTimeStart.text = nonDate
+                    txtLunchOpenTimeEnd.text = nonDate
+                    edLunchMenu.setText(blank)
+
+                    txtDinnerOpenTimeStart.text = nonDate
+                    txtDinnerOpenTimeEnd.text = nonDate
+                    edDinnerMenu.setText(blank)
+                }
 
             } else {
                 errorToBack()
@@ -204,13 +218,12 @@ class MasterHs1WeekFragment : Fragment() {
 
     // <editor-folder desc="Save">
     // 텍스트 업로드
-    // TODO: 버튼 없음, test 필요
     private fun uploadingMealPlans() {
         with(binding) {
             progressbar.visibility = View.VISIBLE // UI 블로킹 시작
             binding.progressbarBackground.visibility = View.VISIBLE
             binding.progressbarBackground.isClickable = true
-            Log.e("MasterHs1WeekFragment", "uploadingWeekMealPlansMaster - prograssbar")
+            Log.e("MasterHs1Fragment", "uploadingMealPlans - prograssbar")
             lifecycleScope.launch {
                 try {
                     val response = uploadingMealPlansMaster(
@@ -219,20 +232,29 @@ class MasterHs1WeekFragment : Fragment() {
                         getMenu()
                     )
                     Log.e(
-                        "MasterHs1WeekFragment",
-                        "uploadingWeekMealPlansMaster - ${response?.message}"
+                        "MasterHs1Fragment",
+                        "uploadingMealPlansMaster - ${response}"
                     )
                     progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
                     binding.progressbarBackground.visibility = View.GONE
+
+                    if (response == "CREATED")
+                        Toast.makeText(requireContext(), "전송 완료", Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(requireContext(), "전송 에러: $response", Toast.LENGTH_LONG).show()
                     backToHome()
                 } catch (e: Exception) {
                     Log.e(
-                        "MasterHs1WeekFragment",
-                        "uploadingWeekMealPlansMaster Exception: $e"
+                        "MasterHs1Fragment",
+                        "uploadingMealPlansMaster Exception: $e"
                     )
+                    if(e.message == "HTTP 400")
+                        Toast.makeText(requireContext(), "전송 에러: 빈 데이터가 있습니다.", Toast.LENGTH_LONG).show()
+                    else
+                        Toast.makeText(requireContext(), "전송 에러: ${e.message}", Toast.LENGTH_LONG).show()
                     errorToBack()
                 }
-                Log.e("MasterHs1WeekFragment", "uploadingWeekMealPlansMaster")
+                Log.e("MasterHs1Fragment", "uploadingMealPlansMaster")
             }
         }
     }
@@ -286,7 +308,7 @@ class MasterHs1WeekFragment : Fragment() {
                                 val encodeByte =
                                     Base64.decode(jsonData?.data?.weekMealImg, Base64.DEFAULT)
                                 Log.e(
-                                    "MasterHs1WeekFragment",
+                                    "MasterHs1Fragment",
                                     "setCheckWeekImg - encodeByte: ${encodeByte.toString(Charsets.UTF_8)}"
                                 )
 
@@ -297,19 +319,6 @@ class MasterHs1WeekFragment : Fragment() {
                                     .centerCrop()
                                     .into(imgMasterHs1)
                                 imgMasterHs1.visibility = View.VISIBLE
-
-//                                imgMasterHs1.layoutParams = ConstraintLayout.LayoutParams(
-//                                    ConstraintLayout.LayoutParams.MATCH_PARENT,
-//                                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-//                                ).apply {
-//                                    setMargins(30, 30, 30, 30)
-//                                    bottomToTop = backgroundView.id
-//                                    endToEnd = fragmentMasterHs1.id
-//                                    startToStart = fragmentMasterHs1.id
-//                                    topToBottom = btnWeek.id
-//                                }
-//                                imgMasterHs1.requestLayout()
-//                                imgMasterHs1.invalidate()     // UI 갱신
 
                                 weekFlag = true
                             } else
@@ -332,29 +341,49 @@ class MasterHs1WeekFragment : Fragment() {
 
     // 해당 요일 이미지 불러오기
     private fun setCheckDayOfWeekImg() {
-//        with(binding) {
-//            btnCurrentDay.setOnClickListener {
-//                if (checkData(jsonData)) {
-//                    // 이미지가 사라져야 함
-//                    if (dayOfWeekFlag) {
-//                        imgMasterHs1.setImageDrawable(R.drawable.ic_map.toDrawable())
-//                        dayOfWeekFlag = false
-//                    }
-//                    // 이미지가 보여야 함
-//                    else {
-//                        if (jsonData?.data?.weekMealImg != null) {
-////                            imgMasterHs1.setImageBitmap(stringToBitmap(jsonData?.data?.weekMealImg))
-//                            dayOfWeekFlag = true
-//
-//                        } else
-//                            Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG)
-//                                .show()
-//                    }
-//                } else {
-//                    Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG).show()
-//                }
-//            }
-//        }
+        with(binding) {
+            btnCurrentDay.setOnClickListener {
+                try {
+                    if (checkData(jsonData)) {
+                        // 이미지가 사라져야 함
+                        if (dayOfWeekFlag) {
+                            imgMasterHs1.visibility = View.GONE
+                            dayOfWeekFlag = false
+                        }
+                        // 이미지가 보여야 함
+                        else {
+                            if (jsonData?.data?.dayMealImg != null) {
+                                val encodeByte =
+                                    Base64.decode(jsonData?.data?.dayMealImg, Base64.DEFAULT)
+                                Log.e(
+                                    "MasterHs1Fragment",
+                                    "setCheckWeekImg - encodeByte: ${encodeByte.toString(Charsets.UTF_8)}"
+                                )
+                                Glide.with(requireContext())
+                                    .load("data:image/png;base64,${encodeByte.toString(Charsets.UTF_8)}")
+                                    .override(450, 650)
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .centerCrop()
+                                    .into(imgMasterHs1)
+                                imgMasterHs1.visibility = View.VISIBLE
+
+                                dayOfWeekFlag = true
+                            } else
+                                Toast.makeText(
+                                    requireContext(),
+                                    "저장된 이미지가 없습니다.",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG).show()
+                    }
+                } catch (e: Exception){
+                    Log.e("MasterHs1WeekFragment", "setCheckDayOfWeekImg - Error $e")
+                }
+            }
+        }
     }
     // </editor-folder>
 

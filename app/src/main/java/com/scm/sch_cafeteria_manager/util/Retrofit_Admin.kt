@@ -53,7 +53,7 @@ interface ApiService_Admin {
         @Part("weekStartDate") weekStartDate: RequestBody,
         @Part("dailyMeals") dailyMeals: RequestBody,
         @Part weeklyMealImg: MultipartBody.Part
-    ): WeekAdminResponse
+    ): WeekAdminResponse?
 
     @Headers("Content-Type: application/json")
     @POST("/api/admin/meal-plans/{restaurant-name}/{day-of-week}")
@@ -180,19 +180,10 @@ suspend fun uploadingWeekMealPlans(
     val type = Types.newParameterizedType(List::class.java, dailyMeals::class.java)
     val jsonAdapter = moshi.adapter<List<dailyMeals>>(type)
     val jsonData = jsonAdapter.toJson(dM)
-//    val meal = jsonData.toRequestBody("application/json".toMediaTypeOrNull())
-//    val meal = MultipartBody.Part.createFormData("dailyMeals", jsonData)
     val meal = jsonData.toRequestBody("application/json".toMediaTypeOrNull())
 
     // start date
-    val adapter = moshi.adapter(String::class.java)
-    val data = adapter.toJson(weekStartDate)
     val startDate = weekStartDate.toRequestBody("application/json".toMediaTypeOrNull())
-//    val startDate = MultipartBody.Part.createFormData("weekStartDate", weekStartDate)
-
-//    val textHashMap = hashMapOf<String, MultipartBody.Part>()
-//    textHashMap["weekStartDate"] = startDate
-//    textHashMap["dailyMeals"] = meal
 
     // image
     val fileImage = weeklyMealImg.asRequestBody("image/jpeg".toMediaTypeOrNull())
@@ -207,24 +198,10 @@ suspend fun uploadingWeekMealPlans(
         response =
             Retrofit_Admin.createApiService(context)
                 .setWeekMealPlans(restaurantName, startDate, meal, multiFile)
-//                .enqueue(object : Callback<WeekAdminResponse>{
-//                    override fun onResponse(
-//                        call: Call<WeekAdminResponse>,
-//                        response: Response<WeekAdminResponse>
-//                    ) {
-//                    }
-//                    override fun onFailure(call: Call<WeekAdminResponse>, t: Throwable) {
-//                        Log.e("uploadingWeekMealPlans", "API 호출 실패: $t")
-//                    }
-//                    }
-//                )
-        Log.e("uploadingWeekMealPlans", "응답 데이터: ${response.message}")
+        Log.e("uploadingWeekMealPlans", "응답 데이터: ${response?.status}")
     } catch (e: Exception) {
         Log.e("uploadingWeekMealPlans", "API 호출 실패: $e")
-        Toast.makeText(context, "전송 실패: $e", Toast.LENGTH_SHORT).show()
     }
-    Log.e("uploadingWeekMealPlans", "응답 데이터: $response")
-
 }
 
 

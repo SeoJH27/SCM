@@ -22,20 +22,30 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.scm.sch_cafeteria_manager.data.CafeteriaData
+import com.scm.sch_cafeteria_manager.data.dOw
+import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.databinding.FragmentCameraBinding
 import com.scm.sch_cafeteria_manager.util.RotateBitmap
+import com.scm.sch_cafeteria_manager.util.uploadingWeekMealPlans
+import com.scm.sch_cafeteria_manager.util.utilAll.dummyMEAL
+import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import java.io.File
 import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
 import com.scm.sch_cafeteria_manager.util.utilAll.weekFilePath
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.util.Objects.isNull
 
 class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
-    private val args: CameraFragmentArgs by navArgs()
+    private val args: CameraFragmentArgs by navArgs() // true: week, false: day of week
     private var imageCapture: ImageCapture? = null
     private var capturedPhotoFile: File? = null  // 저장할 파일 변수
 
@@ -61,6 +71,7 @@ class CameraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // 카메라 권한 요청
         if (ContextCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.CAMERA
             ) != PackageManager.PERMISSION_GRANTED
@@ -100,7 +111,7 @@ class CameraFragment : Fragment() {
 
         with(binding) {
             // 촬영 버튼 비활성화
-            btnPhotoCapture.visibility = View.GONE
+            btnPhotoCapture.visibility = View.INVISIBLE
             btnPhotoCapture.focusable = View.NOT_FOCUSABLE
             // 취소 버튼 활성화
             btnPhotoCancel.visibility = View.VISIBLE
@@ -121,13 +132,50 @@ class CameraFragment : Fragment() {
     // 저장 버튼 클릭 리스너
     private fun setSaveBtn() {
         Log.e("CameraFragment", "setSaveBtn")
+        val title = args.manageDate.cf
+        Log.e("CameraFragment", "Save - $title")
         binding.btnPhotoSave.setOnClickListener {
             // 캐시가 있으면 true
             if (isNull(isCacheFileExists())) {
                 Toast.makeText(requireContext(), "사진을 찍지 않았습니다.", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(requireContext(), "사진 저장 완료", Toast.LENGTH_LONG).show()
-                returnToAdminFragment()
+                val file = File(requireContext().externalCacheDirs?.firstOrNull(), weekFilePath)
+                if (file.exists()) {
+                    val menu = listOf(
+                        dailyMeals(
+                            dOw.MONDAY.dName, dummyMEAL
+                        )
+                    )
+                    Log.e("CameraFragment", "title - $title")
+
+                    binding.progressbar.visibility = View.VISIBLE // UI 블로킹 시작
+                    binding.progressbarBackground.visibility = View.VISIBLE
+                    binding.progressbarBackground.isClickable = true
+                    lifecycleScope.launch {
+                        try {
+                            val response = uploadingWeekMealPlans(
+                                requireContext(),
+                                title,
+                                getWeekStartDate(args.manageDate.day),
+                                menu,
+                                file
+                            )
+                            Toast.makeText(requireContext(), "사진 전송 완료", Toast.LENGTH_SHORT).show()
+                        } catch (e: Exception) {
+                            Log.e("CameraFragment", "setWeekPhoto Error: $e")
+                            Toast.makeText(
+                                requireContext(),
+                                "Error: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } finally {
+                            binding.progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
+                            binding.progressbarBackground.visibility = View.GONE
+                            Log.e("CameraFragment", "file.exists(): ${file.exists()}")
+                            returnToAdminFragment()
+                        }
+                    }
+                }
             }
         }
     }
@@ -275,7 +323,7 @@ class CameraFragment : Fragment() {
 //        if (args.flag)
 //            requireActivity().supportFragmentManager.popBackStack() // Fragment A로 돌아가기
 //        else
-            findNavController().navigateUp()
+        findNavController().navigateUp()
     }
 
     private fun cancleBackToHome() {

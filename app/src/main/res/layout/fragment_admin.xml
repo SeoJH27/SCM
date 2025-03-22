@@ -1,319 +1,322 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_admin"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/layout_admin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/transparency"
-        android:fitsSystemWindows="true"
-        app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_admin"
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparency"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_admin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                app:navigationIcon="@drawable/ic_arrow_back" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-            app:navigationIcon="@drawable/ic_arrow_back" />
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
-
-            <ProgressBar
-                android:id="@+id/progressbar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/txt_admin_title"
-                style="@style/AppTextTitle.30sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="30dp"
-                android:text="@string/str_hs1"
-                app:layout_constraintBottom_toTopOf="@id/txt_admin_date"
-                app:layout_constraintEnd_toStartOf="@id/ic_search"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="spread_inside" />
-
-            <ImageView
-                android:paddingTop="30dp"
-                android:id="@+id/ic_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/desc_icon_other_cafeteria"
-                android:src="@drawable/ic_search"
-                app:layout_constraintBottom_toBottomOf="@id/txt_admin_title"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/txt_admin_title"
-                app:layout_constraintTop_toTopOf="@id/txt_admin_title" />
-
-            <View
-                android:id="@+id/view_admin_title"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="@id/ic_search"
-                app:layout_constraintEnd_toEndOf="@id/ic_search"
-                app:layout_constraintStart_toStartOf="@id/txt_admin_title"
-                app:layout_constraintTop_toTopOf="@id/txt_admin_title" />
-
-            <TextView
-                android:id="@+id/txt_admin_date"
-                style="@style/AppTextTitle.18sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="40dp"
-                android:textAlignment="center"
-                android:paddingBottom="5dp"
-                app:layout_constraintBottom_toTopOf="@id/btn_early_closed"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_admin_title"
-                tools:text="@string/str_today_date_and_time" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_early_closed"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="40dp"
-                android:text="@string/str_early_closed"
-                app:backgroundTint="@color/blue_100"
-                app:layout_constraintBottom_toTopOf="@id/line_1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_admin_date" />
-
-            <ImageButton
-                android:id="@+id/ib_show_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:background="@color/transparency"
-                android:scaleType="center"
-                android:contentDescription="@string/desc_btn_cache_image"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/ic_image"/>
-
-            <View
-                android:id="@+id/line_1"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginVertical="40dp"
-                android:background="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/btn_upload_week"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_early_closed" />
+                android:layout_height="0dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_upload_week"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_regist_week_menu"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/line_2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line_1" />
+                <ProgressBar
+                    android:id="@+id/progressbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_text_upload_week"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_regist_week_menu_text"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/line_2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line_1"
-                android:focusable="false"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/txt_admin_title"
+                    style="@style/AppTextTitle.30sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="30dp"
+                    android:text="@string/str_hs1"
+                    app:layout_constraintBottom_toTopOf="@id/txt_admin_date"
+                    app:layout_constraintEnd_toStartOf="@id/ic_search"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="spread_inside" />
 
-            <View
-                android:id="@+id/line_2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginVertical="40dp"
-                android:background="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/btn_monday"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_upload_week" />
+                <ImageView
+                    android:id="@+id/ic_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/desc_icon_other_cafeteria"
+                    android:paddingTop="30dp"
+                    android:src="@drawable/ic_search"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_admin_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/txt_admin_title"
+                    app:layout_constraintTop_toTopOf="@id/txt_admin_title" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/str_fine_tuning"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line_2" />
+                <View
+                    android:id="@+id/view_admin_title"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="@id/ic_search"
+                    app:layout_constraintEnd_toEndOf="@id/ic_search"
+                    app:layout_constraintStart_toStartOf="@id/txt_admin_title"
+                    app:layout_constraintTop_toTopOf="@id/txt_admin_title" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_monday"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_monday"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/btn_thursday"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line_2" />
+                <TextView
+                    android:id="@+id/txt_admin_date"
+                    style="@style/AppTextTitle.18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="40dp"
+                    android:paddingBottom="5dp"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toTopOf="@id/btn_early_closed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_admin_title"
+                    tools:text="@string/str_today_date_and_time" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_tuesday"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/str_tuesday"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/btn_wednesday"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_monday" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_early_closed"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="40dp"
+                    android:text="@string/str_early_closed"
+                    app:backgroundTint="@color/blue_100"
+                    app:layout_constraintBottom_toTopOf="@id/line_1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_admin_date" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_wednesday"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/str_wednesday"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/btn_thursday"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_tuesday" />
+                <ImageButton
+                    android:id="@+id/ib_show_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/transparency"
+                    android:contentDescription="@string/desc_btn_cache_image"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_thursday"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/str_thursday"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/btn_friday"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_wednesday" />
+                <View
+                    android:id="@+id/line_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="40dp"
+                    android:background="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/btn_upload_week"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_early_closed" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_friday"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/str_friday"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/line_3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_thursday" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_upload_week"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_regist_week_menu"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/line_2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line_1" />
 
-            <View
-                android:id="@+id/line_3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="30dp"
-                android:layout_marginVertical="30dp"
-                android:background="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/txt_open_time"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_friday" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_text_upload_week"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:text="@string/str_regist_week_menu_text"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/line_2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line_1" />
 
-            <TextView
-                android:id="@+id/txt_open_time"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_open_time"
-                app:layout_constraintBottom_toTopOf="@id/btn_logout"
-                app:layout_constraintEnd_toStartOf="@id/edit_open_time_start"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line_3" />
+                <View
+                    android:id="@+id/line_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="40dp"
+                    android:background="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/btn_monday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_upload_week" />
 
-            <EditText
-                android:id="@+id/edit_open_time_start"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:inputType="date|datetime"
-                app:layout_constraintBottom_toBottomOf="@id/txt_open_time"
-                app:layout_constraintEnd_toStartOf="@id/txt_time_to_time"
-                app:layout_constraintStart_toEndOf="@id/txt_open_time"
-                app:layout_constraintTop_toTopOf="@id/txt_open_time"
-                tools:ignore="LabelFor" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/str_fine_tuning"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line_2" />
 
-            <TextView
-                android:id="@+id/txt_time_to_time"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_swung_dash"
-                app:layout_constraintBottom_toBottomOf="@id/txt_open_time"
-                app:layout_constraintEnd_toStartOf="@id/edit_open_time_end"
-                app:layout_constraintStart_toEndOf="@id/edit_open_time_start"
-                app:layout_constraintTop_toTopOf="@id/txt_open_time" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_monday"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_monday"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/btn_thursday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line_2" />
 
-            <EditText
-                android:id="@+id/edit_open_time_end"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:inputType="date|datetime"
-                app:layout_constraintBottom_toBottomOf="@id/txt_open_time"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/txt_time_to_time"
-                app:layout_constraintTop_toTopOf="@id/txt_open_time"
-                tools:ignore="LabelFor" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_tuesday"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/str_tuesday"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/btn_wednesday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_monday" />
 
-            <TextView
-                android:id="@+id/btn_logout"
-                style="@style/AppTextBody.20sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:layout_marginBottom="20dp"
-                android:text="@string/str_logout"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_open_time" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_wednesday"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/str_wednesday"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/btn_thursday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_tuesday" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_thursday"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/str_thursday"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/btn_friday"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_wednesday" />
 
-    </androidx.core.widget.NestedScrollView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_friday"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/str_friday"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/line_3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_thursday" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <View
+                    android:id="@+id/line_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="30dp"
+                    android:background="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/txt_open_time"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_friday" />
+
+                <TextView
+                    android:id="@+id/txt_open_time"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_open_time"
+                    app:layout_constraintBottom_toTopOf="@id/btn_logout"
+                    app:layout_constraintEnd_toStartOf="@id/edit_open_time_start"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line_3" />
+
+                <EditText
+                    android:id="@+id/edit_open_time_start"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:inputType="date|datetime"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_open_time"
+                    app:layout_constraintEnd_toStartOf="@id/txt_time_to_time"
+                    app:layout_constraintStart_toEndOf="@id/txt_open_time"
+                    app:layout_constraintTop_toTopOf="@id/txt_open_time"
+                    tools:ignore="LabelFor" />
+
+                <TextView
+                    android:id="@+id/txt_time_to_time"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_swung_dash"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_open_time"
+                    app:layout_constraintEnd_toStartOf="@id/edit_open_time_end"
+                    app:layout_constraintStart_toEndOf="@id/edit_open_time_start"
+                    app:layout_constraintTop_toTopOf="@id/txt_open_time" />
+
+                <EditText
+                    android:id="@+id/edit_open_time_end"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:inputType="date|datetime"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_open_time"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/txt_time_to_time"
+                    app:layout_constraintTop_toTopOf="@id/txt_open_time"
+                    tools:ignore="LabelFor" />
+
+                <TextView
+                    android:id="@+id/btn_logout"
+                    style="@style/AppTextBody.20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="@string/str_logout"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_open_time" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

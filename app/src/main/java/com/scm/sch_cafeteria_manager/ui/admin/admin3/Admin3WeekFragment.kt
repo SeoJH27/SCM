@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminStaffBinding
 
+// 교직원 식당 관리자
 class Admin3WeekFragment: Fragment() {
     private var _binding: FragmentAdminStaffBinding? = null
     private val binding get() = _binding!!

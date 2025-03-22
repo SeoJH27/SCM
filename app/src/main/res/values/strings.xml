@@ -1,6 +1,7 @@
 <resources>
     <!--                  STRING                  -->
     <string name="app_name">SCM</string>
+    <string name="app_name_debug">SCM Debug</string>
     <string name="str_hs1">향설 1관</string>
     <string name="str_staff">교직원 식당</string>
     <string name="str_hs2">향설 2관</string>
@@ -20,7 +21,7 @@
     <string name="str_login_admin"><u>관리자로 로그인</u></string>
     <string name="str_notice">배식 마감은 운영 시간 30분 전입니다.</string>
     <string name="str_location">위치</string>
-    <string name="edit_location">위치 보기</string>
+    <string name="edit_location"><u>위치 보기</u></string>
     <string name="str_price">가격</string>
 
 
@@ -66,7 +67,8 @@
     <string name="str_regist_week_menu_text">일주일 치 보기</string>
     <string name="str_cancle">취소</string>
     <string name="str_chance_week">요일 변경</string>
-
+    <string name="str_change_week">요일 변경</string>
+    <string name="str_enter_menu">메뉴 입력</string>
 
     <!--                  Extention                  -->
     <string name="timePickerText">%1$s:%2$s</string>
@@ -89,6 +91,5 @@
     <string name="desc_detail_staff_tab">교직원 식당 메뉴 탭 바</string>
     <string name="desc_iv_camera_capture">카메라로 촬영한 이미지를 미리볼 수 있는 뷰</string>
     <string name="desc_btn_cache_image">마지막 저장된 사진을 볼 수 있는 버튼</string>
-    <string name="str_change_week">요일 변경</string>
-    <string name="str_enter_menu">메뉴 입력</string>
+
 </resources>

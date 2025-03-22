@@ -14,6 +14,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -21,6 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.MealType
+import com.scm.sch_cafeteria_manager.data.ShareViewModel
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.dataAdmin
 import com.scm.sch_cafeteria_manager.data.meals
@@ -46,6 +48,8 @@ class Admin1StaffWeekFragment : Fragment() {
     private var _binding: FragmentAdminStaffBinding? = null
     private val binding get() = _binding!!
     private val args: Admin1Hs1WeekFragmentArgs by navArgs()
+    lateinit var viewModel: ShareViewModel
+
     var jsonData: dataAdmin? = null
 
 
@@ -55,6 +59,7 @@ class Admin1StaffWeekFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAdminStaffBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this).get(ShareViewModel::class.java)
         return binding.root
     }
 
@@ -158,9 +163,8 @@ class Admin1StaffWeekFragment : Fragment() {
 
     // 촬영하여 등록 버튼 누를 시 -> 촬영
     private fun setPhotoBtnClick() {
-        // TODO: camera
         binding.btnCaptureImage.setOnClickListener {
-            findNavController().navigate(Admin1Hs1WeekFragmentDirections.admin1Hs1ToCamera(false))
+            findNavController().navigate(Admin1StaffWeekFragmentDirections.admin1StaffToCamera(false, args.manageDate))
         }
     }
 

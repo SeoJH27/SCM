@@ -159,7 +159,7 @@ suspend fun uploadingMealPlansMaster(
     context: Context,
     restaurantName: String,
     body: requestDTO_master
-): AdminResponse? {
+): String? {
 
     val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory()) // Kotlin 지원
@@ -178,10 +178,10 @@ suspend fun uploadingMealPlansMaster(
     try {
         val response = Retrofit_Master.createApiService(context)
             .setMealPlansMaster(restaurantName, startDateData, mealData)
-        Log.e("uploadingMealPlansMaster", "응답 데이터: ${response?.message}")
-        return response
+        Log.e("uploadingMealPlansMaster", "응답 데이터: ${response?.status}")
+        return response?.status
     } catch (e: Exception) {
         Log.e("uploadingMealPlansMaster", "API 호출 실패: ${e.message}")
-        return null
+        return e.message
     }
 }

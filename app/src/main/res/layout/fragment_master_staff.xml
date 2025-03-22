@@ -13,7 +13,7 @@
         app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_admin_hs1"
+            android:id="@+id/toolbar_admin_staff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
@@ -61,11 +61,14 @@
 
             <ImageView
                 android:id="@+id/img_master_staff"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="20dp"
+                android:adjustViewBounds="true"
                 android:contentDescription="@string/desc_img_staff"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/background_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +82,7 @@
                 android:background="@drawable/bg_admin_background"
                 app:layout_constraintBottom_toBottomOf="@id/space"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.473"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_master_staff" />
 
@@ -168,7 +172,7 @@
                 app:layout_constraintTop_toTopOf="@id/view_lunch_menu" />
 
             <EditText
-                android:id="@+id/txt_lunch_menu"
+                android:id="@+id/ed_lunch_menu"
                 style="@style/AppTextBody.15sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -205,6 +209,7 @@
                 android:elevation="4dp"
                 android:progressBackgroundTint="@color/white"
                 android:progressTint="@color/white"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -216,11 +221,11 @@
                 android:layout_height="0dp"
                 android:background="#63000000"
                 android:elevation="3dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="gone" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,7 +3,9 @@ package com.scm.sch_cafeteria_manager.ui.detail.hs1
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.UserDetailResponse
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
@@ -11,6 +13,7 @@ import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
 import com.scm.sch_cafeteria_manager.util.utilAll.mealTypeToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.nonData
+import java.util.Objects.isNull
 
 class DetailHs1ListAdapter(
     items: UserDetailResponse, private val dayOfWeek: String
@@ -59,16 +62,32 @@ class DetailHs1ListAdapter(
 class DetailHs1ItemViewHolder(
     private val binding: ItemDetailMenuBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-
     fun bind(meal: meals?) {
         Log.e("DetailHs1ListAdapter", "bind")
 
         with(binding) {
             if (meal?.mealType != null) {
                 txtTime.text = mealTypeToKorean(meal.mealType)
-            } else txtTime.text = nonData
-
-            txtMenu.text = combinMainAndSub(meal?.mainMenu, meal?.subMenu) ?: nonData
+            } else {
+                txtTime.text = nonData
+                txtTime.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.grey_300
+                    )
+                )
+            }
+            val menu = combinMainAndSub(meal?.mainMenu, meal?.subMenu) ?: nonData
+            if (isNull(menu)) {
+                txtMenu.text = nonData
+                txtMenu.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.grey_300
+                    )
+                )
+            } else
+                txtMenu.text = menu
         }
     }
 

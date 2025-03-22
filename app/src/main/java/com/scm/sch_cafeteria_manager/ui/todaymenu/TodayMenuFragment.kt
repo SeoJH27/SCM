@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Objects.isNull
 
-class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
+class TodayMenuFragment : Fragment() {
     private var _binding: FragmentTodayMenuBinding? = null
     private val binding get() = _binding!!
 
@@ -54,7 +54,7 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
                 val today = LocalDate.now().dayOfWeek.name
                 val date = getWeekDates()
 
-                TODAYMENU = fetchTodayMenu(today, date[0])
+                TODAYMENU = fetchTodayMenu(date[0], today)
                 Log.e("DetailHs1Fragment", "fetchTodayMenu - TODAYMENU: ${TODAYMENU?.data}")
             } catch (e: Error) {
                 Log.e("TodayMenuFragment", "fetchData - e: $e")
@@ -68,7 +68,7 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
             // 데이터를 불러올 수 없다는 알림과 함께 Back
             else {
                 Log.e("TodayMenuFragment", "fetchData - Network Error")
-                Toast.makeText(requireContext(), "데이터를 불러올 수 없습니다. ${LocalDate.now()}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "학식이 제공되지 않는 날짜입니다.\n(${LocalDate.now()})", Toast.LENGTH_SHORT).show()
                 backToHome()
             }
             binding.progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
@@ -96,7 +96,7 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
             Log.e("TodayMenuFragment", "setTab - checkData")
             backToHome()
         } else // init tab
-            connectAdapter(getStr(R.string.str_hs1))
+            connectAdapter(CafeteriaData.HYANGSEOL1.cfName)
     }
 
     private fun viewClickListener() {
@@ -109,7 +109,7 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
                     clickTab(tab)
                 }
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    connectAdapter(getStr(R.string.str_hs1))
+                    connectAdapter(CafeteriaData.HYANGSEOL1.cfName)
                 }
             })
             txtInquiry.setOnClickListener {
@@ -123,7 +123,6 @@ class TodayMenuFragment : Fragment(R.layout.fragment_today_menu) {
             Log.e("TodayMenuFragment", "setTab - clickTab")
             backToHome()
         }
-
         if (tab == null) {
             Log.e("RecyclerView Tab Error", "Tab이 없음")
             return

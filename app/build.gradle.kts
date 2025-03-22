@@ -21,6 +21,9 @@ android {
     }
 
     buildTypes {
+        debug{
+            applicationIdSuffix = ".debug"
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -37,6 +40,9 @@ android {
 //        jvmTarget = "1.8"
 //    }
     viewBinding {
+        enable = true
+    }
+    dataBinding{
         enable = true
     }
 }
@@ -75,8 +81,12 @@ dependencies {
     implementation (libs.converter.moshi)
     implementation(libs.logging.interceptor)
 
-
     // Glide
     implementation (libs.github.glide)
     annotationProcessor (libs.compiler.v4142)
+
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    // LiveData
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 }

@@ -55,28 +55,30 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun test() {
-        cacheHelper.saveToCache(this@LoginActivity, "authority", UserRole.ADMIN1)
+        cacheHelper.saveToCache(this@LoginActivity, "authority", UserRole.MASTER)
         startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
         finish()
     }
 
-    private fun ActivityLoginBinding.setLogin() {
-        val id = editLoginId.text.toString()
-        val password = editLoginPassword.text.toString()
+    private fun setLogin() {
+        with(binding) {
+            val id = editLoginId.text.toString()
+            val password = editLoginPassword.text.toString()
 
-        //TODO: 서버로 보내서 인증 -> Test 필요
-        if (id.isEmpty() && password.isEmpty()) {
-            Toast.makeText(this@LoginActivity, "아이디 혹은 비밀번호를 입력하세요.", Toast.LENGTH_LONG)
-                .show()
-        } else if (id.length > 4 && password.length < 4) {
-            Toast.makeText(
-                this@LoginActivity,
-                "아이디 혹은 비밀번호가 4자리 이상이어야 합니다.",
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
-            login(id, password)
+            //TODO: 서버로 보내서 인증 -> Test 필요
+            if (id.isEmpty() && password.isEmpty()) {
+                Toast.makeText(this@LoginActivity, "아이디 혹은 비밀번호를 입력하세요.", Toast.LENGTH_LONG)
+                    .show()
+            } else if (id.length > 4 && password.length < 4) {
+                Toast.makeText(
+                    this@LoginActivity,
+                    "아이디 혹은 비밀번호가 4자리 이상이어야 합니다.",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                login(id, password)
 
+            }
         }
     }
 

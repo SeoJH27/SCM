@@ -40,9 +40,9 @@ data class WeekAdminResponse(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class weekAdmin(
-    @Json(name = "weekStartDate") val weekStartDate: String?,
-    @Json(name = "dailyMeal") val dailyMeal: List<dailyMeal>?,    // 일일 식단 정보
-    @Json(name = "weekMealImg") val weekMealImg: String         // 주간 식단 이미지 경로
+//    @Json(name = "weekStartDate") val weekStartDate: String?,
+    @Json(name = "weekMealImg") val weekMealImg: String,         // 주간 식단 이미지 경로
+    @Json(name = "dailyMeals") val dailyMeals: List<dailyMeals>?    // 일일 식단 정보
 ): Parcelable
 
 @Parcelize

@@ -3,8 +3,6 @@ package com.scm.sch_cafeteria_manager.ui.admin
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -18,7 +16,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -26,29 +24,22 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.NavAdmin
+import com.scm.sch_cafeteria_manager.data.ShareViewModel
 import com.scm.sch_cafeteria_manager.data.UserRole
 import com.scm.sch_cafeteria_manager.data.dOw
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.manageDate
-import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminBinding
 import com.scm.sch_cafeteria_manager.extentions.toEnumOrNull
 import com.scm.sch_cafeteria_manager.ui.home.HomeActivity
 import com.scm.sch_cafeteria_manager.util.cacheHelper
 import com.scm.sch_cafeteria_manager.util.uploadingWeekMealPlans
 import com.scm.sch_cafeteria_manager.util.utilAll.dummyMEAL
-import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
-import com.scm.sch_cafeteria_manager.util.utilAll.fileToBase64
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
 import com.scm.sch_cafeteria_manager.util.utilAll.weekFilePath
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalTime
@@ -58,10 +49,11 @@ import java.time.format.DateTimeFormatter
 class AdminFragment : Fragment() {
     private var _binding: FragmentAdminBinding? = null
     private val binding get() = _binding!!
+    lateinit var viewModel: ShareViewModel
 
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd")
     private var authority = UserRole.ADMIN1 // 0: Master, 1: 총관리자, 2: 향설1관, 3: 교직원
-    private var isTitleClick: Boolean = false
+    private var isTitleClick: Boolean = false // false: Hyangsheol1, true: faculty
     val days = getWeekDates()
 
     override fun onCreateView(
@@ -70,6 +62,7 @@ class AdminFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAdminBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this).get(ShareViewModel::class.java)
         return binding.root
     }
 
@@ -87,26 +80,43 @@ class AdminFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.e("AdminFragment", "onResume")
+
+        if (viewModel.title == CafeteriaData.HYANGSEOL1.cfName) {
+            binding.txtAdminTitle.text = getStr(R.string.str_hs1)
+            isTitleClick = false
+            Log.e("AdminFragment", "isTitleClick = false")
+        }
+        else if(viewModel.title == CafeteriaData.FACULTY.cfName) {
+            binding.txtAdminTitle.text = getStr(R.string.str_staff)
+            isTitleClick = true
+            Log.e("AdminFragment", "isTitleClick = true")
+        }
+        else
+            Log.e("AdminFragment", "viewModel Error")
+        setLayout()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // 권한별 접근 제한
+        setLayout()
+    }
+
+
+
+    // <editor-fold desc="setLayout">
+    // -----------------------------------------------------------------------------------------------
+    private fun setLayout() {
         setAuthority(days)
         setManageDay(days)
         setTodayDate()
         checkCacheImage()
         setBackToHome()
-
-//        setFragmentResultListener("weekCamera") { _, bundle ->
-//            val result = bundle.getString("resultKey")
-//            Log.e("AdminFragment", "setFragmentResultListener - result: $result")
-//            // 감지 되면 저장
-//            uploadingWeekPhoto(days[0])
-//        }
     }
-
-    // <editor-fold desc="setLayout">
-    // -----------------------------------------------------------------------------------------------
         // <editor-fold desc="setAuthority">
         // -----------------------------------------------------------------------------------------------
         // 권한별 레이아웃 설정
@@ -127,7 +137,10 @@ class AdminFragment : Fragment() {
                 // 날짜 세팅
                 setTodayDate()
                 // 세부 날짜 네비게이션 세팅
-                setManageMenuNavigateTo(NavAdmin.admin1Hs1.navName, day)
+                if (!isTitleClick)
+                    setManageMenuNavigateTo(NavAdmin.admin1Hs1.navName, day, CafeteriaData.HYANGSEOL1.cfName)
+                else
+                    setManageMenuNavigateTo(NavAdmin.admin1Staff.navName, day, CafeteriaData.FACULTY.cfName)
                 // 두 식당 접근
                 setChangeTitleAdmin(day)
                 // 일주일 치 사진 업로드 세팅
@@ -142,8 +155,12 @@ class AdminFragment : Fragment() {
                 viewAdminTitle.focusable = View.NOT_FOCUSABLE
 
                 txtAdminTitle.text = getStr(R.string.str_hs1)
+                viewModel.changeTitle(CafeteriaData.HYANGSEOL1.cfName)
                 setTodayDate()
-                setManageMenuNavigateTo(NavAdmin.admin2.navName, day)
+                setManageMenuNavigateTo(NavAdmin.admin2.navName, day, CafeteriaData.HYANGSEOL1.cfName)
+                // 일주일 치 사진 업로드 세팅
+                viewModel.changeTitle(CafeteriaData.HYANGSEOL1.cfName)
+                setWeekPhoto(day)
             }
         }
 
@@ -154,8 +171,12 @@ class AdminFragment : Fragment() {
                 viewAdminTitle.focusable = View.NOT_FOCUSABLE
 
                 txtAdminTitle.text = getStr(R.string.str_staff)
+                viewModel.changeTitle(CafeteriaData.FACULTY.cfName)
                 setTodayDate()
-                setManageMenuNavigateTo(NavAdmin.admin3.navName, day)
+                setManageMenuNavigateTo(NavAdmin.admin3.navName, day, CafeteriaData.FACULTY.cfName)
+                // 일주일 치 사진 업로드 세팅
+                viewModel.changeTitle(CafeteriaData.FACULTY.cfName)
+                setWeekPhoto(day)
             }
         }
 
@@ -172,7 +193,10 @@ class AdminFragment : Fragment() {
 
                 setTodayDate()
                 setChangeTitleMaster(day)
-                setManageMenuNavigateTo(NavAdmin.masterHs1.navName, day)
+                if (!isTitleClick)
+                    setManageMenuNavigateTo(NavAdmin.masterHs1.navName, day, CafeteriaData.HYANGSEOL1.cfName)
+                else
+                    setManageMenuNavigateTo(NavAdmin.masterStaff.navName, day, CafeteriaData.FACULTY.cfName)
             }
         }
 
@@ -183,10 +207,11 @@ class AdminFragment : Fragment() {
                 if (!isTitleClick) {
                     // 향설 1관으로 타이틀 변경
                     txtAdminTitle.text = getStr(R.string.str_hs1)
+                    viewModel.changeTitle(CafeteriaData.HYANGSEOL1.cfName)
                     // 해당 날짜 표시 및 시간
                     setTodayDate()
                     // 세부 메뉴의 ClickListener
-                    setManageMenuNavigateTo(NavAdmin.masterHs1.navName, day)
+                    setManageMenuNavigateTo(NavAdmin.masterHs1.navName, day, CafeteriaData.HYANGSEOL1.cfName)
                     // 다음 타이틀 클릭 시
                     isTitleClick = true
                     // 다시 Title 트리거 set
@@ -196,10 +221,11 @@ class AdminFragment : Fragment() {
                 else {
                     // 교직원 식당으로 타이틀 변경
                     txtAdminTitle.text = getStr(R.string.str_staff)
+                    viewModel.changeTitle(CafeteriaData.FACULTY.cfName)
                     // 해당 날짜 표시 및 시간
                     setTodayDate()
                     // 세부 메뉴의 ClickListener
-                    setManageMenuNavigateTo(NavAdmin.masterStaff.navName, day)
+                    setManageMenuNavigateTo(NavAdmin.masterStaff.navName, day, CafeteriaData.FACULTY.cfName)
                     // 다음 타이틀 클릭 시
                     isTitleClick = false
                     // 다시 Title 트리거 set
@@ -215,10 +241,11 @@ class AdminFragment : Fragment() {
                 if (!isTitleClick) {
                     // 향설 1관으로 타이틀 변경
                     txtAdminTitle.text = getStr(R.string.str_hs1)
+                    viewModel.changeTitle(CafeteriaData.HYANGSEOL1.cfName)
                     // 해당 날짜 표시 및 시간
                     setTodayDate()
                     // 세부 메뉴의 ClickListener
-                    setManageMenuNavigateTo(NavAdmin.admin1Hs1.navName, day)
+                    setManageMenuNavigateTo(NavAdmin.admin1Hs1.navName, day, CafeteriaData.HYANGSEOL1.cfName)
                     // 다음 타이틀 클릭 시
                     isTitleClick = true
                     // 다시 Title 트리거 set
@@ -228,10 +255,11 @@ class AdminFragment : Fragment() {
                 else {
                     // 교직원 식당으로 타이틀 변경
                     txtAdminTitle.text = getStr(R.string.str_staff)
+                    viewModel.changeTitle(CafeteriaData.FACULTY.cfName)
                     // 해당 날짜 표시 및 시간
                     setTodayDate()
                     // 세부 메뉴의 ClickListener
-                    setManageMenuNavigateTo(NavAdmin.admin1Staff.navName, day)
+                    setManageMenuNavigateTo(NavAdmin.admin1Staff.navName, day, CafeteriaData.FACULTY.cfName)
                     // 다음 타이틀 클릭 시
                     isTitleClick = false
                     // 다시 Title 트리거 set
@@ -278,11 +306,13 @@ class AdminFragment : Fragment() {
         binding.btnUploadWeek.setOnClickListener {
             // date 값은 day(시작 일자)만 쓰임
             // true: week, false: dayOfWeek
-            navigateTo(NavAdmin.weekCamera.navName, manageDate(dOw.MONDAY.dName, day), true)
-//            requireActivity().supportFragmentManager.beginTransaction()
-//                .add(R.id.fragment_camera, CameraFragment())
-//                .addToBackStack(null)
-//                .commit()
+            if (viewModel.title == CafeteriaData.HYANGSEOL1.cfName)
+                navigateTo(NavAdmin.weekCamera.navName, manageDate(dOw.MONDAY.dName, day, CafeteriaData.HYANGSEOL1.cfName), true)
+            else if (viewModel.title == CafeteriaData.FACULTY.cfName)
+                navigateTo(NavAdmin.weekCamera.navName, manageDate(dOw.MONDAY.dName, day, CafeteriaData.FACULTY.cfName), true)
+            else{
+                Log.e("AdminFragment", "viewModel Error")
+            }
         }
     }
 
@@ -363,33 +393,33 @@ class AdminFragment : Fragment() {
     // 세부 메뉴를 눌렀을 때
     private fun setManageMenuNavigateTo(
         destination: String,  // 권한 별 프레그먼트
-        day: String   // 일주일 날짜 모음
+        day: String,   // 일주일 날짜 모음
+        cf: String     // 식당 이름
     ) {
-        // TODO: navagating 없애야함
         with(binding) {
             btnMonday.setOnClickListener {
                 navigateTo(
-                    destination, manageDate(dOw.MONDAY.dName, day), null
+                    destination, manageDate(dOw.MONDAY.dName, day, cf), null
                 )
             }
             btnTuesday.setOnClickListener {
                 navigateTo(
-                    destination, manageDate(dOw.TUESDAY.dName, day), null
+                    destination, manageDate(dOw.TUESDAY.dName, day, cf), null
                 )
             }
             btnWednesday.setOnClickListener {
                 navigateTo(
-                    destination, manageDate(dOw.WEDNESDAY.dName, day), null
+                    destination, manageDate(dOw.WEDNESDAY.dName, day, cf), null
                 )
             }
             btnThursday.setOnClickListener {
                 navigateTo(
-                    destination, manageDate(dOw.THURSDAY.dName, day), null
+                    destination, manageDate(dOw.THURSDAY.dName, day, cf), null
                 )
             }
             btnFriday.setOnClickListener {
                 navigateTo(
-                    destination, manageDate(dOw.FRIDAY.dName, day), null
+                    destination, manageDate(dOw.FRIDAY.dName, day, cf), null
                 )
             }
         }
@@ -412,7 +442,7 @@ class AdminFragment : Fragment() {
             NavAdmin.admin3.navName -> AdminFragmentDirections.toAdmin3(date)
             NavAdmin.masterHs1.navName -> AdminFragmentDirections.toMasterHs1(date)
             NavAdmin.masterStaff.navName -> AdminFragmentDirections.toMasterStaff(date)
-            NavAdmin.weekCamera.navName -> AdminFragmentDirections.toCamera(flag!!)
+            NavAdmin.weekCamera.navName -> AdminFragmentDirections.toCamera(flag!!, date)
             else -> throw IllegalArgumentException("Invalid button config: $destination")
         }
     // </editor-fold>

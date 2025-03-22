@@ -36,7 +36,8 @@
             app:popUpTo="@id/fragment_admin" />
         <action
             android:id="@+id/to_camera"
-            app:destination="@id/fragment_camera" />
+            app:destination="@id/fragment_camera"
+            app:popUpTo="@id/fragment_admin" />
     </fragment>
 
     <fragment
@@ -88,13 +89,13 @@
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
         <action
             android:id="@+id/admin1Staff_to_camera"
-            app:destination="@id/fragment_camera" />
-
+            app:destination="@id/fragment_camera"
+            app:popUpTo="@id/admin1StaffWeekFragment"/>
 
     </fragment>
     <fragment
         android:id="@+id/masterHs1WeekFragment"
-        android:name="com.scm.sch_cafeteria_manager.ui.admin.master.MasterHs1WeekFragment"
+        android:name="com.scm.sch_cafeteria_manager.ui.admin.master.MasterHs1Fragment"
         android:label="MasterHs1WeekFragment"
         tools:layout="@layout/fragment_master_hs1">
         <argument
@@ -103,7 +104,7 @@
     </fragment>
     <fragment
         android:id="@+id/masterStaffWeekFragment"
-        android:name="com.scm.sch_cafeteria_manager.ui.admin.master.MasterStaffWeekFragment"
+        android:name="com.scm.sch_cafeteria_manager.ui.admin.master.MasterStaffFragment"
         android:label="MasterStaffWeekFragment"
         tools:layout="@layout/fragment_master_staff">
         <argument
@@ -119,5 +120,8 @@
         <argument
             android:name="flag"
             app:argType="boolean" />
+        <argument
+            android:name="manageDate"
+            app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
     </fragment>
 </navigation>

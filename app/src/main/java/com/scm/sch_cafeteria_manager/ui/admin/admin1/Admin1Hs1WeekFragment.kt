@@ -14,6 +14,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -22,8 +23,10 @@ import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.MealType
+import com.scm.sch_cafeteria_manager.data.ShareViewModel
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.dataAdmin
+import com.scm.sch_cafeteria_manager.data.manageDate
 import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminHs1Binding
 import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
@@ -46,6 +49,8 @@ class Admin1Hs1WeekFragment : Fragment() {
     private var _binding: FragmentAdminHs1Binding? = null
     private val binding get() = _binding!!
     private val args: Admin1Hs1WeekFragmentArgs by navArgs()
+    lateinit var viewModel: ShareViewModel
+
     var jsonData: dataAdmin? = null
 
     override fun onCreateView(
@@ -54,6 +59,7 @@ class Admin1Hs1WeekFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAdminHs1Binding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this).get(ShareViewModel::class.java)
         return binding.root
     }
 
@@ -202,7 +208,7 @@ class Admin1Hs1WeekFragment : Fragment() {
     // 촬영하여 등록 버튼 누를 시 -> 촬영
     private fun setPhotoBtnClick() {
         binding.btnUploadWeek.setOnClickListener {
-            findNavController().navigate(Admin1Hs1WeekFragmentDirections.admin1Hs1ToCamera(false))
+            findNavController().navigate(Admin1Hs1WeekFragmentDirections.admin1Hs1ToCamera( false, args.manageDate))
         }
     }
 
@@ -263,10 +269,6 @@ class Admin1Hs1WeekFragment : Fragment() {
                                 getWeekStartDate(getWeekDates()[0]),
                                 menu
                             )
-//                            Log.e(
-//                                "Admin1Hs1WeekFragment",
-//                                "uploadingMealPlans - ${response?.message}"
-//                            )
                             cancleImg()
                             backToHome()
                         } catch (e: Exception) {
@@ -349,8 +351,6 @@ class Admin1Hs1WeekFragment : Fragment() {
         builder.setOnDismissListener { //nothing
         }
         val imageView = ImageView(requireContext())
-//        imageView.setImageURI(file.toUri())
-//        imageView.setImageBitmap(stringToBitmap(img))
         imageView.setImageBitmap(stringToBitmap(img))
 
         builder.addContentView(

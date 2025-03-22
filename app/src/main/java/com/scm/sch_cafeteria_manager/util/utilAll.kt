@@ -22,7 +22,7 @@ object utilAll {
     val nonData = "정보 없음"
     val nonDate = "00:00"
 
-    const val BASE_URL = "http://192.168.1.40:8080"
+    const val BASE_URL = "http://192.168.1.24:8080"
     const val photoFilePath = "photo.jpg"
     const val weekFilePath = "week.jpg"
 
@@ -79,9 +79,7 @@ object utilAll {
             if (isNull(subMenu) || subMenu == blank) {
                 return mainMenu?.replaceCommaToLinebreak()
             } else {
-                val menu =
-                    mainMenu?.replaceCommaToLinebreak() + "\n" + subMenu?.replaceCommaToLinebreak()
-                return menu
+                return mainMenu?.replaceCommaToLinebreak() + "\n" + subMenu?.replaceCommaToLinebreak()
             }
         }
     }
@@ -144,7 +142,7 @@ object utilAll {
         val nowYear = today.format(formatterYear).toInt()
 
         // 현 시점보다 선택한 날짜가 다음 달인지 체크
-        if (week.toInt() > nowDay && nowDay > 20) {
+        if (week.toInt() < nowDay && nowDay > 28) {
             // 다음 달이 다음 년도면
             return if (today.format(formatterMonth).toInt() == 12) {
                 LocalDate.of(
@@ -169,7 +167,6 @@ object utilAll {
                 nowMonth,
                 week.toInt()
             ).toString()
-
     }
 
     // mealType을 한국어로 변환
@@ -197,5 +194,4 @@ object utilAll {
         }
         return result
     }
-
 }

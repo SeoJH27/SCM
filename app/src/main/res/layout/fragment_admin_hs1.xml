@@ -1,425 +1,429 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/transparency"
-        android:fitsSystemWindows="true"
-        app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_admin_hs1"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-            app:navigationIcon="@drawable/ic_arrow_back"
-            app:titleTextAppearance="@style/AppTextTitle.23sp"
-            tools:title="월요일 수정" />
+            android:background="@color/transparency"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_admin_hs1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:titleTextAppearance="@style/AppTextTitle.23sp"
+                tools:title="월요일 수정" />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_upload_week"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="@string/str_shoot"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/background_view"
-                app:layout_constraintEnd_toStartOf="@id/btn_change_week"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/btn_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/desc_btn_cache_image"
-                android:src="@drawable/ic_image"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/background_view"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btn_upload_week"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_change_week"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_chance_week"
-                android:visibility="gone"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintBottom_toTopOf="@id/background_view"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btn_upload_week"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/txt_change_week"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@id/background_view"
-                app:layout_constraintEnd_toEndOf="@id/background_view"
-                app:layout_constraintStart_toStartOf="@id/background_view" />
-
-            <View
-                android:id="@+id/background_view"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/bg_admin_background"
-                app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_upload_week" />
-
-            <TextView
-                android:id="@+id/txt_change_time_breakfast"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/str_change_open_time"
-                app:layout_constraintBottom_toTopOf="@id/view_breakfast_menu"
-                app:layout_constraintStart_toStartOf="@id/background_view"
-                app:layout_constraintTop_toTopOf="@id/background_view" />
-
-            <TextView
-                android:id="@+id/txt_breakfast_open_time_start"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btn"
-                android:backgroundTint="@color/grey_100"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
-                app:layout_constraintEnd_toStartOf="@id/txt_breakfast_time_to_time"
-                app:layout_constraintStart_toEndOf="@id/txt_change_time_breakfast"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_breakfast"
-                tools:ignore="LabelFor"
-                tools:text="08:00" />
-
-            <TextView
-                android:id="@+id/txt_breakfast_time_to_time"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_swung_dash"
-                app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
-                app:layout_constraintEnd_toStartOf="@id/txt_breakfast_open_time_end"
-                app:layout_constraintStart_toEndOf="@id/txt_breakfast_open_time_start"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_breakfast" />
-
-            <TextView
-                android:id="@+id/txt_breakfast_open_time_end"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btn"
-                android:backgroundTint="@color/grey_100"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
-                app:layout_constraintEnd_toEndOf="@id/background_view"
-                app:layout_constraintStart_toEndOf="@id/txt_breakfast_time_to_time"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_breakfast"
-                tools:text="19:00" />
-
-            <View
-                android:id="@+id/view_breakfast_menu"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintBottom_toTopOf="@id/txt_breakfast_menu"
-                app:layout_constraintEnd_toEndOf="@id/txt_breakfast_open_time_end"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
-                app:layout_constraintTop_toBottomOf="@id/txt_change_time_breakfast" />
-
-            <TextView
-                style="@style/AppTextTitle.18sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_breakfast"
-                app:layout_constraintBottom_toBottomOf="@id/view_breakfast_menu"
-                app:layout_constraintEnd_toEndOf="@id/txt_change_time_breakfast"
-                app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
-                app:layout_constraintTop_toTopOf="@id/view_breakfast_menu" />
-
-            <TextView
-                android:id="@+id/txt_breakfast_menu"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btn"
-                android:backgroundTint="@color/grey_100"
-                android:padding="10dp"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@id/view_breakfast_menu"
-                app:layout_constraintEnd_toEndOf="@id/view_breakfast_menu"
-                app:layout_constraintStart_toStartOf="@id/txt_breakfast_open_time_start"
-                app:layout_constraintTop_toTopOf="@id/view_breakfast_menu"
-                tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
-
-            <View
-                android:id="@+id/line_1"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="40dp"
-                android:background="@color/grey_300"
-                app:layout_constraintBottom_toTopOf="@id/txt_change_time_lunch"
-                app:layout_constraintEnd_toEndOf="@id/background_view"
-                app:layout_constraintStart_toStartOf="@id/background_view"
-                app:layout_constraintTop_toBottomOf="@id/view_breakfast_menu" />
+                android:layout_height="0dp">
 
-            <TextView
-                android:id="@+id/txt_change_time_lunch"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/str_change_open_time"
-                app:layout_constraintBottom_toTopOf="@id/view_lunch_menu"
-                app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
-                app:layout_constraintTop_toBottomOf="@+id/line_1" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_upload_week"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/str_shoot"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/background_view"
+                    app:layout_constraintEnd_toStartOf="@id/btn_change_week"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/txt_lunch_open_time_start"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btn"
-                android:backgroundTint="@color/grey_100"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
-                app:layout_constraintEnd_toStartOf="@id/txt_lunch_time_to_time"
-                app:layout_constraintStart_toEndOf="@id/txt_change_time_lunch"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch"
-                tools:ignore="LabelFor"
-                tools:text="08:00" />
+                <ImageButton
+                    android:id="@+id/btn_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/desc_btn_cache_image"
+                    android:src="@drawable/ic_image"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/background_view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/btn_upload_week"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/txt_lunch_time_to_time"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_swung_dash"
-                app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
-                app:layout_constraintEnd_toStartOf="@id/txt_lunch_open_time_end"
-                app:layout_constraintStart_toEndOf="@id/txt_lunch_open_time_start"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_change_week"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_chance_week"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintBottom_toTopOf="@id/background_view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/btn_upload_week"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/txt_lunch_open_time_end"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btn"
-                android:backgroundTint="@color/grey_100"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
-                app:layout_constraintEnd_toEndOf="@id/background_view"
-                app:layout_constraintStart_toEndOf="@id/txt_lunch_time_to_time"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch"
-                tools:text="19:00" />
+                <TextView
+                    android:id="@+id/txt_change_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@id/background_view"
+                    app:layout_constraintEnd_toEndOf="@id/background_view"
+                    app:layout_constraintStart_toStartOf="@id/background_view" />
 
-            <View
-                android:id="@+id/view_lunch_menu"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintBottom_toTopOf="@id/txt_lunch_menu"
-                app:layout_constraintEnd_toEndOf="@id/txt_lunch_open_time_end"
-                app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
-                app:layout_constraintTop_toBottomOf="@id/txt_change_time_lunch" />
+                <View
+                    android:id="@+id/background_view"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/bg_admin_background"
+                    app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_upload_week" />
 
-            <TextView
-                style="@style/AppTextTitle.18sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_lunch"
-                app:layout_constraintBottom_toBottomOf="@id/view_lunch_menu"
-                app:layout_constraintEnd_toEndOf="@id/txt_change_time_lunch"
-                app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
-                app:layout_constraintTop_toTopOf="@id/view_lunch_menu" />
+                <TextView
+                    android:id="@+id/txt_change_time_breakfast"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/str_change_open_time"
+                    app:layout_constraintBottom_toTopOf="@id/view_breakfast_menu"
+                    app:layout_constraintStart_toStartOf="@id/background_view"
+                    app:layout_constraintTop_toTopOf="@id/background_view" />
 
-            <TextView
-                android:id="@+id/txt_lunch_menu"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btn"
-                android:backgroundTint="@color/grey_100"
-                android:padding="10dp"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@id/view_lunch_menu"
-                app:layout_constraintEnd_toEndOf="@id/view_lunch_menu"
-                app:layout_constraintStart_toStartOf="@id/txt_lunch_open_time_start"
-                app:layout_constraintTop_toTopOf="@id/view_lunch_menu"
-                tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
+                <TextView
+                    android:id="@+id/txt_breakfast_open_time_start"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_btn"
+                    android:backgroundTint="@color/grey_100"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
+                    app:layout_constraintEnd_toStartOf="@id/txt_breakfast_time_to_time"
+                    app:layout_constraintStart_toEndOf="@id/txt_change_time_breakfast"
+                    app:layout_constraintTop_toTopOf="@id/txt_change_time_breakfast"
+                    tools:ignore="LabelFor"
+                    tools:text="08:00" />
 
-            <View
-                android:id="@+id/line_2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="40dp"
-                android:layout_marginVertical="10dp"
-                android:background="@color/grey_300"
-                app:layout_constraintBottom_toTopOf="@id/txt_change_time_dinner"
-                app:layout_constraintEnd_toEndOf="@id/background_view"
-                app:layout_constraintStart_toStartOf="@id/background_view"
-                app:layout_constraintTop_toBottomOf="@id/view_lunch_menu" />
+                <TextView
+                    android:id="@+id/txt_breakfast_time_to_time"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_swung_dash"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
+                    app:layout_constraintEnd_toStartOf="@id/txt_breakfast_open_time_end"
+                    app:layout_constraintStart_toEndOf="@id/txt_breakfast_open_time_start"
+                    app:layout_constraintTop_toTopOf="@id/txt_change_time_breakfast" />
 
-            <TextView
-                android:id="@+id/txt_change_time_dinner"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/str_change_open_time"
-                app:layout_constraintBottom_toTopOf="@id/view_dinner_menu"
-                app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
-                app:layout_constraintTop_toBottomOf="@+id/line_2" />
+                <TextView
+                    android:id="@+id/txt_breakfast_open_time_end"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_btn"
+                    android:backgroundTint="@color/grey_100"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_change_time_breakfast"
+                    app:layout_constraintEnd_toEndOf="@id/background_view"
+                    app:layout_constraintStart_toEndOf="@id/txt_breakfast_time_to_time"
+                    app:layout_constraintTop_toTopOf="@id/txt_change_time_breakfast"
+                    tools:text="19:00" />
 
-            <TextView
-                android:id="@+id/txt_dinner_open_time_start"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btn"
-                android:backgroundTint="@color/grey_100"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
-                app:layout_constraintEnd_toStartOf="@id/txt_dinner_time_to_time"
-                app:layout_constraintStart_toEndOf="@id/txt_change_time_dinner"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_dinner"
-                tools:ignore="LabelFor"
-                tools:text="08:00" />
+                <View
+                    android:id="@+id/view_breakfast_menu"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="@id/txt_breakfast_menu"
+                    app:layout_constraintEnd_toEndOf="@id/txt_breakfast_open_time_end"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
+                    app:layout_constraintTop_toBottomOf="@id/txt_change_time_breakfast" />
 
-            <TextView
-                android:id="@+id/txt_dinner_time_to_time"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_swung_dash"
-                app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
-                app:layout_constraintEnd_toStartOf="@id/txt_dinner_open_time_end"
-                app:layout_constraintStart_toEndOf="@id/txt_dinner_open_time_start"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_dinner" />
+                <TextView
+                    style="@style/AppTextTitle.18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_breakfast"
+                    app:layout_constraintBottom_toBottomOf="@id/view_breakfast_menu"
+                    app:layout_constraintEnd_toEndOf="@id/txt_change_time_breakfast"
+                    app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
+                    app:layout_constraintTop_toTopOf="@id/view_breakfast_menu" />
 
-            <TextView
-                android:id="@+id/txt_dinner_open_time_end"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btn"
-                android:backgroundTint="@color/grey_100"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
-                app:layout_constraintEnd_toEndOf="@id/background_view"
-                app:layout_constraintStart_toEndOf="@id/txt_dinner_time_to_time"
-                app:layout_constraintTop_toTopOf="@id/txt_change_time_dinner"
-                tools:text="19:00" />
+                <TextView
+                    android:id="@+id/txt_breakfast_menu"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_btn"
+                    android:backgroundTint="@color/grey_100"
+                    android:padding="10dp"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="@id/view_breakfast_menu"
+                    app:layout_constraintEnd_toEndOf="@id/view_breakfast_menu"
+                    app:layout_constraintStart_toStartOf="@id/txt_breakfast_open_time_start"
+                    app:layout_constraintTop_toTopOf="@id/view_breakfast_menu"
+                    tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
 
-            <View
-                android:id="@+id/view_dinner_menu"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintBottom_toBottomOf="@id/background_view"
-                app:layout_constraintEnd_toEndOf="@id/txt_dinner_open_time_end"
-                app:layout_constraintStart_toStartOf="@id/txt_change_time_dinner"
-                app:layout_constraintTop_toBottomOf="@id/txt_change_time_dinner" />
+                <View
+                    android:id="@+id/line_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="40dp"
+                    android:background="@color/grey_300"
+                    app:layout_constraintBottom_toTopOf="@id/txt_change_time_lunch"
+                    app:layout_constraintEnd_toEndOf="@id/background_view"
+                    app:layout_constraintStart_toStartOf="@id/background_view"
+                    app:layout_constraintTop_toBottomOf="@id/view_breakfast_menu" />
 
-            <TextView
-                style="@style/AppTextTitle.18sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/str_dinner"
-                app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
-                app:layout_constraintEnd_toEndOf="@id/txt_change_time_lunch"
-                app:layout_constraintStart_toStartOf="@id/txt_change_time_dinner"
-                app:layout_constraintTop_toTopOf="@id/view_dinner_menu" />
+                <TextView
+                    android:id="@+id/txt_change_time_lunch"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/str_change_open_time"
+                    app:layout_constraintBottom_toTopOf="@id/view_lunch_menu"
+                    app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
+                    app:layout_constraintTop_toBottomOf="@+id/line_1" />
 
-            <TextView
-                android:id="@+id/txt_dinner_menu"
-                style="@style/AppTextBody.15sp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_btn"
-                android:backgroundTint="@color/grey_100"
-                android:padding="10dp"
-                android:layout_marginVertical="10dp"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
-                app:layout_constraintEnd_toEndOf="@id/view_dinner_menu"
-                app:layout_constraintStart_toStartOf="@id/txt_dinner_open_time_start"
-                app:layout_constraintTop_toTopOf="@id/view_dinner_menu"
-                tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
+                <TextView
+                    android:id="@+id/txt_lunch_open_time_start"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_btn"
+                    android:backgroundTint="@color/grey_100"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
+                    app:layout_constraintEnd_toStartOf="@id/txt_lunch_time_to_time"
+                    app:layout_constraintStart_toEndOf="@id/txt_change_time_lunch"
+                    app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch"
+                    tools:ignore="LabelFor"
+                    tools:text="08:00" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_upload_all_menu"
-                style="@style/btnStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="30dp"
-                android:text="@string/str_save"
-                app:backgroundTint="@color/grey_100"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/background_view" />
+                <TextView
+                    android:id="@+id/txt_lunch_time_to_time"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_swung_dash"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
+                    app:layout_constraintEnd_toStartOf="@id/txt_lunch_open_time_end"
+                    app:layout_constraintStart_toEndOf="@id/txt_lunch_open_time_start"
+                    app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch" />
 
-            <ProgressBar
-                android:id="@+id/progressbar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="4dp"
-                android:progressBackgroundTint="@color/white"
-                android:progressTint="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/txt_lunch_open_time_end"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_btn"
+                    android:backgroundTint="@color/grey_100"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_change_time_lunch"
+                    app:layout_constraintEnd_toEndOf="@id/background_view"
+                    app:layout_constraintStart_toEndOf="@id/txt_lunch_time_to_time"
+                    app:layout_constraintTop_toTopOf="@id/txt_change_time_lunch"
+                    tools:text="19:00" />
 
-            <View
-                android:id="@+id/progressbarBackground"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="#63000000"
-                android:elevation="3dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="gone" />
+                <View
+                    android:id="@+id/view_lunch_menu"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="@id/txt_lunch_menu"
+                    app:layout_constraintEnd_toEndOf="@id/txt_lunch_open_time_end"
+                    app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
+                    app:layout_constraintTop_toBottomOf="@id/txt_change_time_lunch" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    style="@style/AppTextTitle.18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_lunch"
+                    app:layout_constraintBottom_toBottomOf="@id/view_lunch_menu"
+                    app:layout_constraintEnd_toEndOf="@id/txt_change_time_lunch"
+                    app:layout_constraintStart_toStartOf="@id/txt_change_time_lunch"
+                    app:layout_constraintTop_toTopOf="@id/view_lunch_menu" />
 
-    </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <TextView
+                    android:id="@+id/txt_lunch_menu"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_btn"
+                    android:backgroundTint="@color/grey_100"
+                    android:padding="10dp"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="@id/view_lunch_menu"
+                    app:layout_constraintEnd_toEndOf="@id/view_lunch_menu"
+                    app:layout_constraintStart_toStartOf="@id/txt_lunch_open_time_start"
+                    app:layout_constraintTop_toTopOf="@id/view_lunch_menu"
+                    tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
+
+                <View
+                    android:id="@+id/line_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="40dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@color/grey_300"
+                    app:layout_constraintBottom_toTopOf="@id/txt_change_time_dinner"
+                    app:layout_constraintEnd_toEndOf="@id/background_view"
+                    app:layout_constraintStart_toStartOf="@id/background_view"
+                    app:layout_constraintTop_toBottomOf="@id/view_lunch_menu" />
+
+                <TextView
+                    android:id="@+id/txt_change_time_dinner"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/str_change_open_time"
+                    app:layout_constraintBottom_toTopOf="@id/view_dinner_menu"
+                    app:layout_constraintStart_toStartOf="@id/txt_change_time_breakfast"
+                    app:layout_constraintTop_toBottomOf="@+id/line_2" />
+
+                <TextView
+                    android:id="@+id/txt_dinner_open_time_start"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_btn"
+                    android:backgroundTint="@color/grey_100"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
+                    app:layout_constraintEnd_toStartOf="@id/txt_dinner_time_to_time"
+                    app:layout_constraintStart_toEndOf="@id/txt_change_time_dinner"
+                    app:layout_constraintTop_toTopOf="@id/txt_change_time_dinner"
+                    tools:ignore="LabelFor"
+                    tools:text="08:00" />
+
+                <TextView
+                    android:id="@+id/txt_dinner_time_to_time"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_swung_dash"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
+                    app:layout_constraintEnd_toStartOf="@id/txt_dinner_open_time_end"
+                    app:layout_constraintStart_toEndOf="@id/txt_dinner_open_time_start"
+                    app:layout_constraintTop_toTopOf="@id/txt_change_time_dinner" />
+
+                <TextView
+                    android:id="@+id/txt_dinner_open_time_end"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_btn"
+                    android:backgroundTint="@color/grey_100"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="5dp"
+                    app:layout_constraintBottom_toBottomOf="@id/txt_change_time_dinner"
+                    app:layout_constraintEnd_toEndOf="@id/background_view"
+                    app:layout_constraintStart_toEndOf="@id/txt_dinner_time_to_time"
+                    app:layout_constraintTop_toTopOf="@id/txt_change_time_dinner"
+                    tools:text="19:00" />
+
+                <View
+                    android:id="@+id/view_dinner_menu"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toBottomOf="@id/background_view"
+                    app:layout_constraintEnd_toEndOf="@id/txt_dinner_open_time_end"
+                    app:layout_constraintStart_toStartOf="@id/txt_change_time_dinner"
+                    app:layout_constraintTop_toBottomOf="@id/txt_change_time_dinner" />
+
+                <TextView
+                    style="@style/AppTextTitle.18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_dinner"
+                    app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
+                    app:layout_constraintEnd_toEndOf="@id/txt_change_time_lunch"
+                    app:layout_constraintStart_toStartOf="@id/txt_change_time_dinner"
+                    app:layout_constraintTop_toTopOf="@id/view_dinner_menu" />
+
+                <TextView
+                    android:id="@+id/txt_dinner_menu"
+                    style="@style/AppTextBody.15sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:background="@drawable/bg_btn"
+                    android:backgroundTint="@color/grey_100"
+                    android:padding="10dp"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="@id/view_dinner_menu"
+                    app:layout_constraintEnd_toEndOf="@id/view_dinner_menu"
+                    app:layout_constraintStart_toStartOf="@id/txt_dinner_open_time_start"
+                    app:layout_constraintTop_toTopOf="@id/view_dinner_menu"
+                    tools:text="버섯 불고기\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림\n비엔나야채볶음\n고추잎무침\n도시락김\n콩조림" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_upload_all_menu"
+                    style="@style/btnStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="30dp"
+                    android:text="@string/str_save"
+                    app:backgroundTint="@color/grey_100"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/background_view" />
+
+                <ProgressBar
+                    android:id="@+id/progressbar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:elevation="4dp"
+                    android:progressBackgroundTint="@color/white"
+                    android:progressTint="@color/white"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/progressbarBackground"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="#63000000"
+                    android:elevation="3dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

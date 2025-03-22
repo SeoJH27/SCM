@@ -3,6 +3,7 @@ package com.scm.sch_cafeteria_manager.ui.detail.staff
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.UserDetailResponse
@@ -12,6 +13,7 @@ import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
 import com.scm.sch_cafeteria_manager.util.utilAll.mealTypeToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.nonData
+import java.util.Objects.isNull
 
 class DetailStaffListAdapter(
     items: UserDetailResponse,
@@ -66,19 +68,28 @@ class DetailStaffItemViewHolder(
         Log.e("DetailStaffListAdapter", "bind")
 
         with(binding) {
-            val grey = binding.root.resources.getColor(R.color.grey_300)
-            if (meal != null) {
+            if (meal?.mealType != null) {
                 txtTime.text = mealTypeToKorean(meal.mealType)
             } else {
                 txtTime.text = nonData
-                txtTime.setTextColor(grey)
+                txtTime.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.grey_300
+                    )
+                )
             }
-            if (meal != null) {
-                txtMenu.text = combinMainAndSub(meal.mainMenu, meal.subMenu)
-            } else {
+            val menu = combinMainAndSub(meal?.mainMenu, meal?.subMenu) ?: nonData
+            if (isNull(menu)) {
                 txtMenu.text = nonData
-                txtMenu.setTextColor(grey)
-            }
+                txtMenu.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.grey_300
+                    )
+                )
+            } else
+                txtMenu.text = menu
         }
     }
 
