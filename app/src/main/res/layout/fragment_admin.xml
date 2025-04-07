@@ -34,16 +34,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
 
-                <ProgressBar
-                    android:id="@+id/progressbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <TextView
                     android:id="@+id/txt_admin_title"
                     style="@style/AppTextTitle.30sp"
@@ -105,7 +95,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txt_admin_date" />
-
+<!--
                 <ImageButton
                     android:id="@+id/ib_show_image"
                     android:layout_width="wrap_content"
@@ -117,7 +107,7 @@
                     android:src="@drawable/ic_image"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
+-->
                 <View
                     android:id="@+id/line_1"
                     android:layout_width="match_parent"
@@ -260,22 +250,19 @@
                     android:layout_height="wrap_content"
                     android:text="@string/str_open_time"
                     app:layout_constraintBottom_toTopOf="@id/btn_logout"
-                    app:layout_constraintEnd_toStartOf="@id/edit_open_time_start"
+                    app:layout_constraintEnd_toStartOf="@id/txt_open_time_start"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line_3" />
 
-                <EditText
-                    android:id="@+id/edit_open_time_start"
+                <TextView
+                    android:id="@+id/txt_open_time_start"
                     style="@style/AppTextBody.15sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:autofillHints=""
-                    android:inputType="date|datetime"
                     app:layout_constraintBottom_toBottomOf="@id/txt_open_time"
                     app:layout_constraintEnd_toStartOf="@id/txt_time_to_time"
                     app:layout_constraintStart_toEndOf="@id/txt_open_time"
-                    app:layout_constraintTop_toTopOf="@id/txt_open_time"
-                    tools:ignore="LabelFor" />
+                    app:layout_constraintTop_toTopOf="@id/txt_open_time" />
 
                 <TextView
                     android:id="@+id/txt_time_to_time"
@@ -284,22 +271,19 @@
                     android:layout_height="wrap_content"
                     android:text="@string/str_swung_dash"
                     app:layout_constraintBottom_toBottomOf="@id/txt_open_time"
-                    app:layout_constraintEnd_toStartOf="@id/edit_open_time_end"
-                    app:layout_constraintStart_toEndOf="@id/edit_open_time_start"
+                    app:layout_constraintEnd_toStartOf="@id/txt_open_time_end"
+                    app:layout_constraintStart_toEndOf="@id/txt_open_time_start"
                     app:layout_constraintTop_toTopOf="@id/txt_open_time" />
 
-                <EditText
-                    android:id="@+id/edit_open_time_end"
+                <TextView
+                    android:id="@+id/txt_open_time_end"
                     style="@style/AppTextBody.15sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:autofillHints=""
-                    android:inputType="date|datetime"
                     app:layout_constraintBottom_toBottomOf="@id/txt_open_time"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/txt_time_to_time"
-                    app:layout_constraintTop_toTopOf="@id/txt_open_time"
-                    tools:ignore="LabelFor" />
+                    app:layout_constraintTop_toTopOf="@id/txt_open_time" />
 
                 <TextView
                     android:id="@+id/btn_logout"
@@ -314,6 +298,30 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txt_open_time" />
 
+                <ProgressBar
+                    android:id="@+id/progressbar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:elevation="4dp"
+                    android:progressBackgroundTint="@color/white"
+                    android:progressTint="@color/white"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/progressbarBackground"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="#63000000"
+                    android:elevation="3dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>

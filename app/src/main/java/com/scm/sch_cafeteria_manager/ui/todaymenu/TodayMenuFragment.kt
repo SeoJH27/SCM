@@ -16,6 +16,7 @@ import com.scm.sch_cafeteria_manager.data.UserTodayMenuResponse
 import com.scm.sch_cafeteria_manager.databinding.FragmentTodayMenuBinding
 import com.scm.sch_cafeteria_manager.util.fetchTodayMenu
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
+import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import com.scm.sch_cafeteria_manager.util.utilAll.setInquiryLink
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -54,7 +55,7 @@ class TodayMenuFragment : Fragment() {
                 val today = LocalDate.now().dayOfWeek.name
                 val date = getWeekDates()
 
-                TODAYMENU = fetchTodayMenu(date[0], today)
+                TODAYMENU = fetchTodayMenu(getWeekStartDate(date[0]), today)
                 Log.e("DetailHs1Fragment", "fetchTodayMenu - TODAYMENU: ${TODAYMENU?.data}")
             } catch (e: Error) {
                 Log.e("TodayMenuFragment", "fetchData - e: $e")

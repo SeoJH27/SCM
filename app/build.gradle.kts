@@ -61,10 +61,11 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
 
-    // Network
-    implementation(libs.kotlinx.serialization.json)
+    // retrofit
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+
+    //cookieJar
+    implementation(libs.okhttp.urlconnection)
 
     // Camera X
     implementation(libs.androidx.camera.core)

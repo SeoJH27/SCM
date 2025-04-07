@@ -260,6 +260,8 @@ class Admin1Hs1WeekFragment : Fragment() {
                 val menu: requestDTO_dayOfWeek = isMenu!!
                 with(binding) {
                     progressbar.visibility = View.VISIBLE // UI 블로킹 시작
+                    binding.progressbarBackground.visibility = View.VISIBLE
+                    binding.progressbarBackground.isClickable = true
                     Log.e("Admin1Hs1WeekFragment", "setTextSaveBtnClick - progressbar")
                     lifecycleScope.launch {
                         try {
@@ -281,6 +283,7 @@ class Admin1Hs1WeekFragment : Fragment() {
                         }
                         Log.e("Admin1Hs1WeekFragment", "setTextSaveBtnClick")
                         progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
+                        binding.progressbarBackground.visibility = View.GONE
                     }
                 }
             }

@@ -153,14 +153,7 @@ class CameraFragment : Fragment() {
                     binding.progressbarBackground.isClickable = true
                     lifecycleScope.launch {
                         try {
-                            val response = uploadingWeekMealPlans(
-                                requireContext(),
-                                title,
-                                getWeekStartDate(args.manageDate.day),
-                                menu,
-                                file
-                            )
-                            Toast.makeText(requireContext(), "사진 전송 완료", Toast.LENGTH_SHORT).show()
+                            uploadingWeekMealPlans(requireContext(), title, getWeekStartDate(args.manageDate.day), menu, file)
                         } catch (e: Exception) {
                             Log.e("CameraFragment", "setWeekPhoto Error: $e")
                             Toast.makeText(

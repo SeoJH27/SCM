@@ -72,3 +72,18 @@ data class dataMaster(
     val weekMealImg: String,
     val dailyMeal: dailyMeal
 ): Parcelable
+
+// fetch시 사용하는 MasterResponse
+@Parcelize
+data class MasterWeekResponse(
+    val status: String,
+    val message: String,
+    val data: dataWeekMaster
+): Parcelable
+
+@Parcelize
+data class dataWeekMaster(
+    val dayMealImg: String?,
+    val weekMealImg: String,
+    @Json(name = "dailyMeals") val dailyMeals: List<dailyMeals>
+): Parcelable

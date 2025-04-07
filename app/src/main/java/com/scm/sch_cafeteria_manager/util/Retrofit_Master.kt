@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.scm.sch_cafeteria_manager.data.AdminResponse
 import com.scm.sch_cafeteria_manager.data.MasterResponse
+import com.scm.sch_cafeteria_manager.data.MasterWeekResponse
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.requestDTO_master
 import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
@@ -35,9 +36,9 @@ interface ApiService_Master {
     @GET("/api/master/meal-plans")
     suspend fun getMealPlans(@QueryMap pendingDailyMealRequestDTO: Map<String, String>): Response<MasterResponse>
 
-//    @Headers("Content-Type: application/json")
-//    @GET("/api/master/week-meal-plans")
-//    suspend fun getWeekMealPlans(@QueryMap pendingWeeklyMealRequestDTO : Map<String, String>): Response<MasterResponse>
+    @Headers("Content-Type: application/json")
+    @GET("/api/master/week-meal-plans")
+    suspend fun getWeekMealPlans(@QueryMap pendingWeeklyMealRequestDTO : Map<String, String>): Response<MasterWeekResponse>
 
 //    @Headers("Content-Type: application/json")
 //    @POST("/api/master/meal-plans/{restaurant-name}")
@@ -49,16 +50,20 @@ interface ApiService_Master {
         @Path("restaurant-name") resName: String,
         @Part("weekStartDate") weekStartDate: RequestBody,
         @Part("dailyMeals") dailyMeals: RequestBody
-    ): AdminResponse?
+    ): Response<AdminResponse>
 }
 
 object Retrofit_Master {
-    fun createApiService(context: Context): ApiService_Master {
+    suspend fun createApiService(context: Context): ApiService_Master {
+        // 만료 확인
+        if(isJwtExpired(context)){
+            val re = reissueToAdmin(context)
+            Log.e("Retrofit_Master", "createApiService - reissue: $re")
+        }
+
         // Headers에 AuthInterceptor 추가
-//        val okHttpClient = OkHttpClient.Builder()
-//            .addInterceptor(AuthInterceptor_Master(context))
-//            .build()
         val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(context))
             .connectTimeout(150, TimeUnit.SECONDS)
             .readTimeout(100, TimeUnit.SECONDS)
             .writeTimeout(100, TimeUnit.SECONDS)
@@ -77,48 +82,36 @@ object Retrofit_Master {
     }
 }
 
-private class AuthInterceptor_Master(private val context: Context) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): okResponse {
-        val token = PrefHelper_Login.getAccessToken(context) // SharedPreferences에서 토큰 불러오기
-        val request = chain.request().newBuilder()
-
-        token?.let {
-            request.addHeader("Authorization", "Bearer $it") // Authorization 헤더 추가
-        }
-        return chain.proceed(request.build())
-    }
-}
-
 //
 //                                            fetch (GET)
 //
 
 // 일주일 메뉴 불러오기
-//suspend fun fetchWeekMealPlansMaster(
-//    context: Context,
-//    weekStartDate: String,
-//    restaurantName: String
-//): MasterResponse? {
-//    val requestDTO = mapOf(
-//        "weekStartDate" to weekStartDate,
-//        "restaurantName" to restaurantName
-//    )
-//    var value: MasterResponse? = null
-//    Log.e("fetchWeekMealPlansMaster", "requestDTO: $requestDTO")
-//    try {
-//        val response = Retrofit_Master.createApiService(context).getWeekMealPlans(requestDTO)
-//        // 데이터 체크: 데이터가 없으면 null 반환
-//        if (response.isSuccessful) {
-//            value = response.body()
-//        }else{
-//            value = null
-//        }
-//        Log.e("fetchWeekMealPlansMaster", "응답 데이터: ${value?.data?.dailyMeal}")
-//    } catch (e: Exception) {
-//        Log.e("fetchWeekMealPlansMaster", "API 호출 실패: ${e.message}")
-//    }
-//    return value
-//}
+suspend fun fetchWeekMealPlansMaster(
+    context: Context,
+    weekStartDate: String,
+    restaurantName: String
+): MasterWeekResponse? {
+    val requestDTO = mapOf(
+        "weekStartDate" to weekStartDate,
+        "restaurantName" to restaurantName
+    )
+    var value: MasterWeekResponse? = null
+    Log.e("fetchWeekMealPlansMaster", "requestDTO: $requestDTO")
+    try {
+        val response = Retrofit_Master.createApiService(context).getWeekMealPlans(requestDTO)
+        // 데이터 체크: 데이터가 없으면 null 반환
+        if (response.isSuccessful) {
+            value = response.body()
+        }else{
+            value = null
+        }
+        Log.e("fetchWeekMealPlansMaster", "응답 데이터: ${value?.data?.dailyMeals}")
+    } catch (e: Exception) {
+        Log.e("fetchWeekMealPlansMaster", "API 호출 실패: ${e.message}")
+    }
+    return value
+}
 
 // 특정 요일 메뉴 불러오기
 suspend fun fetchMealPlansMaster(
@@ -178,8 +171,12 @@ suspend fun uploadingMealPlansMaster(
     try {
         val response = Retrofit_Master.createApiService(context)
             .setMealPlansMaster(restaurantName, startDateData, mealData)
-        Log.e("uploadingMealPlansMaster", "응답 데이터: ${response?.status}")
-        return response?.status
+
+        if (response.isSuccessful){
+            return response.code().toString()
+        }
+        Log.e("uploadingMealPlansMaster", "응답 데이터: $response")
+        return response.code().toString()
     } catch (e: Exception) {
         Log.e("uploadingMealPlansMaster", "API 호출 실패: ${e.message}")
         return e.message

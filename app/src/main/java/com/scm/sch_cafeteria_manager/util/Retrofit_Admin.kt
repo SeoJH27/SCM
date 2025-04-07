@@ -3,30 +3,23 @@ package com.scm.sch_cafeteria_manager.util
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.google.gson.GsonBuilder
 import com.scm.sch_cafeteria_manager.data.AdminResponse
 import com.scm.sch_cafeteria_manager.data.WeekAdminResponse
 import com.scm.sch_cafeteria_manager.data.dailyMeals
-import com.scm.sch_cafeteria_manager.data.dataAdmin
 import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
-import com.scm.sch_cafeteria_manager.data.weekAdmin
 import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -38,8 +31,6 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import java.io.File
 import java.util.concurrent.TimeUnit
-import okhttp3.Response as okResponse
-
 
 interface ApiService_Admin {
     @Headers("Content-Type: application/json")
@@ -53,7 +44,7 @@ interface ApiService_Admin {
         @Part("weekStartDate") weekStartDate: RequestBody,
         @Part("dailyMeals") dailyMeals: RequestBody,
         @Part weeklyMealImg: MultipartBody.Part
-    ): WeekAdminResponse?
+    ): Response<WeekAdminResponse>
 
     @Headers("Content-Type: application/json")
     @POST("/api/admin/meal-plans/{restaurant-name}/{day-of-week}")
@@ -61,17 +52,22 @@ interface ApiService_Admin {
         @Path("restaurant-name") resName: String,
         @Path("day-of-week") dayOfWeek: String,
         @Body requestDTO_dayOfWeek: String
-    ): Call<AdminResponse>
+    ): Response<AdminResponse>
 }
 
 object Retrofit_Admin {
-    fun createApiService(context: Context): ApiService_Admin {
-        // Headers에 AuthInterceptor 추가
-//        val okHttpClient = OkHttpClient.Builder()
-//            .addInterceptor(AuthInterceptor_Admin(context))
-//            .build()
+    suspend fun createApiService(context: Context): ApiService_Admin {
+        // 만료 확인
+        if(isJwtExpired(context)){
+            val re = reissueToAdmin(context)
+            Log.e("Retrofit_Admin", "createApiService - reissue: $re")
+        }
 
         val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(context))
+//            .addInterceptor(HttpLoggingInterceptor().apply {
+//                level = HttpLoggingInterceptor.Level.BODY
+//            })
             .connectTimeout(150, TimeUnit.SECONDS)
             .readTimeout(100, TimeUnit.SECONDS)
             .writeTimeout(100, TimeUnit.SECONDS)
@@ -87,18 +83,6 @@ object Retrofit_Admin {
             .client(okHttpClient)
             .build()
             .create(ApiService_Admin::class.java)
-    }
-}
-
-private class AuthInterceptor_Admin(private val context: Context) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): okResponse {
-        val token = PrefHelper_Login.getAccessToken(context) // SharedPreferences에서 토큰 불러오기
-        val request = chain.request().newBuilder()
-
-        token?.let {
-            request.addHeader("Authorization", "Bearer $it") // Authorization 헤더 추가
-        }
-        return chain.proceed(request.build())
     }
 }
 
@@ -150,7 +134,8 @@ suspend fun fetchMealPlans(
         // 데이터 체크: 데이터가 없으면 null 반환
         if (data.isSuccessful) {
             value = data.body()
-        } else {
+        }
+        else {
             value = null
         }
         Log.e("fetchMealPlans", "응답 데이터: ${value?.data}")
@@ -189,18 +174,24 @@ suspend fun uploadingWeekMealPlans(
     val fileImage = weeklyMealImg.asRequestBody("image/jpeg".toMediaTypeOrNull())
     val multiFile = MultipartBody.Part.createFormData("weeklyMealImg", "photo", fileImage)
 
-    Log.e("uploadingWeekMealPlans", "List<dailyMeals>: $meal"
-                                         +"\nweekStartDate: $startDate"
-                                         +"\nfileImage: $fileImage")
-
-    var response: WeekAdminResponse? = null
+    Log.e(
+        "uploadingWeekMealPlans", "List<dailyMeals>: $meal"
+                + "\nweekStartDate: $startDate"
+                + "\nfileImage: $fileImage"
+    )
     try {
-        response =
-            Retrofit_Admin.createApiService(context)
-                .setWeekMealPlans(restaurantName, startDate, meal, multiFile)
-        Log.e("uploadingWeekMealPlans", "응답 데이터: ${response?.status}")
+        val response = Retrofit_Admin.createApiService(context)
+            .setWeekMealPlans(restaurantName, startDate, meal, multiFile)
+        if (response.isSuccessful) {
+            Log.e("uploadingWeekMealPlans", "응답 데이터: ${response}")
+            Toast.makeText(context, "Successful", Toast.LENGTH_LONG).show()
+        } else {
+            Log.e("uploadingWeekMealPlans", " Error: $response")
+            Toast.makeText(context, "응답 데이터: ${response}", Toast.LENGTH_LONG).show()
+        }
     } catch (e: Exception) {
         Log.e("uploadingWeekMealPlans", "API 호출 실패: $e")
+        Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
     }
 }
 
@@ -224,8 +215,9 @@ suspend fun uploadingMealPlans(
         val response =
             Retrofit_Admin.createApiService(context)
                 .setMealPlans(restaurantName, dayOfWeek, jsonData)
-        Log.e("uploadingMealPlans", "응답 데이터: ${response.request()}")
-        error = response.timeout().toString()
+        Log.e("uploadingMealPlans", "응답 데이터: ${response}")
+        Toast.makeText(context, "Successful", Toast.LENGTH_LONG).show()
+        error = response.errorBody().toString()
     } catch (e: Exception) {
         Log.e("uploadingMealPlans", "API 호출 실패: $error")
         Toast.makeText(context, "전송 실패: 에러 코드 $error", Toast.LENGTH_SHORT).show()

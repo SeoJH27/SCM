@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -74,7 +74,6 @@
             <TextView
                 android:id="@+id/edit_operating_hours"
                 style="@style/AppTextBody"
-                tools:text="@string/edit_operating_hours_staff"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="20dp"
@@ -82,7 +81,8 @@
                 app:layout_constraintBottom_toBottomOf="@id/txt_operating_hours"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/txt_operating_hours"
-                app:layout_constraintTop_toTopOf="@id/txt_operating_hours" />
+                app:layout_constraintTop_toTopOf="@id/txt_operating_hours"
+                tools:text="@string/edit_operating_hours_staff" />
 
             <TextView
                 android:id="@+id/txt_notice"
@@ -252,6 +252,7 @@
                 android:elevation="4dp"
                 android:progressBackgroundTint="@color/white"
                 android:progressTint="@color/white"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -263,11 +264,11 @@
                 android:layout_height="0dp"
                 android:background="#63000000"
                 android:elevation="3dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="gone" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

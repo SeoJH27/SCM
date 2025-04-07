@@ -70,6 +70,18 @@
     <string name="str_change_week">요일 변경</string>
     <string name="str_enter_menu">메뉴 입력</string>
 
+
+    <!--                  Label: admin                  -->
+    <string name="str_hs1_breakfast_open_time_start">08:00</string>
+    <string name="str_hs1_breakfast_open_time_end">09:30</string>
+    <string name="str_hs1_lunch_open_time_start">11:00</string>
+    <string name="str_hs1_lunch_open_time_end">14:00</string>
+    <string name="str_hs1_dinner_open_time_start">17:00</string>
+    <string name="str_hs1_dinner_open_time_end">19:00</string>
+    <string name="str_staff_lunch_open_time_start">11:00</string>
+    <string name="str_staff_lunch_open_time_end">13:30</string>
+
+
     <!--                  Extention                  -->
     <string name="timePickerText">%1$s:%2$s</string>
 
@@ -91,5 +103,4 @@
     <string name="desc_detail_staff_tab">교직원 식당 메뉴 탭 바</string>
     <string name="desc_iv_camera_capture">카메라로 촬영한 이미지를 미리볼 수 있는 뷰</string>
     <string name="desc_btn_cache_image">마지막 저장된 사진을 볼 수 있는 버튼</string>
-
 </resources>

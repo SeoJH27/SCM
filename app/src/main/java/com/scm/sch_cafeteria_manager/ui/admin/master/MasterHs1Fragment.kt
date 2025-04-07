@@ -54,7 +54,6 @@ class MasterHs1Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // 서버로부터 data 받기
         viewLifecycleOwner.lifecycleScope.launch {
             fetchData()
@@ -238,7 +237,7 @@ class MasterHs1Fragment : Fragment() {
                     progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
                     binding.progressbarBackground.visibility = View.GONE
 
-                    if (response == "CREATED")
+                    if (response == "200")
                         Toast.makeText(requireContext(), "전송 완료", Toast.LENGTH_SHORT).show()
                     else
                         Toast.makeText(requireContext(), "전송 에러: $response", Toast.LENGTH_LONG).show()

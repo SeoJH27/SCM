@@ -22,11 +22,10 @@ object utilAll {
     val nonData = "정보 없음"
     val nonDate = "00:00"
 
-    const val BASE_URL = "http://192.168.1.24:8080"
+    const val BASE_URL = "http://124.60.137.10:8080"
     const val photoFilePath = "photo.jpg"
     const val weekFilePath = "week.jpg"
 
-    // TODO : 비었을 때 사용. 더 적절한 용어 필요함.
     val emptyMEAL = listOf(
         meals(blank, blank, blank, blank, blank)
     )
@@ -43,13 +42,14 @@ object utilAll {
     fun stringToBitmap(img: String?): Bitmap? {
         return try {
             val encodeByte = Base64.decode(img, Base64.DEFAULT)
+            val imgByte = Base64.decode(encodeByte, Base64.DEFAULT)
 
             if (isNull(encodeByte)) {
-                Log.e("utilAll", "stringToBitmap - Error $encodeByte")
+                Log.e("utilAll", "stringToBitmap - Error $imgByte")
                 return null
-            } else Log.e("utilAll", "stringToBitmap - size: ${encodeByte.size}")
+            } else Log.e("utilAll", "stringToBitmap - size: ${imgByte.size}")
 
-            val bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+            val bitmap = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.size)
 
             if (isNull(bitmap)) {
                 Log.e("utilAll", "stringToBitmap - Error $bitmap")
