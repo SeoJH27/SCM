@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -19,7 +18,6 @@ import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.MasterResponse
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.MealType
-import com.scm.sch_cafeteria_manager.data.ShareViewModel
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.requestDTO_master
 import com.scm.sch_cafeteria_manager.databinding.FragmentMasterHs1Binding
@@ -127,7 +125,7 @@ class MasterHs1Fragment : Fragment() {
                 txtDinnerOpenTimeEnd.text = nonDate
                 edDinnerMenu.setText(blank)
             } else if (jsonData!!.data.dailyMeal.dayOfWeek == args.manageDate.week) {
-                val meals = jsonData!!.data.dailyMeal.meals
+                val meals = jsonData!!.data.dailyMeal.meals!!
 
                 var menu: String?
                 if (meals.size > 0) {

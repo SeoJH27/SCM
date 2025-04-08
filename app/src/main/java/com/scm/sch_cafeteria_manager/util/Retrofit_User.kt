@@ -7,6 +7,7 @@ import com.scm.sch_cafeteria_manager.data.UserTodayMenuResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -25,9 +26,12 @@ interface ApiService_User {
     suspend fun getTodayMenu(@QueryMap request: Map<String, String>): Response<UserTodayMenuResponse>
 }
 
-object RetrofitClient_D {
+object RetrofitClient_User {
     fun createApiService(): ApiService_User {
         val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
             .connectTimeout(150, TimeUnit.SECONDS)
             .readTimeout(100, TimeUnit.SECONDS)
             .writeTimeout(100, TimeUnit.SECONDS)
@@ -57,13 +61,14 @@ suspend fun fetchDetailMenu(restaurantName: String, weekStartDate: String): User
     Log.e("fetchDetailMenu", "request=${request}")
 
     try {
-        val data = RetrofitClient_D.createApiService().getDetailMenu(request) // suspend 사용으로 awaitResponse 불필요
+        val data = RetrofitClient_User.createApiService()
+            .getDetailMenu(request) // suspend 사용으로 awaitResponse 불필요
 
         // 데이터 체크: 데이터가 없으면 null 반환
-        if (data.isSuccessful) {
-            value = data.body()
+        value = if (data.isSuccessful) {
+            data.body()
         } else {
-            value = null
+            null
         }
         Log.e("fetchDetailMenu", "응답 데이터: ${value?.data?.dailyMeals}")
     } catch (e: Exception) {
@@ -85,13 +90,13 @@ suspend fun fetchTodayMenu(dayOfWeek: String, weekStartDate: String): UserTodayM
     var value: UserTodayMenuResponse?
 
     try {
-        val data = RetrofitClient_D.createApiService()
-            .getTodayMenu(request) // suspend 사용으로 awaitResponse 불필요
+        val data = RetrofitClient_User.createApiService()
+            .getTodayMenu(request) // suspend 사용, awaitResponse 불필요
         // 데이터 체크: 데이터가 없으면 null 반환
-        if (data.isSuccessful) {
-            value = data.body()
+        value = if (data.isSuccessful) {
+            data.body()
         } else {
-            value = null
+            null
         }
         Log.e("fetchTodayMenu", "응답 데이터: ${value?.data}")
     } catch (e: Exception) {

@@ -42,20 +42,20 @@ class TodayMenuFragment : Fragment() {
         fetchData()
     }
 
-    // 네트워크 통신 -> lifecycleScope로 제어
+    // 네트워크 통신 -> lifecycleScope 제어
     private fun fetchData() {
         binding.progressbar.visibility = View.VISIBLE // UI 블로킹 시작
         binding.progressbarBackground.visibility = View.VISIBLE
         binding.progressbarBackground.isClickable = true
 
-        Log.e("TodayMenuFragment", "fetchData - prograssbar")
+        Log.e("TodayMenuFragment", "fetchData - progressbar")
         lifecycleScope.launch {
-            // Retrofit에서 데이터 가져오기
+            // Retrofit 데이터 가져오기
             try {
                 val today = LocalDate.now().dayOfWeek.name
                 val date = getWeekDates()
 
-                TODAYMENU = fetchTodayMenu(getWeekStartDate(date[0]), today)
+                TODAYMENU = fetchTodayMenu(today, getWeekStartDate(date[0]))
                 Log.e("DetailHs1Fragment", "fetchTodayMenu - TODAYMENU: ${TODAYMENU?.data}")
             } catch (e: Error) {
                 Log.e("TodayMenuFragment", "fetchData - e: $e")
@@ -69,7 +69,11 @@ class TodayMenuFragment : Fragment() {
             // 데이터를 불러올 수 없다는 알림과 함께 Back
             else {
                 Log.e("TodayMenuFragment", "fetchData - Network Error")
-                Toast.makeText(requireContext(), "학식이 제공되지 않는 날짜입니다.\n(${LocalDate.now()})", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "학식이 제공 되지 않는 날짜 입니다.\n(${LocalDate.now()})",
+                    Toast.LENGTH_SHORT
+                ).show()
                 backToHome()
             }
             binding.progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
@@ -88,21 +92,24 @@ class TodayMenuFragment : Fragment() {
         Log.e("TodayMenuFragment", "setTab")
 
         with(binding) {
-            tlTodayMemu.addTab(tlTodayMemu.newTab().setText(getStr(R.string.str_hs1)))
-//            tlTodayMemu.addTab(tlTodayMemu.newTab().setText(getStr(R.string.str_hs2)))
-//            tlTodayMemu.addTab(tlTodayMemu.newTab().setText(getStr(R.string.str_student_union)))
-            tlTodayMemu.addTab(tlTodayMemu.newTab().setText(getStr(R.string.str_staff)))
+            tlTodayMenu.addTab(tlTodayMenu.newTab().setText(getStr(R.string.str_hs1)))
+//            tlTodayMenu.addTab(tlTodayMenu.newTab().setText(getStr(R.string.str_hs2)))
+//            tlTodayMenu.addTab(tlTodayMenu.newTab().setText(getStr(R.string.str_student_union)))
+            tlTodayMenu.addTab(tlTodayMenu.newTab().setText(getStr(R.string.str_staff)))
         }
         if (checkData(TODAYMENU)) {
+            connectAdapter(CafeteriaData.HYANGSEOL1.cfName)
+        }
+        // init tab
+        else {
             Log.e("TodayMenuFragment", "setTab - checkData")
             backToHome()
-        } else // init tab
-            connectAdapter(CafeteriaData.HYANGSEOL1.cfName)
+        }
     }
 
     private fun viewClickListener() {
         with(binding) {
-            binding.tlTodayMemu.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            binding.tlTodayMenu.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     clickTab(tab)
                 }
@@ -114,38 +121,33 @@ class TodayMenuFragment : Fragment() {
                 }
             })
             txtInquiry.setOnClickListener {
-                setInquiryLink()
+                startActivity(setInquiryLink())
             }
         }
     }
 
     private fun clickTab(tab: TabLayout.Tab?) {
-        if (checkData(TODAYMENU)) {
-            Log.e("TodayMenuFragment", "setTab - clickTab")
-            backToHome()
-        }
         if (tab == null) {
-            Log.e("RecyclerView Tab Error", "Tab이 없음")
+            Log.e("RecyclerView Tab Error", "Tab 없음")
             return
         }
         when (tab.position) {
-            0 -> connectAdapter(CafeteriaData.HYANGSEOL1.cfName) // 향설 1관 Tab을 눌렸을 경우
+            0 -> connectAdapter(CafeteriaData.HYANGSEOL1.cfName) // 향설 1관 Tab 눌렸을 경우
 //            1 -> connectAdapter(getStr(R.string.str_hs2))
 //            2 -> connectAdapter(getStr(R.string.str_student_union))
-            1 -> connectAdapter(CafeteriaData.FACULTY.cfName) // 교직원 Tab을 눌렸을 경우
+            1 -> connectAdapter(CafeteriaData.FACULTY.cfName) // 교직원 Tab 눌렸을 경우
             else -> throw IllegalArgumentException("Invalid button config: $tab")
         }
     }
 
     private fun connectAdapter(cf: String) {
         Log.e("TodayMenuFragment", "connectAdapter: TODAYMENU = $TODAYMENU")
-
         if (checkData(TODAYMENU)) {
-            Log.e("TodayMenuFragment", "setTab - connectAdapter")
-            backToHome()
-        } else {
             binding.rvTodayMenu.adapter =
                 TodayMenuListAdapter(TODAYMENU!!, cf)
+        } else {
+            Log.e("TodayMenuFragment", "setTab - connectAdapter")
+            backToHome()
         }
     }
     // </editor-folder>
@@ -156,6 +158,7 @@ class TodayMenuFragment : Fragment() {
             backToHome()
         }
     }
+
     // 에러 시 뒤로가기
     private fun errorToBack() {
         Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_SHORT).show()
@@ -172,7 +175,7 @@ class TodayMenuFragment : Fragment() {
         return !(isNull(data) || isNull(data?.data))
     }
 
-    private fun getStr(id: Int): String{
+    private fun getStr(id: Int): String {
         return resources.getString(id)
     }
 

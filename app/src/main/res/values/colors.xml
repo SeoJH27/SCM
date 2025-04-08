@@ -18,11 +18,11 @@
     <color name="grey_300">#888888</color>
     <color name="grey_800">#586476</color>
 
-    <color name="darkred_100">#B78B8B</color>
-    <color name="darkred_400">#B83B3B</color>
+    <color name="dark_red_100">#B78B8B</color>
+    <color name="dark_red_400">#B83B3B</color>
 
-    <color name="bluesky_50">#D7E6FF</color>
-    <color name="bluesky_10">#E9F1FF</color>
+    <color name="blue_sky_50">#D7E6FF</color>
+    <color name="blue_sky_10">#E9F1FF</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

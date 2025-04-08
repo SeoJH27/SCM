@@ -1,6 +1,5 @@
 package com.scm.sch_cafeteria_manager.ui.login
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,22 +10,13 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.data.UserRole
 import com.scm.sch_cafeteria_manager.data.loginRequest
-import com.scm.sch_cafeteria_manager.data.loginResponse
 import com.scm.sch_cafeteria_manager.databinding.ActivityLoginBinding
 import com.scm.sch_cafeteria_manager.ui.admin.AdminActivity
 import com.scm.sch_cafeteria_manager.ui.home.HomeActivity
 import com.scm.sch_cafeteria_manager.util.PrefHelper_Login
-import com.scm.sch_cafeteria_manager.util.PrefHelper_Login.getIsLoggedIn
 import com.scm.sch_cafeteria_manager.util.PrefHelper_Login.saveTokens
-import com.scm.sch_cafeteria_manager.util.Retrofit_Login
 import com.scm.sch_cafeteria_manager.util.loginToAdmin
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.http.Body
 
 class LoginActivity : AppCompatActivity() {
 
@@ -55,11 +45,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun test() {
-        saveTokens(this@LoginActivity, "", "", UserRole.ADMIN1.name)
-        startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
-        finish()
-    }
+//    private fun test() {
+//        saveTokens(this@LoginActivity, "", "", UserRole.ADMIN1.name)
+//        startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
+//        finish()
+//    }
 
     private fun setLogin() {
         with(binding) {

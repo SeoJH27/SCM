@@ -1,5 +1,6 @@
 package com.scm.sch_cafeteria_manager.ui.admin
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -16,8 +17,6 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.core.net.toUri
-import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -25,33 +24,22 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.scm.sch_cafeteria_manager.R
-import com.scm.sch_cafeteria_manager.data.Cafeteria
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.NavAdmin
 import com.scm.sch_cafeteria_manager.data.ShareViewModel
 import com.scm.sch_cafeteria_manager.data.UserRole
 import com.scm.sch_cafeteria_manager.data.dOw
-import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.manageDate
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminBinding
 import com.scm.sch_cafeteria_manager.extentions.toEnumOrNull
 import com.scm.sch_cafeteria_manager.ui.home.HomeActivity
 import com.scm.sch_cafeteria_manager.util.PrefHelper_Login
-import com.scm.sch_cafeteria_manager.util.Retrofit_Login
-import com.scm.sch_cafeteria_manager.util.RotateBitmap
-import com.scm.sch_cafeteria_manager.util.cacheHelper.saveToCache
-import com.scm.sch_cafeteria_manager.util.fetchMealPlansMaster
 import com.scm.sch_cafeteria_manager.util.fetchWeekMealPlansMaster
 import com.scm.sch_cafeteria_manager.util.logoutToAdmin
-import com.scm.sch_cafeteria_manager.util.uploadingWeekMealPlans
-import com.scm.sch_cafeteria_manager.util.utilAll.dummyMEAL
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
-import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
 import com.scm.sch_cafeteria_manager.util.utilAll.stringToBitmap
-import com.scm.sch_cafeteria_manager.util.utilAll.weekFilePath
 import kotlinx.coroutines.launch
-import java.io.File
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -61,12 +49,12 @@ import kotlin.math.abs
 class AdminFragment : Fragment() {
     private var _binding: FragmentAdminBinding? = null
     private val binding get() = _binding!!
-    lateinit var viewModel: ShareViewModel
+    private lateinit var viewModel: ShareViewModel
 
-    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd")
+    private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd")
     private var authority = UserRole.ADMIN1 // 0: Master, 1: 총관리자, 2: 향설1관, 3: 교직원
     private var isTitleClick: Boolean = false // false: Hyangsheol1, true: faculty
-    val days = getWeekDates()
+    private val days = getWeekDates()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +62,7 @@ class AdminFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAdminBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(ShareViewModel::class.java)
+        viewModel = ViewModelProvider(this)[ShareViewModel::class.java]
         return binding.root
     }
 
@@ -86,17 +74,20 @@ class AdminFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.e("AdminFragment", "onResume")
-
-        if (viewModel.title == CafeteriaData.HYANGSEOL1.cfName) {
-            binding.txtAdminTitle.text = getStr(R.string.str_hs1)
-            isTitleClick = false
-            Log.e("AdminFragment", "isTitleClick = false")
-        } else if (viewModel.title == CafeteriaData.FACULTY.cfName) {
-            binding.txtAdminTitle.text = getStr(R.string.str_staff)
-            isTitleClick = true
-            Log.e("AdminFragment", "isTitleClick = true")
-        } else
-            Log.e("AdminFragment", "viewModel Error")
+        when (viewModel.title) {
+            CafeteriaData.HYANGSEOL1.cfName -> {
+                binding.txtAdminTitle.text = getStr(R.string.str_hs1)
+                isTitleClick = false
+                Log.e("AdminFragment", "isTitleClick = false")
+            }
+            CafeteriaData.FACULTY.cfName -> {
+                binding.txtAdminTitle.text = getStr(R.string.str_staff)
+                isTitleClick = true
+                Log.e("AdminFragment", "isTitleClick = true")
+            }
+            else ->
+                Log.e("AdminFragment", "viewModel Error")
+        }
         setLayout()
     }
 
@@ -377,8 +368,8 @@ class AdminFragment : Fragment() {
                         binding.progressbarBackground.visibility = View.GONE
 
                         if (response != null) {
-                            val Bitmap = stringToBitmap(response.data.weekMealImg)
-                            if (Bitmap != null) {
+                            val bitmap = stringToBitmap(response.data.weekMealImg)
+                            if (bitmap != null) {
                                 // TODO: 이미지 돌리기
 //                            val exif = ExifInterface()
 //                            val orientation = exif.getAttributeInt(
@@ -386,7 +377,7 @@ class AdminFragment : Fragment() {
 //                                ExifInterface.ORIENTATION_UNDEFINED
 //                            )
 //                            val b = RotateBitmap(bitmap, orientation)
-                                popUpImage(Bitmap)
+                                popUpImage(bitmap)
                             }
                         }
                     } catch (e: Exception) {
@@ -435,20 +426,26 @@ class AdminFragment : Fragment() {
         binding.btnUploadWeek.setOnClickListener {
             // date 값은 day(시작 일자)만 쓰임
             // true: week, false: dayOfWeek
-            if (viewModel.title == CafeteriaData.HYANGSEOL1.cfName)
-                navigateTo(
-                    NavAdmin.weekCamera.navName,
-                    manageDate(dOw.MONDAY.dName, day, CafeteriaData.HYANGSEOL1.cfName),
-                    true
-                )
-            else if (viewModel.title == CafeteriaData.FACULTY.cfName)
-                navigateTo(
-                    NavAdmin.weekCamera.navName,
-                    manageDate(dOw.MONDAY.dName, day, CafeteriaData.FACULTY.cfName),
-                    true
-                )
-            else {
-                Log.e("AdminFragment", "viewModel Error")
+            when (viewModel.title) {
+                CafeteriaData.HYANGSEOL1.cfName -> {
+                    navigateTo(
+                        NavAdmin.weekCamera.navName,
+                        manageDate(dOw.MONDAY.dName, day, CafeteriaData.HYANGSEOL1.cfName),
+                        true
+                    )
+                }
+
+                CafeteriaData.FACULTY.cfName -> {
+                    navigateTo(
+                        NavAdmin.weekCamera.navName,
+                        manageDate(dOw.MONDAY.dName, day, CafeteriaData.FACULTY.cfName),
+                        true
+                    )
+                }
+
+                else -> {
+                    Log.e("AdminFragment", "viewModel Error")
+                }
             }
         }
     }
@@ -565,6 +562,7 @@ class AdminFragment : Fragment() {
     }
 
     // 현재 저장된 이미지 팝업으로 띄우기
+    @SuppressLint("ClickableViewAccessibility")
     private fun popUpImage(file: Bitmap) {
         val builder = Dialog(requireContext())
         builder.requestWindowFeature(Window.FEATURE_NO_TITLE)

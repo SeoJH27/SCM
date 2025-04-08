@@ -3,26 +3,30 @@ package com.scm.sch_cafeteria_manager.ui.todaymenu
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.UserTodayMenuResponse
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
+import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
+import com.scm.sch_cafeteria_manager.util.utilAll.dummyMEAL
 import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
+import com.scm.sch_cafeteria_manager.util.utilAll.mealTypeToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.nonData
+import java.util.Objects.isNull
 
 class TodayMenuListAdapter(
     items: UserTodayMenuResponse, private val restaurantName: String,
 ) : RecyclerView.Adapter<TodayMenuItemViewHolder>() {
-
     private var MEAL: List<meals?> = emptyList()
 
     init {
         items.data.forEach {
             if (it.restaurantName == restaurantName) {
-                if (it.meals.isNullOrEmpty()) MEAL = emptyMEAL
-                else MEAL = it.meals
+                MEAL = it.dailyMeals.meals
                 Log.e("TodayMenuListAdapter", "init: $restaurantName - $MEAL")
                 return@forEach
             }
@@ -32,48 +36,46 @@ class TodayMenuListAdapter(
     // 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodayMenuItemViewHolder {
         Log.e("TodayMenuListAdapter", "onCreateViewHolder")
-        if (MEAL.isEmpty()) {
-            MEAL = emptyMEAL
-            Log.e("TodayMenuListAdapter", "onCreateViewHolder: 데이터가 없습니다. 할당: $MEAL")
-        }
         return TodayMenuItemViewHolder.from(parent)
     }
 
     //할당
     override fun onBindViewHolder(holder: TodayMenuItemViewHolder, position: Int) {
-        Log.e("TodayMenuListAdapter", "onBindViewHolder: ${MEAL.get(position)}")
         if (MEAL.isEmpty()) {
-            MEAL = emptyMEAL
             Log.e("TodayMenuListAdapter", "onBindViewHolder: 데이터가 없습니다. 할당: $MEAL")
-            holder.bind(MEAL.get(position))
+            holder.emptyBind()
         } else {
-            holder.bind(MEAL.get(position))
+            holder.bind(MEAL[position])
         }
     }
 
     override fun getItemCount(): Int {
-        return if (MEAL.isEmpty()) 1 else MEAL.size
+        Log.e("TodayMenuListAdapter", "getItemCount")
+        return if (MEAL.isEmpty() || MEAL == emptyMEAL) 1 else MEAL.size
     }
 }
 
 class TodayMenuItemViewHolder(
     private val binding: ItemDetailMenuBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-
     fun bind(meal: meals?) {
         Log.e("TodayMenuListAdapter", "bind")
-
         with(binding) {
-            if (meal != null) {
-                txtTime.text = meal.mealType
-            } else {
-                txtTime.setText(blank)
-            }
-            if (meal != null) {
-                txtMenu.text = meal.mainMenu?.replaceCommaToLinebreak()
-            } else {
-                txtMenu.setText(nonData)
-            }
+            txtTime.text = mealTypeToKorean(meal?.mealType)
+            txtMenu.text = combinMainAndSub(meal?.mainMenu, meal?.subMenu) ?: nonData
+        }
+    }
+
+    fun emptyBind() {
+        Log.e("TodayMenuListAdapter", "emptyBind")
+        with(binding) {
+            txtMenu.text = nonData
+            txtMenu.setTextColor(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    R.color.grey_300
+                )
+            )
         }
     }
 

@@ -48,9 +48,9 @@ class Admin1StaffWeekFragment : Fragment() {
     private var _binding: FragmentAdminStaffBinding? = null
     private val binding get() = _binding!!
     private val args: Admin1Hs1WeekFragmentArgs by navArgs()
-    lateinit var viewModel: ShareViewModel
+    private lateinit var viewModel: ShareViewModel
 
-    var jsonData: dataAdmin? = null
+    private var jsonData: dataAdmin? = null
 
 
     override fun onCreateView(
@@ -59,7 +59,7 @@ class Admin1StaffWeekFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAdminStaffBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(ShareViewModel::class.java)
+        viewModel = ViewModelProvider(this)[ShareViewModel::class.java]
         return binding.root
     }
 
@@ -79,7 +79,7 @@ class Admin1StaffWeekFragment : Fragment() {
         binding.progressbarBackground.isClickable = true
 
         lifecycleScope.launch {
-            // Retrofit에서 데이터 가져오기
+            // Retrofit 데이터 가져오기
             try {
                 jsonData = fetchMealPlans(
                     requireContext(),
@@ -114,7 +114,7 @@ class Admin1StaffWeekFragment : Fragment() {
     }
 
     // <editor-folder desc="setLayout">
-    // 대기 상태 데이터 불러오기
+    // 대기 상태 데이터 불러 오기
     private fun setLayout() {
         checkDay()
         setPhotoBtnClick()
@@ -136,14 +136,14 @@ class Admin1StaffWeekFragment : Fragment() {
         }
         // 데이터 상 날짜 더블 체크
         else if (jsonData!!.dailyMeal.dayOfWeek == args.manageDate.week) {
-            val meals = jsonData!!.dailyMeal.meals
+            val meals = jsonData!!.dailyMeal.meals!!
             with(binding) {
                 toolbarAdminHs1.title =
                     dayOfWeekToKorean(jsonData!!.dailyMeal.dayOfWeek) + " 수정"
-                if (meals.size > 0) {
+                if (meals.isNotEmpty()) {
                     // Lunch
-                    txtLunchOpenTimeStart.text = meals[0].operatingStartTime ?: nonDate
-                    txtLunchOpenTimeEnd.text = meals[0].operatingEndTime ?: nonDate
+                    txtLunchOpenTimeStart.text = meals[0].operatingStartTime
+                    txtLunchOpenTimeEnd.text = meals[0].operatingEndTime
                     val menu = combinMainAndSub(meals[0].mainMenu, meals[0].subMenu)
                     if (isNull(menu)) {
                         txtLunchMenu.text = nonDate
@@ -185,7 +185,7 @@ class Admin1StaffWeekFragment : Fragment() {
         binding.btnImage.setOnClickListener {
             val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
             if (file.exists()) {
-                popUpImage(file)
+                popUpImage()
             } else {
                 Toast.makeText(requireContext(), "찍은 사진이 없습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -209,7 +209,7 @@ class Admin1StaffWeekFragment : Fragment() {
                     Log.e("Admin1Hs1WeekFragment", "setTextSaveBtnClick - progressbar")
                     lifecycleScope.launch {
                         try {
-                            val response = uploadingMealPlans(
+                            uploadingMealPlans(
                                 requireContext(),
                                 CafeteriaData.HYANGSEOL1.cfName,
                                 getWeekStartDate(getWeekDates()[0]),
@@ -219,14 +219,14 @@ class Admin1StaffWeekFragment : Fragment() {
 //                                "Admin1Hs1WeekFragment",
 //                                "uploadingMealPlans - ${response?.message}"
 //                            )
-                            cancleImg()
+                            deleteImg()
                             backToHome()
                         } catch (e: Exception) {
                             Log.e(
                                 "Admin1Hs1WeekFragment",
                                 "uploadingMealPlans Exception: $e"
                             )
-                            cancleImg()
+                            deleteImg()
                             errorToBack()
                         }
                         Log.e("Admin1Hs1WeekFragment", "setTextSaveBtnClick")
@@ -265,7 +265,7 @@ class Admin1StaffWeekFragment : Fragment() {
                 return body
             }
         } else {
-            Toast.makeText(requireContext(), "사진이 포함되어있지 않습니다.", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "사진이 포함 되어 있지 않습니다.", Toast.LENGTH_LONG).show()
             return null
         }
     }
@@ -273,13 +273,13 @@ class Admin1StaffWeekFragment : Fragment() {
     private fun getImg(): String {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
         val base64Image = fileToBase64(file)
-        return base64Image;
+        return base64Image
     }
     // </editor-folder>
 
     // <editor-folder desc="Image">
     // 찍은 사진 팝업으로 보여주기
-    private fun popUpImage(file: File) {
+    private fun popUpImage() {
         //TODO: 여백 누르면 사라지게 만들기
         val img = jsonData?.weekMealImg
         Log.e("popUpImage", "$img")
@@ -306,7 +306,7 @@ class Admin1StaffWeekFragment : Fragment() {
         return file.exists()
     }
     // 이미지 삭제
-    private fun cancleImg() {
+    private fun deleteImg() {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
         file.delete()
     }

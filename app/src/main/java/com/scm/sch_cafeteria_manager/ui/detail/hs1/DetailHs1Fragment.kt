@@ -92,11 +92,9 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     clickTab(tab)
                 }
-
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                     clickTab(tab)
                 }
-
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                     connectAdapter(dOw.MONDAY.dName)
                 }
@@ -105,7 +103,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
                 setLocationHyperLink()
             }
             txtInquiry.setOnClickListener {
-                setInquiryLink()
+                startActivity(setInquiryLink())
             }
         }
     }
@@ -145,7 +143,6 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
             }
         }
     }
-
     // </editor-folder>
 
     private fun clickTab(tab: TabLayout.Tab?) {
@@ -154,7 +151,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
             backToHome()
         }
         if ((tab == null)) {
-            Log.e("RecyclerView Tab Error", "Tab이 없음")
+            Log.e("RecyclerView Tab Error", "Tab 없음")
             return
         }
         when (tab.position) {

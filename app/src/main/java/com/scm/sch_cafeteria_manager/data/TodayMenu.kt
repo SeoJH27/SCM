@@ -5,11 +5,18 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class TodayMenu(
     val weekStartDate: String,
-    val restaurants: List<Cafeteria>
+    val restaurants: List<todayRes>
 ): Parcelable
 
 @Parcelize
 data class Cafeteria(
     val restaurantName: String,
-    val meals: List<meals?>
+    val meals: List<meals>
+): Parcelable
+
+@Parcelize
+data class todayRes(
+    val restaurantName: String,
+    val dailyMeals: dailyMeals,
+    val active: Boolean
 ): Parcelable

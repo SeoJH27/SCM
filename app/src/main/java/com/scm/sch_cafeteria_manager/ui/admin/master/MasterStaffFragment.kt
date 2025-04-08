@@ -113,7 +113,7 @@ class MasterStaffFragment : Fragment() {
                 edLunchMenu.setText(blank)
 
             } else if (data!!.data.dailyMeal.dayOfWeek == args.manageDate.week) {
-                val meals = data!!.data.dailyMeal.meals
+                val meals = data!!.data.dailyMeal.meals!!
 
                 val menu: String?
                 if (meals.size > 0) {

@@ -25,7 +25,7 @@ class DetailStaffListAdapter(
     init {
         items.data.dailyMeals.forEach {
             if (it.dayOfWeek == dayOfWeek) {
-                MEAL = it.meals.ifEmpty { emptyMEAL }
+                MEAL = it.meals
                 Log.e("DetailStaffListAdapter", "init - $MEAL")
                 return@forEach
             }
@@ -35,23 +35,17 @@ class DetailStaffListAdapter(
     // 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailStaffItemViewHolder {
         Log.e("DetailStaffListAdapter", "onCreateViewHolder")
-        if (MEAL.isEmpty()) {
-            MEAL = emptyMEAL
-            Log.e("DetailStaffListAdapter", "onCreateViewHolder: 데이터가 없습니다. 할당: $MEAL")
-        }
-
         return DetailStaffItemViewHolder.from(parent)
     }
 
     //할당
     override fun onBindViewHolder(holder: DetailStaffItemViewHolder, position: Int) {
-        Log.e("DetailStaffListAdapter", "onBindViewHolder: ${MEAL.get(position)}")
         if (MEAL.isEmpty()) {
-            MEAL = emptyMEAL
-            Log.e("DetailStaffListAdapter", "onBindViewHolder: 데이터가 없습니다. 할당: $MEAL")
-            holder.bind(MEAL.get(position))
+            Log.e("DetailStaffListAdapter",
+                "onBindViewHolder: 데이터가 없습니다. 할당: $MEAL")
+            holder.emptyBind()
         } else {
-            holder.bind(MEAL.get(position))
+            holder.bind(MEAL[position])
         }
     }
 
@@ -66,30 +60,22 @@ class DetailStaffItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(meal: meals?) {
         Log.e("DetailStaffListAdapter", "bind")
-
         with(binding) {
-            if (meal?.mealType != null) {
-                txtTime.text = mealTypeToKorean(meal.mealType)
-            } else {
-                txtTime.text = nonData
-                txtTime.setTextColor(
-                    ContextCompat.getColor(
-                        binding.root.context,
-                        R.color.grey_300
-                    )
+            txtTime.text = mealTypeToKorean(meal!!.mealType)
+            txtMenu.text = combinMainAndSub(meal.mainMenu, meal.subMenu) ?: nonData
+        }
+    }
+
+    fun emptyBind() {
+        Log.e("DetailStaffListAdapter", "emptyBind")
+        with(binding) {
+            txtMenu.text = nonData
+            txtMenu.setTextColor(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    R.color.grey_300
                 )
-            }
-            val menu = combinMainAndSub(meal?.mainMenu, meal?.subMenu) ?: nonData
-            if (isNull(menu)) {
-                txtMenu.text = nonData
-                txtMenu.setTextColor(
-                    ContextCompat.getColor(
-                        binding.root.context,
-                        R.color.grey_300
-                    )
-                )
-            } else
-                txtMenu.text = menu
+            )
         }
     }
 
@@ -98,9 +84,7 @@ class DetailStaffItemViewHolder(
             Log.e("DetailHs1ListAdapter", "from")
             return DetailStaffItemViewHolder(
                 ItemDetailMenuBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
         }

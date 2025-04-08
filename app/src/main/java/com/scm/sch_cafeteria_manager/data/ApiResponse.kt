@@ -4,7 +4,6 @@ import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
-import java.io.File
 
 // 디테일 API Response
 @JsonClass(generateAdapter = true)
@@ -18,7 +17,7 @@ data class UserDetailResponse(
 data class UserTodayMenuResponse(
     val status: String,
     val message: String,
-    val data: List<Cafeteria>
+    val data: List<todayRes>
 )
 
 // fetch시 사용하는 AdminResponse
@@ -54,7 +53,7 @@ data class dataAdmin(
 @Parcelize
 data class dailyMeal(
     @Json(name = "dayOfWeek") val dayOfWeek: String,
-    @Json(name = "meals") val meals: List<meals>
+    @Json(name = "meals") val meals: List<meals>?
 ): Parcelable
 
 

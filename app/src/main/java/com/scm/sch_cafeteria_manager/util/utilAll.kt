@@ -1,7 +1,9 @@
 package com.scm.sch_cafeteria_manager.util
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Base64
 import android.util.Log
 import com.scm.sch_cafeteria_manager.data.MealType
@@ -31,11 +33,14 @@ object utilAll {
     )
 
     val dummyMEAL = listOf(
-        meals(MealType.BREAKFAST.myName, "00:00", "00:00", "테스트", "테스트")
+        meals("", "00:00", "00:00", "정보 없음", "")
     )
 
-    fun setInquiryLink() {
-        // TODO: 카카오톡 오픈채팅방 하이퍼링크
+    fun setInquiryLink(): Intent {
+        Log.e("DetailHs1Fragment", "setLocationHyperLink")
+        // 카카오톡 오픈채팅방 하이퍼링크
+        val url = "https://open.kakao.com/o/sutXu9ph"
+        return Intent(Intent.ACTION_VIEW, Uri.parse(url))
     }
 
     // String to Bitmap

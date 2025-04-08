@@ -139,7 +139,7 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
                 setLocationHyperLink()
             }
             txtInquiry.setOnClickListener {
-                setInquiryLink()
+                startActivity(setInquiryLink())
             }
         }
     }

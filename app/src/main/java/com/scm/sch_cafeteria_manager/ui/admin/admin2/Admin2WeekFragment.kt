@@ -143,7 +143,7 @@ class Admin2WeekFragment: Fragment() {
         }
         // 데이터 상 날짜 더블 체크
         else if (jsonData!!.dailyMeal.dayOfWeek == args.manageDate.week) {
-            val meals = jsonData!!.dailyMeal.meals
+            val meals = jsonData!!.dailyMeal.meals!!
             with(binding) {
                 toolbarAdminHs1.title =
                     dayOfWeekToKorean(jsonData!!.dailyMeal.dayOfWeek) + " 수정"
