@@ -12,6 +12,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -45,13 +46,13 @@ import java.io.File
 import java.util.Objects.isNull
 
 // 향설 1관 관리자
-class Admin2WeekFragment: Fragment() {
+class Admin2WeekFragment : Fragment() {
     private var _binding: FragmentAdminHs1Binding? = null
     private val binding get() = _binding!!
     private val args: Admin2WeekFragmentArgs by navArgs()
-    lateinit var viewModel: ShareViewModel
+    private lateinit var viewModel: ShareViewModel
 
-    var jsonData: dataAdmin? = null
+    private var jsonData: dataAdmin? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +60,7 @@ class Admin2WeekFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAdminHs1Binding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(ShareViewModel::class.java)
+        viewModel = ViewModelProvider(this)[ShareViewModel::class.java]
         return binding.root
     }
 
@@ -86,11 +87,11 @@ class Admin2WeekFragment: Fragment() {
                     args.manageDate.week,
                     getWeekStartDate(args.manageDate.day)
                 )?.data
-                Log.e("Admin2WeekFragment", "fetchAdmin1Hs1Menu: ${jsonData?.dailyMeal}")
+                Log.e("Admin2WeekFragment", "fetchAdmin2Hs1Menu: ${jsonData?.dailyMeal}")
             } catch (e: Exception) {
                 Log.e(
                     "Admin2WeekFragment",
-                    "fetchAdmin1Hs1Menu Exception: $e, ${getWeekStartDate(args.manageDate.week)}, ${args.manageDate.day}"
+                    "fetchAdmin2Hs1Menu Exception: $e, ${getWeekStartDate(args.manageDate.week)}, ${args.manageDate.day}"
                 )
                 errorToBack()
             }
@@ -119,15 +120,17 @@ class Admin2WeekFragment: Fragment() {
         setPhotoBtnClick()
         setTimeChanger()
         setTextSaveBtnClick()
-        setCheckImage()
+//        setCheckImage()
         setBack()
     }
 
     // 한 번 더 해당 요일이 맞는지 체크 후 Layout 세팅
     private fun checkDay() {
-        // 데이터가 아예 없는 경우
-        if (jsonData?.dailyMeal == null) {
-            with(binding) {
+        with(binding) {
+            toolbarAdminHs1.title =
+                dayOfWeekToKorean(jsonData!!.dailyMeal.dayOfWeek) + " 수정"
+            // 데이터가 아예 없는 경우
+            if (jsonData?.dailyMeal == null) {
                 txtBreakfastOpenTimeStart.text = nonDate
                 txtBreakfastOpenTimeEnd.text = nonDate
                 txtBreakfastMenu.text = blank
@@ -140,18 +143,14 @@ class Admin2WeekFragment: Fragment() {
                 txtDinnerOpenTimeEnd.text = nonDate
                 txtDinnerMenu.text = blank
             }
-        }
-        // 데이터 상 날짜 더블 체크
-        else if (jsonData!!.dailyMeal.dayOfWeek == args.manageDate.week) {
-            val meals = jsonData!!.dailyMeal.meals!!
-            with(binding) {
-                toolbarAdminHs1.title =
-                    dayOfWeekToKorean(jsonData!!.dailyMeal.dayOfWeek) + " 수정"
+            // 데이터 상 날짜 더블 체크
+            else if (jsonData!!.dailyMeal.dayOfWeek == args.manageDate.week) {
+                val meals = jsonData!!.dailyMeal.meals!!
                 var menu: String?
-                if (meals.size > 0) {
+                if (meals.isNotEmpty()) {
                     // Breakfast
-                    txtBreakfastOpenTimeStart.text = meals[0].operatingStartTime ?: nonDate
-                    txtBreakfastOpenTimeEnd.text = meals[0].operatingEndTime ?: nonDate
+                    txtBreakfastOpenTimeStart.text = meals[0].operatingStartTime
+                    txtBreakfastOpenTimeEnd.text = meals[0].operatingEndTime
                     menu = combinMainAndSub(meals[0].mainMenu, meals[0].subMenu)
                     if (isNull(menu)) {
                         txtBreakfastMenu.text = nonDate
@@ -167,8 +166,8 @@ class Admin2WeekFragment: Fragment() {
                 }
                 if (meals.size > 1) {
                     // Lunch
-                    txtLunchOpenTimeStart.text = meals[1].operatingStartTime ?: nonDate
-                    txtLunchOpenTimeEnd.text = meals[1].operatingEndTime ?: nonDate
+                    txtLunchOpenTimeStart.text = meals[1].operatingStartTime
+                    txtLunchOpenTimeEnd.text = meals[1].operatingEndTime
                     menu = combinMainAndSub(meals[1].mainMenu, meals[1].subMenu)
                     if (isNull(menu)) {
                         txtLunchMenu.text = nonDate
@@ -184,8 +183,8 @@ class Admin2WeekFragment: Fragment() {
                 }
                 if (meals.size > 2) {
                     // Dinner
-                    txtDinnerOpenTimeStart.text = meals[2].operatingStartTime ?: nonDate
-                    txtDinnerOpenTimeEnd.text = meals[2].operatingEndTime ?: nonDate
+                    txtDinnerOpenTimeStart.text = meals[2].operatingStartTime
+                    txtDinnerOpenTimeEnd.text = meals[2].operatingEndTime
                     menu = combinMainAndSub(meals[2].mainMenu, meals[2].subMenu)
                     if (isNull(menu)) {
                         txtDinnerMenu.text = nonDate
@@ -199,7 +198,6 @@ class Admin2WeekFragment: Fragment() {
                         txtDinnerMenu.text = menu
                     }
                 }
-
             }
         }
     }
@@ -207,7 +205,12 @@ class Admin2WeekFragment: Fragment() {
     // 촬영하여 등록 버튼 누를 시 -> 촬영
     private fun setPhotoBtnClick() {
         binding.btnUploadWeek.setOnClickListener {
-            findNavController().navigate(Admin2WeekFragmentDirections.admin2ToCamera( false, args.manageDate))
+            findNavController().navigate(
+                Admin2WeekFragmentDirections.admin2ToCamera(
+                    false,
+                    args.manageDate
+                )
+            )
         }
     }
 
@@ -235,17 +238,17 @@ class Admin2WeekFragment: Fragment() {
         }
     }
 
-    // 캐시 이미지 체크
-    private fun setCheckImage() {
-        binding.btnImage.setOnClickListener {
-            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-            if (file.exists()) {
-                popUpImage(file)
-            } else {
-                Toast.makeText(requireContext(), "찍은 사진이 없습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+//    // 캐시 이미지 체크
+//    private fun setCheckImage() {
+//        binding.btnImage.setOnClickListener {
+//            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+//            if (file.exists()) {
+//                popUpImage(file)
+//            } else {
+//                Toast.makeText(requireContext(), "찍은 사진이 없습니다.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
     // </editor-folder>
 
     // <editor-folder desc="Save">
@@ -268,14 +271,14 @@ class Admin2WeekFragment: Fragment() {
                                 getWeekStartDate(getWeekDates()[0]),
                                 menu
                             )
-                            cancleImg()
+                            cancelImg()
                             backToHome()
                         } catch (e: Exception) {
                             Log.e(
                                 "Admin2WeekFragment",
                                 "uploadingMealPlans Exception: $e"
                             )
-                            cancleImg()
+                            cancelImg()
                             errorToBack()
                         }
                         Log.e("Admin2WeekFragment", "setTextSaveBtnClick")
@@ -285,6 +288,7 @@ class Admin2WeekFragment: Fragment() {
             }
         }
     }
+
     // 전송을 위한 데이터 가져오기 TODO: 다시 재정리
     private fun getMenu(): requestDTO_dayOfWeek? {
         if (checkImg()) {
@@ -340,27 +344,27 @@ class Admin2WeekFragment: Fragment() {
 
     // <editor-folder desc="Image">
     // 찍은 사진 팝업으로 보여주기
-    private fun popUpImage(file: File) {
-        //TODO: 여백 누르면 사라지게 만들기
-        val img = jsonData?.weekMealImg
-        Log.e("popUpImage", "$img")
-
-        val builder = Dialog(requireContext())
-        builder.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        builder.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        builder.setOnDismissListener { //nothing
-        }
-        val imageView = ImageView(requireContext())
-        imageView.setImageBitmap(stringToBitmap(img))
-
-        builder.addContentView(
-            imageView, RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        )
-        builder.show()
-    }
+//    private fun popUpImage(file: File) {
+//        //TODO: 여백 누르면 사라지게 만들기
+//        val img = jsonData?.weekMealImg
+//        Log.e("popUpImage", "$img")
+//
+//        val builder = Dialog(requireContext())
+//        builder.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        builder.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        builder.setOnDismissListener { //nothing
+//        }
+//        val imageView = ImageView(requireContext())
+//        imageView.setImageBitmap(stringToBitmap(img))
+//
+//        builder.addContentView(
+//            imageView, RelativeLayout.LayoutParams(
+//                ViewGroup.LayoutParams.MATCH_PARENT,
+//                ViewGroup.LayoutParams.MATCH_PARENT
+//            )
+//        )
+//        builder.show()
+//    }
 
     // 이미지 체크
     private fun checkImg(): Boolean {
@@ -369,7 +373,7 @@ class Admin2WeekFragment: Fragment() {
     }
 
     // 이미지 삭제
-    private fun cancleImg() {
+    private fun cancelImg() {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
         file.delete()
     }
@@ -394,6 +398,9 @@ class Admin2WeekFragment: Fragment() {
                     backToHome()
                 }
                 .show()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback {
+            findNavController().navigateUp()
         }
     }
 

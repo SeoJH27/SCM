@@ -17,6 +17,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -671,6 +672,9 @@ class AdminFragment : Fragment() {
     private fun setBackToHome() {
         binding.toolbarAdmin.setNavigationOnClickListener {
             backDialog()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback {
+            backToHome()
         }
     }
 

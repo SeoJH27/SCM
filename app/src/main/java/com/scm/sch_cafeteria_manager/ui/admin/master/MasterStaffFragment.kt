@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -116,7 +117,7 @@ class MasterStaffFragment : Fragment() {
                 val meals = data!!.data.dailyMeal.meals!!
 
                 val menu: String?
-                if (meals.size > 0) {
+                if (meals.isNotEmpty()) {
                     txtLunchOpenTimeStart.text = meals[0].operatingStartTime
                     txtLunchOpenTimeEnd.text = meals[0].operatingEndTime
                     edLunchMenu.setText(meals[0].mainMenu)
@@ -335,6 +336,9 @@ class MasterStaffFragment : Fragment() {
                     backToHome()
                 }
                 .show()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback {
+            findNavController().navigateUp()
         }
     }
 

@@ -12,6 +12,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -64,7 +65,6 @@ class Admin1Hs1WeekFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // 서버로부터 data 받기
         viewLifecycleOwner.lifecycleScope.launch {
             fetchData()
@@ -119,7 +119,7 @@ class Admin1Hs1WeekFragment : Fragment() {
         setPhotoBtnClick()
         setTimeChanger()
         setTextSaveBtnClick()
-        setCheckImage()
+//        setCheckImage()
         setBack()
     }
 
@@ -241,16 +241,16 @@ class Admin1Hs1WeekFragment : Fragment() {
     }
 
     // 캐시 이미지 체크
-    private fun setCheckImage() {
-        binding.btnImage.setOnClickListener {
-            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-            if (file.exists()) {
-                popUpImage()
-            } else {
-                Toast.makeText(requireContext(), "찍은 사진이 없습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+//    private fun setCheckImage() {
+//        binding.btnImage.setOnClickListener {
+//            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+//            if (file.exists()) {
+//                popUpImage()
+//            } else {
+//                Toast.makeText(requireContext(), "찍은 사진이 없습니다.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
     // </editor-folder>
 
     // <editor-folder desc="Save">
@@ -403,6 +403,9 @@ class Admin1Hs1WeekFragment : Fragment() {
                     backToHome()
                 }
                 .show()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback {
+            findNavController().navigateUp()
         }
     }
 

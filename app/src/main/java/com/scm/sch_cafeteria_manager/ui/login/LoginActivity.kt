@@ -14,7 +14,7 @@ import com.scm.sch_cafeteria_manager.databinding.ActivityLoginBinding
 import com.scm.sch_cafeteria_manager.ui.admin.AdminActivity
 import com.scm.sch_cafeteria_manager.ui.home.HomeActivity
 import com.scm.sch_cafeteria_manager.util.PrefHelper_Login
-import com.scm.sch_cafeteria_manager.util.PrefHelper_Login.saveTokens
+import com.scm.sch_cafeteria_manager.util.PrefHelper_Login.getIsLoggedIn
 import com.scm.sch_cafeteria_manager.util.loginToAdmin
 import kotlinx.coroutines.launch
 
@@ -30,12 +30,12 @@ class LoginActivity : AppCompatActivity() {
 
         with(binding) {
             // 로그인 체크
-//            Log.e("LoginActivity", "isAdminLoggedIn prefs Check")
-//            if (getIsLoggedIn(this@LoginActivity)) {
-//                Log.e("LoginActivity", "isAdminLoggedIn prefs Check - true")
-//                startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
-//                finish()
-//            }
+            Log.e("LoginActivity", "isAdminLoggedIn prefs Check")
+            if (getIsLoggedIn(this@LoginActivity)) {
+                Log.e("LoginActivity", "isAdminLoggedIn prefs Check - true")
+                startActivity(Intent(this@LoginActivity, AdminActivity::class.java))
+                finish()
+            }
             btnLoginConfirm.setOnClickListener {
 //                test()
                 setLogin()

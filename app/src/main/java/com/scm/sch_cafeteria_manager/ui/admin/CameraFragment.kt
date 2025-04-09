@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -304,6 +305,9 @@ class CameraFragment : Fragment() {
                     cancleBackToHome()
                 }
                 .show()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback {
+            findNavController().navigateUp()
         }
     }
 

@@ -15,7 +15,7 @@
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar_admin_hs1"
+                android:id="@+id/toolbar_admin_staff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
@@ -47,19 +47,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageButton
-                    android:id="@+id/btn_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/desc_btn_cache_image"
-                    android:src="@drawable/ic_image"
-                    app:backgroundTint="@color/grey_100"
-                    app:layout_constraintBottom_toTopOf="@id/background_view"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btn_capture_image"
-                    app:layout_constraintTop_toTopOf="parent" />
-
+                <!--
+                                <ImageButton
+                                    android:id="@+id/btn_image"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:contentDescription="@string/desc_btn_cache_image"
+                                    android:src="@drawable/ic_image"
+                                    app:backgroundTint="@color/grey_100"
+                                    app:layout_constraintBottom_toTopOf="@id/background_view"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@id/btn_capture_image"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                -->
                 <View
                     android:id="@+id/background_view"
                     android:layout_width="0dp"

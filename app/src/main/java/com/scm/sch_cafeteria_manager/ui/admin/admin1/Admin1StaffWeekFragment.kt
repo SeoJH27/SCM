@@ -12,6 +12,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -120,7 +121,7 @@ class Admin1StaffWeekFragment : Fragment() {
         setPhotoBtnClick()
         setTimeChanger()
         setTextSaveBtnClick()
-        setCheckImage()
+//        setCheckImage()
         setBack()
     }
 
@@ -138,7 +139,7 @@ class Admin1StaffWeekFragment : Fragment() {
         else if (jsonData!!.dailyMeal.dayOfWeek == args.manageDate.week) {
             val meals = jsonData!!.dailyMeal.meals!!
             with(binding) {
-                toolbarAdminHs1.title =
+                toolbarAdminStaff.title =
                     dayOfWeekToKorean(jsonData!!.dailyMeal.dayOfWeek) + " 수정"
                 if (meals.isNotEmpty()) {
                     // Lunch
@@ -181,16 +182,16 @@ class Admin1StaffWeekFragment : Fragment() {
     }
 
     // 캐시 이미지 체크
-    private fun setCheckImage() {
-        binding.btnImage.setOnClickListener {
-            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-            if (file.exists()) {
-                popUpImage()
-            } else {
-                Toast.makeText(requireContext(), "찍은 사진이 없습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+//    private fun setCheckImage() {
+//        binding.btnImage.setOnClickListener {
+//            val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
+//            if (file.exists()) {
+//                popUpImage()
+//            } else {
+//                Toast.makeText(requireContext(), "찍은 사진이 없습니다.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
     // </editor-folder>
 
     // <editor-folder desc="Save">
@@ -320,7 +321,7 @@ class Admin1StaffWeekFragment : Fragment() {
     // <editor-folder desc="setBack">
     // 뒤로가기 버튼
     fun setBack() {
-        binding.toolbarAdminHs1.setNavigationOnClickListener {
+        binding.toolbarAdminStaff.setNavigationOnClickListener {
             // 저장을 누르지 않았을 경우 경고 후 Back
             MaterialAlertDialogBuilder(requireContext())
                 .setMessage("뒤로가기 시 저장이 되지 않습니다.\n관리자 홈 화면으로 돌아가시겠습니까?")
@@ -331,6 +332,9 @@ class Admin1StaffWeekFragment : Fragment() {
                     backToHome()
                 }
                 .show()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback {
+            findNavController().navigateUp()
         }
     }
 

@@ -38,7 +38,7 @@ object utilAll {
 
     fun setInquiryLink(): Intent {
         Log.e("DetailHs1Fragment", "setLocationHyperLink")
-        // 카카오톡 오픈채팅방 하이퍼링크
+        // 카카오톡 오픈 채팅방 하이퍼링크
         val url = "https://open.kakao.com/o/sutXu9ph"
         return Intent(Intent.ACTION_VIEW, Uri.parse(url))
     }

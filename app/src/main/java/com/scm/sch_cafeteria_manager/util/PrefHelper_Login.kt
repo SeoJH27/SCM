@@ -25,10 +25,10 @@ object PrefHelper_Login {
         return prefs.getString("refreshToken", null)
     }
 
-//    fun getIsLoggedIn(context: Context): Boolean{
-//        val prefs = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-//        return prefs.getBoolean("isLoggedIn", false)
-//    }
+    fun getIsLoggedIn(context: Context): Boolean{
+        val prefs = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        return prefs.getBoolean("isLoggedIn", false)
+    }
 
     fun getAuthority(context: Context): String?{
         val prefs = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)

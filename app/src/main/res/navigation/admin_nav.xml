@@ -12,32 +12,27 @@
         tools:layout="@layout/fragment_admin">
         <action
             android:id="@+id/to_admin1Hs1"
-            app:destination="@id/admin1Hs1WeekFragment"
-            app:popUpTo="@id/fragment_admin" />
+            app:destination="@id/admin1Hs1WeekFragment" />
         <action
             android:id="@+id/to_admin1Staff"
-            app:destination="@id/admin1StaffWeekFragment"
-            app:popUpTo="@id/fragment_admin" />
+            app:destination="@id/admin1StaffWeekFragment" />
         <action
             android:id="@+id/to_admin2"
-            app:destination="@id/admin2WeekFragment"
-            app:popUpTo="@id/fragment_admin" />
+            app:destination="@id/admin2WeekFragment" />
         <action
             android:id="@+id/to_admin3"
             app:destination="@id/admin3WeekFragment"
-            app:popUpTo="@id/fragment_admin" />
+            app:popUpTo="@id/fragment_admin"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/to_masterHs1"
-            app:destination="@id/masterHs1WeekFragment"
-            app:popUpTo="@id/fragment_admin" />
+            app:destination="@id/masterHs1WeekFragment" />
         <action
             android:id="@+id/to_masterStaff"
-            app:destination="@id/masterStaffWeekFragment"
-            app:popUpTo="@id/fragment_admin" />
+            app:destination="@id/masterStaffWeekFragment" />
         <action
             android:id="@+id/to_camera"
-            app:destination="@id/fragment_camera"
-            app:popUpTo="@id/fragment_admin" />
+            app:destination="@id/fragment_camera" />
     </fragment>
 
     <fragment
@@ -50,8 +45,7 @@
             app:argType="com.scm.sch_cafeteria_manager.data.manageDate" />
         <action
             android:id="@+id/admin1Hs1_to_camera"
-            app:destination="@id/fragment_camera"
-            app:popUpTo="@id/admin1Hs1WeekFragment"/>
+            app:destination="@id/fragment_camera"/>
     </fragment>
     <fragment
         android:id="@+id/admin2WeekFragment"
@@ -91,7 +85,6 @@
             android:id="@+id/admin1Staff_to_camera"
             app:destination="@id/fragment_camera"
             app:popUpTo="@id/admin1StaffWeekFragment"/>
-
     </fragment>
     <fragment
         android:id="@+id/masterHs1WeekFragment"

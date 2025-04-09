@@ -48,17 +48,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageButton
-                    android:id="@+id/btn_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/desc_btn_cache_image"
-                    android:src="@drawable/ic_image"
-                    app:backgroundTint="@color/grey_100"
-                    app:layout_constraintBottom_toTopOf="@id/background_view"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btn_upload_week"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!--                <ImageButton-->
+                <!--                    android:id="@+id/btn_image"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:contentDescription="@string/desc_btn_cache_image"-->
+                <!--                    android:src="@drawable/ic_image"-->
+                <!--                    app:backgroundTint="@color/grey_100"-->
+                <!--                    app:layout_constraintBottom_toTopOf="@id/background_view"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintStart_toEndOf="@id/btn_upload_week"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_change_week"
