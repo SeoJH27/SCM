@@ -130,8 +130,6 @@ class Admin1StaffWeekFragment : Fragment() {
         // 데이터가 아예 없는 경우
         if (jsonData?.dailyMeal == null) {
             with(binding) {
-                txtLunchOpenTimeStart.text = nonDate
-                txtLunchOpenTimeEnd.text = nonDate
                 txtLunchMenu.text = blank
             }
         }
@@ -280,27 +278,27 @@ class Admin1StaffWeekFragment : Fragment() {
 
     // <editor-folder desc="Image">
     // 찍은 사진 팝업으로 보여주기
-    private fun popUpImage() {
-        //TODO: 여백 누르면 사라지게 만들기
-        val img = jsonData?.weekMealImg
-        Log.e("popUpImage", "$img")
-
-        val builder = Dialog(requireContext())
-        builder.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        builder.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        builder.setOnDismissListener { //nothing
-        }
-        val imageView = ImageView(requireContext())
-//        imageView.setImageURI(file.toUri())
-        imageView.setImageBitmap(stringToBitmap(img))
-        builder.addContentView(
-            imageView, RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        )
-        builder.show()
-    }
+//    private fun popUpImage() {
+//        //TODO: 여백 누르면 사라지게 만들기
+//        val img = jsonData?.weekMealImg
+//        Log.e("popUpImage", "$img")
+//
+//        val builder = Dialog(requireContext())
+//        builder.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        builder.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        builder.setOnDismissListener { //nothing
+//        }
+//        val imageView = ImageView(requireContext())
+////        imageView.setImageURI(file.toUri())
+//        imageView.setImageBitmap(stringToBitmap(img))
+//        builder.addContentView(
+//            imageView, RelativeLayout.LayoutParams(
+//                ViewGroup.LayoutParams.MATCH_PARENT,
+//                ViewGroup.LayoutParams.MATCH_PARENT
+//            )
+//        )
+//        builder.show()
+//    }
     // 이미지 체크
     private fun checkImg(): Boolean {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)

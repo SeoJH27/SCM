@@ -29,7 +29,6 @@ import com.scm.sch_cafeteria_manager.util.utilAll.blank
 import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.dayOfWeekToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
-import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
 import kotlinx.coroutines.launch
 import java.util.Objects.isNull
 
@@ -114,22 +113,13 @@ class MasterHs1Fragment : Fragment() {
             btnCurrentDay.text = dayOfWeekToKorean(jsonData!!.data.dailyMeal.dayOfWeek)
 
             if (jsonData?.data?.dailyMeal == null) {
-                txtBreakfastOpenTimeStart.text = nonDate
-                txtBreakfastOpenTimeEnd.text = nonDate
                 edBreakfastMenu.setText(blank)
-
-                txtLunchOpenTimeStart.text = nonDate
-                txtLunchOpenTimeEnd.text = nonDate
                 edLunchMenu.setText(blank)
-
-                txtDinnerOpenTimeStart.text = nonDate
-                txtDinnerOpenTimeEnd.text = nonDate
                 edDinnerMenu.setText(blank)
             } else if (jsonData!!.data.dailyMeal.dayOfWeek == args.manageDate.week) {
                 val meals = jsonData!!.data.dailyMeal.meals!!
-
                 var menu: String?
-                if (meals.size > 0) {
+                if (meals.isNotEmpty()) {
                     txtBreakfastOpenTimeStart.text = meals[0].operatingStartTime
                     txtBreakfastOpenTimeEnd.text = meals[0].operatingEndTime
                     edBreakfastMenu.setText(meals[0].mainMenu)
@@ -162,16 +152,8 @@ class MasterHs1Fragment : Fragment() {
                         edDinnerMenu.setText(menu)
                     }
                 } else {
-                    txtBreakfastOpenTimeStart.text = nonDate
-                    txtBreakfastOpenTimeEnd.text = nonDate
                     edBreakfastMenu.setText(blank)
-
-                    txtLunchOpenTimeStart.text = nonDate
-                    txtLunchOpenTimeEnd.text = nonDate
                     edLunchMenu.setText(blank)
-
-                    txtDinnerOpenTimeStart.text = nonDate
-                    txtDinnerOpenTimeEnd.text = nonDate
                     edDinnerMenu.setText(blank)
                 }
 
@@ -238,18 +220,24 @@ class MasterHs1Fragment : Fragment() {
 
                     if (response == "200")
                         Toast.makeText(requireContext(), "전송 완료", Toast.LENGTH_SHORT).show()
+                    else if (response == "400")
+                        Toast.makeText(requireContext(), "빈 항목이 있습니다.", Toast.LENGTH_SHORT).show()
+
                     else
-                        Toast.makeText(requireContext(), "전송 에러: $response", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "전송 에러: $response", Toast.LENGTH_LONG)
+                            .show()
                     backToHome()
                 } catch (e: Exception) {
                     Log.e(
                         "MasterHs1Fragment",
                         "uploadingMealPlansMaster Exception: $e"
                     )
-                    if(e.message == "HTTP 400")
-                        Toast.makeText(requireContext(), "전송 에러: 빈 데이터가 있습니다.", Toast.LENGTH_LONG).show()
+                    if (e.message == "HTTP 400")
+                        Toast.makeText(requireContext(), "전송 에러: 빈 데이터가 있습니다.", Toast.LENGTH_LONG)
+                            .show()
                     else
-                        Toast.makeText(requireContext(), "전송 에러: ${e.message}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "전송 에러: ${e.message}", Toast.LENGTH_LONG)
+                            .show()
                     errorToBack()
                 }
                 Log.e("MasterHs1Fragment", "uploadingMealPlansMaster")
@@ -377,7 +365,7 @@ class MasterHs1Fragment : Fragment() {
                     } else {
                         Toast.makeText(requireContext(), "저장된 이미지가 없습니다.", Toast.LENGTH_LONG).show()
                     }
-                } catch (e: Exception){
+                } catch (e: Exception) {
                     Log.e("MasterHs1WeekFragment", "setCheckDayOfWeekImg - Error $e")
                 }
             }

@@ -3,6 +3,7 @@
 
     <!-- Custom font 적용 -->
     <style name="customTextViewFontStyle" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/goormsans</item>
     </style>
 

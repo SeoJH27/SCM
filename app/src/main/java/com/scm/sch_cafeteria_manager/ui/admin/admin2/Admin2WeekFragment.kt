@@ -1,16 +1,10 @@
 package com.scm.sch_cafeteria_manager.ui.admin.admin2
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
@@ -131,16 +125,8 @@ class Admin2WeekFragment : Fragment() {
                 dayOfWeekToKorean(jsonData!!.dailyMeal.dayOfWeek) + " 수정"
             // 데이터가 아예 없는 경우
             if (jsonData?.dailyMeal == null) {
-                txtBreakfastOpenTimeStart.text = nonDate
-                txtBreakfastOpenTimeEnd.text = nonDate
                 txtBreakfastMenu.text = blank
-
-                txtLunchOpenTimeStart.text = nonDate
-                txtLunchOpenTimeEnd.text = nonDate
                 txtLunchMenu.text = blank
-
-                txtDinnerOpenTimeStart.text = nonDate
-                txtDinnerOpenTimeEnd.text = nonDate
                 txtDinnerMenu.text = blank
             }
             // 데이터 상 날짜 더블 체크
@@ -265,7 +251,7 @@ class Admin2WeekFragment : Fragment() {
                     Log.e("Admin2WeekFragment", "setTextSaveBtnClick - progressbar")
                     lifecycleScope.launch {
                         try {
-                            val response = uploadingMealPlans(
+                            uploadingMealPlans(
                                 requireContext(),
                                 CafeteriaData.HYANGSEOL1.cfName,
                                 getWeekStartDate(getWeekDates()[0]),
@@ -338,7 +324,7 @@ class Admin2WeekFragment : Fragment() {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
         val base64Image = fileToBase64(file)
 
-        return base64Image;
+        return base64Image
     }
     // </editor-folder>
 

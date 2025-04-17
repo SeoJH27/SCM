@@ -37,9 +37,13 @@ object PrefHelper_Login {
 
     fun resetToken(context: Context, accessTk: String, refreshTk: String){
         val prefs = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        prefs.edit().apply {
+        val authority = prefs.getString("authority", null)
+        deleteTokens(context)
+        prefs.edit().apply{
             putString("accessToken", accessTk)
             putString("refreshToken", refreshTk)
+            putBoolean("isLoggedIn", true)
+            putString("authority", authority)
             apply()
         }
     }

@@ -52,7 +52,6 @@
                 style="@style/btnStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/str_monday"
                 app:backgroundTint="@color/grey_100"
                 app:layout_constraintBottom_toBottomOf="@id/btn_week"
                 app:layout_constraintEnd_toEndOf="parent"

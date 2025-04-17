@@ -1,6 +1,5 @@
 package com.scm.sch_cafeteria_manager.ui.admin.admin3
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -117,8 +116,6 @@ class Admin3WeekFragment : Fragment() {
                 dayOfWeekToKorean(jsonData!!.dailyMeal.dayOfWeek) + " 수정"
 
             if (jsonData?.dailyMeal == null) {
-                txtLunchOpenTimeStart.text = nonDate
-                txtLunchOpenTimeEnd.text = nonDate
                 txtLunchMenu.text = blank
 
             } else if (jsonData!!.dailyMeal.dayOfWeek == args.manageDate.week) {

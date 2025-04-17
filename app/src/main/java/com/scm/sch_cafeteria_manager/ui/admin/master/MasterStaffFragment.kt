@@ -9,18 +9,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.scm.sch_cafeteria_manager.data.AdminResponse
 import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.MasterResponse
 import com.scm.sch_cafeteria_manager.data.MealType
-import com.scm.sch_cafeteria_manager.data.ShareViewModel
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.requestDTO_master
@@ -32,7 +29,6 @@ import com.scm.sch_cafeteria_manager.util.utilAll.blank
 import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.dayOfWeekToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
-import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
 import kotlinx.coroutines.launch
 import java.util.Objects.isNull
 
@@ -109,8 +105,6 @@ class MasterStaffFragment : Fragment() {
             btnCurrentDay.text = dayOfWeekToKorean(data!!.data.dailyMeal.dayOfWeek)
 
             if (data?.data?.dailyMeal == null) {
-                txtLunchOpenTimeStart.text = nonDate
-                txtLunchOpenTimeEnd.text = nonDate
                 edLunchMenu.setText(blank)
 
             } else if (data!!.data.dailyMeal.dayOfWeek == args.manageDate.week) {
@@ -128,8 +122,6 @@ class MasterStaffFragment : Fragment() {
                         edLunchMenu.setText(menu)
                     }
                 } else {
-                    txtLunchOpenTimeStart.text = nonDate
-                    txtLunchOpenTimeEnd.text = nonDate
                     edLunchMenu.setText(blank)
                 }
             } else {
@@ -180,7 +172,7 @@ class MasterStaffFragment : Fragment() {
                     progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
                     binding.progressbarBackground.visibility = View.GONE
 
-                    if (response == "CREATED")
+                    if (response == "200")
                         Toast.makeText(requireContext(), "전송 완료", Toast.LENGTH_SHORT).show()
                     else
                         Toast.makeText(requireContext(), "전송 에러: $response", Toast.LENGTH_LONG).show()

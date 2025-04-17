@@ -33,7 +33,7 @@ object utilAll {
     )
 
     val dummyMEAL = listOf(
-        meals("", "00:00", "00:00", "정보 없음", "")
+        meals("LUNCH", "00:00", "00:00", "정보 없음", " ")
     )
 
     fun setInquiryLink(): Intent {

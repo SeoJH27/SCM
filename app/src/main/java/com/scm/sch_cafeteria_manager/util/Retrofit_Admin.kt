@@ -174,9 +174,9 @@ suspend fun uploadingWeekMealPlans(
     val multiFile = MultipartBody.Part.createFormData("weeklyMealImg", "photo", fileImage)
 
     Log.e(
-        "uploadingWeekMealPlans", "List<dailyMeals>: $meal"
-                + "\nweekStartDate: $startDate"
-                + "\nfileImage: $fileImage"
+        "uploadingWeekMealPlans", "List<dailyMeals>: $dM"
+                + "\nweekStartDate: $weekStartDate"
+                + "\nfileImage: ${fileImage.contentLength()}"
     )
     try {
         val response = Retrofit_Admin.createApiService(context)
@@ -186,7 +186,7 @@ suspend fun uploadingWeekMealPlans(
             Toast.makeText(context, "Successful", Toast.LENGTH_LONG).show()
         } else {
             Log.e("uploadingWeekMealPlans", " Error: $response")
-            Toast.makeText(context, "응답 데이터: ${response}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Error: ${response.code()}", Toast.LENGTH_LONG).show()
         }
     } catch (e: Exception) {
         Log.e("uploadingWeekMealPlans", "API 호출 실패: $e")

@@ -142,6 +142,8 @@ suspend fun loginToAdmin(context: Context, login: loginRequest): Boolean {
                             "Login Successful",
                             Toast.LENGTH_SHORT
                         ).show()
+                        Log.e("loginToAdmin", "loginToAdmin:\naccessToken=${PrefHelper_Login.getAccessToken(context)}\nrefreshToken=${PrefHelper_Login.getRefreshToken(context)}")
+
                         return true
 
                     } else {
@@ -185,7 +187,7 @@ suspend fun logoutToAdmin(context: Context) {
         if (refreshTk.isNullOrEmpty()) {
             throw Exception("refresh token 없음")
         } else {
-            val response = Retrofit_Login.createApiService(context).logout("refresh=" + refreshTk)
+            val response = Retrofit_Login.createApiService(context).logout("refresh=$refreshTk")
             PrefHelper_Login.deleteTokens(context)
             if (response.isSuccessful) {
                 try {
@@ -195,7 +197,7 @@ suspend fun logoutToAdmin(context: Context) {
                 }
             } else {
                 Toast.makeText(context, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
-                Log.e("logoutToAdmin", "Successful Error: ${response}")
+                Log.e("logoutToAdmin", "Error: ${response}")
             }
         }
     } catch (e: Exception) {
@@ -205,12 +207,14 @@ suspend fun logoutToAdmin(context: Context) {
 }
 
 suspend fun reissueToAdmin(context: Context): Boolean {
+    Log.e("reissue", "reissue:\naccessToken=${PrefHelper_Login.getAccessToken(context)}\nrefreshToken=${PrefHelper_Login.getRefreshToken(context)}")
+
     try {
         val refreshTk = PrefHelper_Login.getRefreshToken(context)
         if (refreshTk.isNullOrEmpty()) {
-            throw NullPointerException("refresh token이 없습니다.")
+            throw NullPointerException("refresh token 없습니다.")
         } else {
-            val response = Retrofit_Login.createApiServiceLogin().reissue("refresh=" + refreshTk)
+            val response = Retrofit_Login.createApiServiceLogin().reissue("refresh=${refreshTk}")
             if (response.isSuccessful) {
                 when (response.code()) {
                     200 -> {
@@ -235,6 +239,7 @@ suspend fun reissueToAdmin(context: Context): Boolean {
                     }
                 }
             } else {
+                Log.e("reissue", "reissue: refreshTk = $refreshTk")
                 throw Exception("reissue 불가")
             }
         }
