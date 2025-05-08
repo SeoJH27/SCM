@@ -27,6 +27,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import java.net.ConnectException
 import java.net.CookieManager
 import java.util.concurrent.TimeUnit
 
@@ -142,7 +143,12 @@ suspend fun loginToAdmin(context: Context, login: loginRequest): Boolean {
                             "Login Successful",
                             Toast.LENGTH_SHORT
                         ).show()
-                        Log.e("loginToAdmin", "loginToAdmin:\naccessToken=${PrefHelper_Login.getAccessToken(context)}\nrefreshToken=${PrefHelper_Login.getRefreshToken(context)}")
+                        Log.e(
+                            "loginToAdmin",
+                            "loginToAdmin:\naccessToken=${PrefHelper_Login.getAccessToken(context)}\nrefreshToken=${
+                                PrefHelper_Login.getRefreshToken(context)
+                            }"
+                        )
 
                         return true
 
@@ -170,9 +176,11 @@ suspend fun loginToAdmin(context: Context, login: loginRequest): Boolean {
                     ).show()
                 }
             }
+        } catch (e: ConnectException) {
+            Toast.makeText(context, "네트워크가 연결되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
-            Toast.makeText(context, "Network Error: ${e.message}", Toast.LENGTH_SHORT).show()
-            Log.e("loginToAdmin", "Network Error: ${e.message}")
+            Toast.makeText(context, "Exception: ${e.message}", Toast.LENGTH_SHORT).show()
+            Log.e("loginToAdmin", "Exception: ${e.message}")
         }
     } else {
         Toast.makeText(context, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
@@ -191,30 +199,38 @@ suspend fun logoutToAdmin(context: Context) {
             PrefHelper_Login.deleteTokens(context)
             if (response.isSuccessful) {
                 try {
+                } catch (e: ConnectException) {
+                    Toast.makeText(context, "네트워크가 연결되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
-                    Toast.makeText(context, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                     Log.e("logoutToAdmin", "Successful Error: ${response.message()}")
                 }
             } else {
-                Toast.makeText(context, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                 Log.e("logoutToAdmin", "Error: ${response}")
             }
         }
     } catch (e: Exception) {
-        Toast.makeText(context, "Error: $e", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context, "Error: $e", Toast.LENGTH_SHORT).show()
         Log.e("logoutToAdmin", "Error: $e")
     }
 }
 
 suspend fun reissueToAdmin(context: Context): Boolean {
-    Log.e("reissue", "reissue:\naccessToken=${PrefHelper_Login.getAccessToken(context)}\nrefreshToken=${PrefHelper_Login.getRefreshToken(context)}")
+    Log.e(
+        "reissue",
+        "reissue:\naccessToken=${PrefHelper_Login.getAccessToken(context)}\nrefreshToken=${
+            PrefHelper_Login.getRefreshToken(context)
+        }"
+    )
 
     try {
         val refreshTk = PrefHelper_Login.getRefreshToken(context)
         if (refreshTk.isNullOrEmpty()) {
             throw NullPointerException("refresh token 없습니다.")
         } else {
-            val response = Retrofit_Login.createApiServiceLogin().reissue("refresh=${refreshTk}")
+            val refresh = "refresh=${refreshTk}"
+            val response = Retrofit_Login.createApiServiceLogin().reissue(refresh)
             if (response.isSuccessful) {
                 when (response.code()) {
                     200 -> {
@@ -240,9 +256,11 @@ suspend fun reissueToAdmin(context: Context): Boolean {
                 }
             } else {
                 Log.e("reissue", "reissue: refreshTk = $refreshTk")
-                throw Exception("reissue 불가")
+                Toast.makeText(context, "로그인이 만료되었습니다.\n다시 로그인해주세요.", Toast.LENGTH_LONG).show()
             }
         }
+    } catch (e: ConnectException) {
+        Toast.makeText(context, "네트워크가 연결되어 있지 않습니다.", Toast.LENGTH_SHORT).show()
     } catch (e: Exception) {
         Toast.makeText(context, "Error: $e", Toast.LENGTH_SHORT).show()
         Log.e("reissue", "Error: $e")

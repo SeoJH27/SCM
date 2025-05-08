@@ -27,7 +27,7 @@ import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
 import com.scm.sch_cafeteria_manager.util.fetchMealPlans
 import com.scm.sch_cafeteria_manager.util.uploadingMealPlans
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
-import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
+import com.scm.sch_cafeteria_manager.util.utilAll.combineMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.dayOfWeekToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.fileToBase64
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
@@ -124,7 +124,7 @@ class Admin3WeekFragment : Fragment() {
                 if (meals.isNotEmpty()) {
                     txtLunchOpenTimeStart.text = meals[0].operatingStartTime
                     txtLunchOpenTimeEnd.text = meals[0].operatingEndTime
-                    menu = combinMainAndSub(meals[0].mainMenu, meals[0].subMenu)
+                    menu = combineMainAndSub(meals[0].mainMenu, meals[0].subMenu)
                     if (isNull(menu)) {
                         txtLunchMenu.text = nonDate
                         txtLunchMenu.setTextColor(

@@ -5,20 +5,19 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.scm.sch_cafeteria_manager.data.UserRole
 import com.scm.sch_cafeteria_manager.data.loginRequest
 import com.scm.sch_cafeteria_manager.databinding.ActivityLoginBinding
 import com.scm.sch_cafeteria_manager.ui.admin.AdminActivity
+import com.scm.sch_cafeteria_manager.ui.home.BaseActivity
 import com.scm.sch_cafeteria_manager.ui.home.HomeActivity
 import com.scm.sch_cafeteria_manager.util.PrefHelper_Login
 import com.scm.sch_cafeteria_manager.util.PrefHelper_Login.getIsLoggedIn
 import com.scm.sch_cafeteria_manager.util.loginToAdmin
 import kotlinx.coroutines.launch
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 

@@ -1,16 +1,10 @@
 package com.scm.sch_cafeteria_manager.ui.admin.admin1
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
@@ -33,14 +27,13 @@ import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
 import com.scm.sch_cafeteria_manager.util.fetchMealPlans
 import com.scm.sch_cafeteria_manager.util.uploadingMealPlans
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
-import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
+import com.scm.sch_cafeteria_manager.util.utilAll.combineMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.dayOfWeekToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.fileToBase64
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
 import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
-import com.scm.sch_cafeteria_manager.util.utilAll.stringToBitmap
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Objects.isNull
@@ -144,7 +137,7 @@ class Admin1Hs1WeekFragment : Fragment() {
                     // Breakfast
                     txtBreakfastOpenTimeStart.text = meals[0].operatingStartTime
                     txtBreakfastOpenTimeEnd.text = meals[0].operatingEndTime
-                    menu = combinMainAndSub(meals[0].mainMenu, meals[0].subMenu)
+                    menu = combineMainAndSub(meals[0].mainMenu, meals[0].subMenu)
                     if (isNull(menu)) {
                         txtBreakfastMenu.text = nonDate
                         txtBreakfastMenu.setTextColor(
@@ -162,7 +155,7 @@ class Admin1Hs1WeekFragment : Fragment() {
                     // Lunch
                     txtLunchOpenTimeStart.text = meals[1].operatingStartTime
                     txtLunchOpenTimeEnd.text = meals[1].operatingEndTime
-                    menu = combinMainAndSub(meals[1].mainMenu, meals[1].subMenu)
+                    menu = combineMainAndSub(meals[1].mainMenu, meals[1].subMenu)
                     if (isNull(menu)) {
                         txtLunchMenu.text = nonDate
                         txtLunchMenu.setTextColor(
@@ -179,7 +172,7 @@ class Admin1Hs1WeekFragment : Fragment() {
                     // Dinner
                     txtDinnerOpenTimeStart.text = meals[2].operatingStartTime
                     txtDinnerOpenTimeEnd.text = meals[2].operatingEndTime
-                    menu = combinMainAndSub(meals[2].mainMenu, meals[2].subMenu)
+                    menu = combineMainAndSub(meals[2].mainMenu, meals[2].subMenu)
                     if (isNull(menu)) {
                         txtDinnerMenu.text = nonDate
                         txtDinnerMenu.setTextColor(

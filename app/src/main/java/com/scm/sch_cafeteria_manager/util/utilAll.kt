@@ -1,5 +1,7 @@
 package com.scm.sch_cafeteria_manager.util
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -16,6 +18,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Objects.isNull
+import kotlin.system.exitProcess
 
 
 object utilAll {
@@ -77,7 +80,7 @@ object utilAll {
     }
 
     // 메뉴를 합치는 함수
-    fun combinMainAndSub(mainMenu: String?, subMenu: String?): String? {
+    fun combineMainAndSub(mainMenu: String?, subMenu: String?): String? {
         if (isNull(mainMenu))
             return null
         else {
@@ -135,7 +138,7 @@ object utilAll {
         )
     }
 
-    // weekStartDate를 구하는 함수
+    // weekStartDate 를 구하는 함수
     fun getWeekStartDate(week: String): String {
         val today = LocalDate.now()
         val formatterDay = DateTimeFormatter.ofPattern("dd")
@@ -174,7 +177,7 @@ object utilAll {
             ).toString()
     }
 
-    // mealType을 한국어로 변환
+    // mealType 을 한국어로 변환
     fun mealTypeToKorean(mealType: String?): String {
         if (isNull(mealType))
             return blank
@@ -188,7 +191,7 @@ object utilAll {
             return blank
     }
 
-    // dayOfWeek를 한국어로 변환
+    // dayOfWeek 를 한국어로 변환
     fun dayOfWeekToKorean(dayOfWeek: String): String {
         var result = dayOfWeek
         if (isNull(dayOfWeek))

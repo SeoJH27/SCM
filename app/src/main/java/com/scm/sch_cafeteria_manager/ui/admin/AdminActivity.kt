@@ -1,8 +1,11 @@
 package com.scm.sch_cafeteria_manager.ui.admin
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
@@ -11,8 +14,9 @@ import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.ShareViewModel
 import com.scm.sch_cafeteria_manager.databinding.ActivityAdminBinding
 import com.scm.sch_cafeteria_manager.databinding.ActivityLoginBinding
+import com.scm.sch_cafeteria_manager.ui.home.BaseActivity
 
-class AdminActivity : AppCompatActivity() {
+class AdminActivity : BaseActivity() {
     private lateinit var binding: ActivityAdminBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

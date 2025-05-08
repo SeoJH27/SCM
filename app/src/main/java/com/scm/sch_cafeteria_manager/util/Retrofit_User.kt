@@ -4,6 +4,7 @@ import android.util.Log
 import com.scm.sch_cafeteria_manager.util.utilAll.BASE_URL
 import com.scm.sch_cafeteria_manager.data.UserDetailResponse
 import com.scm.sch_cafeteria_manager.data.UserTodayMenuResponse
+import com.scm.sch_cafeteria_manager.data.VersionResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -24,6 +25,10 @@ interface ApiService_User {
     @Headers("Content-Type: application/json")
     @GET("/api/user/meal-plans/today")
     suspend fun getTodayMenu(@QueryMap request: Map<String, String>): Response<UserTodayMenuResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("/api/version")
+    suspend fun getVersion(): Response<VersionResponse>
 }
 
 object RetrofitClient_User {
@@ -99,6 +104,27 @@ suspend fun fetchTodayMenu(dayOfWeek: String, weekStartDate: String): UserTodayM
             null
         }
         Log.e("fetchTodayMenu", "응답 데이터: ${value?.data}")
+    } catch (e: Exception) {
+        Log.e("fetchTodayMenu", "API 호출 실패: ${e.message}")
+        value = null
+    }
+    return value
+}
+
+suspend fun fetchVersion(): VersionResponse? {
+    Log.e("SCM", "fetchVersion")
+    var value: VersionResponse?
+
+    try {
+        val data = RetrofitClient_User.createApiService()
+            .getVersion()
+        // 데이터 체크: 데이터가 없으면 null 반환
+        value = if (data.isSuccessful) {
+            data.body()
+        } else {
+            null
+        }
+        Log.e("fetchTodayMenu", "응답 데이터: $value")
     } catch (e: Exception) {
         Log.e("fetchTodayMenu", "API 호출 실패: ${e.message}")
         value = null

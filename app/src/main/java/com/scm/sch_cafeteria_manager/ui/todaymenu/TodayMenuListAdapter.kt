@@ -9,14 +9,10 @@ import com.scm.sch_cafeteria_manager.R
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.data.UserTodayMenuResponse
 import com.scm.sch_cafeteria_manager.databinding.ItemDetailMenuBinding
-import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
-import com.scm.sch_cafeteria_manager.util.utilAll.blank
-import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
-import com.scm.sch_cafeteria_manager.util.utilAll.dummyMEAL
+import com.scm.sch_cafeteria_manager.util.utilAll.combineMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.emptyMEAL
 import com.scm.sch_cafeteria_manager.util.utilAll.mealTypeToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.nonData
-import java.util.Objects.isNull
 
 class TodayMenuListAdapter(
     items: UserTodayMenuResponse, private val restaurantName: String,
@@ -62,7 +58,7 @@ class TodayMenuItemViewHolder(
         Log.e("TodayMenuListAdapter", "bind")
         with(binding) {
             txtTime.text = mealTypeToKorean(meal?.mealType)
-            txtMenu.text = combinMainAndSub(meal?.mainMenu, meal?.subMenu) ?: nonData
+            txtMenu.text = combineMainAndSub(meal?.mainMenu, meal?.subMenu) ?: nonData
         }
     }
 

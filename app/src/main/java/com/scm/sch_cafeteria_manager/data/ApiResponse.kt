@@ -5,6 +5,13 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
+// Version Response
+@JsonClass(generateAdapter = true)
+data class VersionResponse(
+    @Json(name = "status") val status: String,
+    @Json(name = "message") val message: String
+)
+
 // 디테일 API Response
 @JsonClass(generateAdapter = true)
 data class UserDetailResponse(

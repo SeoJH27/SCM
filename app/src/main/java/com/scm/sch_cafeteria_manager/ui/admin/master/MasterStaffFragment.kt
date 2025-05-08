@@ -26,7 +26,7 @@ import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
 import com.scm.sch_cafeteria_manager.util.fetchMealPlansMaster
 import com.scm.sch_cafeteria_manager.util.uploadingMealPlansMaster
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
-import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
+import com.scm.sch_cafeteria_manager.util.utilAll.combineMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.dayOfWeekToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import kotlinx.coroutines.launch
@@ -115,7 +115,7 @@ class MasterStaffFragment : Fragment() {
                     txtLunchOpenTimeStart.text = meals[0].operatingStartTime
                     txtLunchOpenTimeEnd.text = meals[0].operatingEndTime
                     edLunchMenu.setText(meals[0].mainMenu)
-                    menu = combinMainAndSub(meals[0].mainMenu, meals[0].subMenu)
+                    menu = combineMainAndSub(meals[0].mainMenu, meals[0].subMenu)
                     if (isNull(menu)) {
                         edLunchMenu.setText(blank)
                     } else {

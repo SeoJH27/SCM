@@ -1,7 +1,9 @@
 package com.scm.sch_cafeteria_manager.ui.home
 
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +28,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val packageInfo = requireContext().getApplicationContext()
+            .getPackageManager()
+            .getPackageInfo(requireContext().getApplicationContext().getPackageName(), 0 );
+
+        Log.e("UpdateCheck", "android version: ${packageInfo.versionName}")
+
         with(binding) {
             btnHs1.setOnClickListener {
                 navigateTo("hs1")

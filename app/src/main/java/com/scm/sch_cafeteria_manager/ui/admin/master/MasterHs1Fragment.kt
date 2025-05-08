@@ -26,7 +26,7 @@ import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
 import com.scm.sch_cafeteria_manager.util.fetchMealPlansMaster
 import com.scm.sch_cafeteria_manager.util.uploadingMealPlansMaster
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
-import com.scm.sch_cafeteria_manager.util.utilAll.combinMainAndSub
+import com.scm.sch_cafeteria_manager.util.utilAll.combineMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.dayOfWeekToKorean
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import kotlinx.coroutines.launch
@@ -123,7 +123,7 @@ class MasterHs1Fragment : Fragment() {
                     txtBreakfastOpenTimeStart.text = meals[0].operatingStartTime
                     txtBreakfastOpenTimeEnd.text = meals[0].operatingEndTime
                     edBreakfastMenu.setText(meals[0].mainMenu)
-                    menu = combinMainAndSub(meals[0].mainMenu, meals[0].subMenu)
+                    menu = combineMainAndSub(meals[0].mainMenu, meals[0].subMenu)
                     if (isNull(menu)) {
                         edBreakfastMenu.setText(blank)
                     } else {
@@ -134,7 +134,7 @@ class MasterHs1Fragment : Fragment() {
                     txtLunchOpenTimeStart.text = meals[1].operatingStartTime
                     txtLunchOpenTimeEnd.text = meals[1].operatingEndTime
                     edLunchMenu.setText(meals[1].mainMenu)
-                    menu = combinMainAndSub(meals[1].mainMenu, meals[1].subMenu)
+                    menu = combineMainAndSub(meals[1].mainMenu, meals[1].subMenu)
                     if (isNull(menu)) {
                         edLunchMenu.setText(blank)
                     } else {
@@ -145,7 +145,7 @@ class MasterHs1Fragment : Fragment() {
                     txtDinnerOpenTimeStart.text = meals[2].operatingStartTime
                     txtDinnerOpenTimeEnd.text = meals[2].operatingEndTime
                     edDinnerMenu.setText(meals[2].mainMenu)
-                    menu = combinMainAndSub(meals[2].mainMenu, meals[2].subMenu)
+                    menu = combineMainAndSub(meals[2].mainMenu, meals[2].subMenu)
                     if (isNull(menu)) {
                         edDinnerMenu.setText(blank)
                     } else {
