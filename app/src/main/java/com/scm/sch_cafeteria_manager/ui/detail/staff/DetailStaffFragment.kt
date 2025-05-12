@@ -23,7 +23,6 @@ import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import com.scm.sch_cafeteria_manager.util.utilAll.setInquiryLink
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
 import java.util.Objects.isNull
 
 class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
@@ -112,7 +111,7 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
         }
 
         if (checkData(STAFF)) {// init tab
-            connectAdapter(dOw.MONDAY.dName)
+            connectAdapter(dOw.MONDAY.engName)
         } else {
             Log.e("DetailStaffFragment", "setTab - checkData")
             backToHome()
@@ -131,7 +130,7 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
-                    connectAdapter(dOw.MONDAY.dName)
+                    connectAdapter(dOw.MONDAY.engName)
                 }
             })
 
@@ -154,11 +153,11 @@ class DetailStaffFragment : Fragment(R.layout.fragment_detail_staff) {
             return
         }
         when (tab.position) {
-            0 -> connectAdapter(dOw.MONDAY.dName)
-            1 -> connectAdapter(dOw.TUESDAY.dName)
-            2 -> connectAdapter(dOw.WEDNESDAY.dName)
-            3 -> connectAdapter(dOw.THURSDAY.dName)
-            4 -> connectAdapter(dOw.FRIDAY.dName)
+            0 -> connectAdapter(dOw.MONDAY.engName)
+            1 -> connectAdapter(dOw.TUESDAY.engName)
+            2 -> connectAdapter(dOw.WEDNESDAY.engName)
+            3 -> connectAdapter(dOw.THURSDAY.engName)
+            4 -> connectAdapter(dOw.FRIDAY.engName)
             else -> throw IllegalArgumentException("Invalid button config: $tab")
         }
     }

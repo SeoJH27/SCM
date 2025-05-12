@@ -12,7 +12,7 @@ data class meals(
     @Json(name = "operatingStartTime") val operatingStartTime: String,
     @Json(name = "operatingEndTime") val operatingEndTime: String,
     @Json(name = "mainMenu") val mainMenu: String,
-    @Json(name = "subMenu") val subMenu: String
+    @Json(name = "subMenu") val subMenu: String?
 ): Parcelable
 
 // admin
@@ -20,7 +20,7 @@ data class meals(
 @JsonClass(generateAdapter = true)
 data class dailyMeals(
     @Json(name = "dayOfWeek") val dayOfWeek: String,
-    @Json(name = "meals") val meals: List<meals?>
+    @Json(name = "meals") val meals: List<meals>
 ): Parcelable
 
 // detail

@@ -1,7 +1,5 @@
 package com.scm.sch_cafeteria_manager.util
 
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,31 +10,35 @@ import com.scm.sch_cafeteria_manager.data.MealType
 import com.scm.sch_cafeteria_manager.data.dOw
 import com.scm.sch_cafeteria_manager.data.meals
 import com.scm.sch_cafeteria_manager.extentions.replaceCommaToLinebreak
+import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileInputStream
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Objects.isNull
-import kotlin.system.exitProcess
 
 
 object utilAll {
 
-    val blank = ""
+    val blank = " "
     val nonData = "정보 없음"
     val nonDate = "00:00"
 
     const val BASE_URL = "http://124.60.137.10:8080"
     const val photoFilePath = "photo.jpg"
     const val weekFilePath = "week.jpg"
+    const val photoFileType = 0
+    const val weekFileType = 1
 
     val emptyMEAL = listOf(
         meals(blank, blank, blank, blank, blank)
     )
 
     val dummyMEAL = listOf(
-        meals("LUNCH", "00:00", "00:00", "정보 없음", " ")
+        meals(MealType.BREAKFAST.engName, "08:00", "09:30", nonData, blank)
+    )
+    val dummyMEAL1 = listOf(
+        meals(MealType.LUNCH.engName, "11:00", "13:30", nonData, blank)
     )
 
     fun setInquiryLink(): Intent {
@@ -49,8 +51,8 @@ object utilAll {
     // String to Bitmap
     fun stringToBitmap(img: String?): Bitmap? {
         return try {
-            val encodeByte = Base64.decode(img, Base64.DEFAULT)
-            val imgByte = Base64.decode(encodeByte, Base64.DEFAULT)
+            val encodeByte = Base64.decode(img, Base64.NO_WRAP)
+            val imgByte = Base64.decode(encodeByte, Base64.NO_WRAP)
 
             if (isNull(encodeByte)) {
                 Log.e("utilAll", "stringToBitmap - Error $imgByte")
@@ -72,11 +74,25 @@ object utilAll {
     }
 
     // File to Base64
-    fun fileToBase64(file: File): String {
-        val inputStream = FileInputStream(file)
-        val bytes = inputStream.readBytes() // 파일을 바이트 배열로 변환
-        inputStream.close()
-        return Base64.encodeToString(bytes, Base64.DEFAULT) // Base64로 변환
+    fun fileToBase64(file: File): String? {
+        return try {
+            // 1. 파일에서 Bitmap 읽기
+            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+            // 2. 압축 (JPEG + 지정된 품질)
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
+            // 3. ByteArray 추출
+            val compressedBytes = outputStream.toByteArray()
+            // 4. Base64 인코딩
+            Base64.encodeToString(compressedBytes, Base64.NO_WRAP) // Base64로 변환
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+//        val inputStream = FileInputStream(file)
+//        val bytes = inputStream.readBytes() // 파일을 바이트 배열로 변환
+//        inputStream.close()
+//        return Base64.encodeToString(bytes, Base64.DEFAULT) // Base64로 변환
     }
 
     // 메뉴를 합치는 함수
@@ -104,7 +120,7 @@ object utilAll {
         val f: LocalDate
 
         // 오늘이 토요일이나 일요일이면 다음 주로 세팅
-        if (today.dayOfWeek.name == dOw.SATURDAY.dName || today.dayOfWeek.name == dOw.SUNDAY.dName) {
+        if (today.dayOfWeek.name == dOw.SATURDAY.engName || today.dayOfWeek.name == dOw.SUNDAY.engName) {
             m = today.with(DayOfWeek.MONDAY).plusWeeks(1) // 다음 주 월요일
             t = today.with(DayOfWeek.TUESDAY).plusWeeks(1) // 다음 주 월요일
             w = today.with(DayOfWeek.WEDNESDAY).plusWeeks(1) // 다음 주 월요일
@@ -181,11 +197,11 @@ object utilAll {
     fun mealTypeToKorean(mealType: String?): String {
         if (isNull(mealType))
             return blank
-        if (mealType == MealType.BREAKFAST.myName)
+        if (mealType == MealType.BREAKFAST.engName)
             return MealType.BREAKFAST.korName
-        else if (mealType == MealType.LUNCH.myName)
+        else if (mealType == MealType.LUNCH.engName)
             return MealType.LUNCH.korName
-        else if (mealType == MealType.DINNER.myName)
+        else if (mealType == MealType.DINNER.engName)
             return MealType.DINNER.korName
         else
             return blank
@@ -197,7 +213,7 @@ object utilAll {
         if (isNull(dayOfWeek))
             return result
         dOw.entries.forEach {
-            if (dayOfWeek == it.dName)
+            if (dayOfWeek == it.engName)
                 result = it.korName
         }
         return result

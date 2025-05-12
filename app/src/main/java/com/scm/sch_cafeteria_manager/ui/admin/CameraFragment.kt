@@ -25,16 +25,20 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.scm.sch_cafeteria_manager.data.CafeteriaData
 import com.scm.sch_cafeteria_manager.data.dOw
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.databinding.FragmentCameraBinding
 import com.scm.sch_cafeteria_manager.util.RotateBitmap
 import com.scm.sch_cafeteria_manager.util.uploadingWeekMealPlans
 import com.scm.sch_cafeteria_manager.util.utilAll.dummyMEAL
+import com.scm.sch_cafeteria_manager.util.utilAll.dummyMEAL1
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import java.io.File
 import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
+import com.scm.sch_cafeteria_manager.util.utilAll.photoFileType
 import com.scm.sch_cafeteria_manager.util.utilAll.weekFilePath
+import com.scm.sch_cafeteria_manager.util.utilAll.weekFileType
 import kotlinx.coroutines.launch
 import java.util.Objects.isNull
 
@@ -44,6 +48,8 @@ class CameraFragment : Fragment() {
     private val args: CameraFragmentArgs by navArgs() // true: week, false: day of week
     private var imageCapture: ImageCapture? = null
     private var capturedPhotoFile: File? = null  // 저장할 파일 변수
+    private var filePath: String = ""
+    private var fileType: Int = 2
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -103,7 +109,7 @@ class CameraFragment : Fragment() {
 
     // 취소 & 저장 버튼 활성화
     private fun setCancleBtn() {
-        Log.e("CameraFragment", "setCancleBtn")
+        Log.e("CameraFragment", "setCancelBtn")
 
         with(binding) {
             // 촬영 버튼 비활성화
@@ -111,8 +117,11 @@ class CameraFragment : Fragment() {
             btnPhotoCapture.focusable = View.NOT_FOCUSABLE
             // 취소 버튼 활성화
             btnPhotoCancel.visibility = View.VISIBLE
+            btnPhotoCancel.focusable = View.FOCUSABLE
             // 저장 버튼 활성화
             btnPhotoSave.visibility = View.VISIBLE
+            btnPhotoSave.focusable = View.FOCUSABLE
+            btnPhotoSave.alpha = 1f
 
             // 취소 클릭 시
             btnPhotoCancel.setOnClickListener {
@@ -121,8 +130,10 @@ class CameraFragment : Fragment() {
                 deleteCacheFile()
                 setCaptureBtn()
             }
+            btnPhotoSave.setOnClickListener {
+                setSaveBtn()
+            }
         }
-        setSaveBtn()
     }
 
     // 저장 버튼 클릭 리스너
@@ -130,39 +141,60 @@ class CameraFragment : Fragment() {
         Log.e("CameraFragment", "setSaveBtn")
         val title = args.manageDate.cf
         Log.e("CameraFragment", "Save - $title")
-        binding.btnPhotoSave.setOnClickListener {
-            // 캐시가 있으면 true
-            if (isNull(isCacheFileExists())) {
-                Toast.makeText(requireContext(), "사진을 찍지 않았습니다.", Toast.LENGTH_LONG).show()
-            } else {
-                val file = File(requireContext().externalCacheDirs?.firstOrNull(), weekFilePath)
-                if (file.exists()) {
-                    val menu = listOf(
+        // 캐시가 있으면 true
+        if (isNull(isCacheFileExists())) {
+            Log.e("CameraFragment", "setSaveBtn - if")
+            Toast.makeText(requireContext(), "사진을 찍지 않았습니다.", Toast.LENGTH_LONG).show()
+        } else {
+            Log.e("CameraFragment", "setSaveBtn - else")
+            val file = File(requireContext().externalCacheDirs?.firstOrNull(), filePath)
+            if (file.exists()) {
+                Log.e("CameraFragment", "setSaveBtn - else - if")
+                val menu: List<dailyMeals>
+                if(title == CafeteriaData.HYANGSEOL1.cfName){
+                    menu = listOf(
                         dailyMeals(
-                            dOw.MONDAY.dName, dummyMEAL
+                            dOw.MONDAY.engName, dummyMEAL
                         )
                     )
-                    Log.e("CameraFragment", "title - $title")
+                } else{
+                    menu = listOf(
+                        dailyMeals(
+                            dOw.MONDAY.engName, dummyMEAL1
+                        )
+                    )
+                }
+                Log.e("CameraFragment", "title - $title")
 
-                    binding.progressbar.visibility = View.VISIBLE // UI 블로킹 시작
-                    binding.progressbarBackground.visibility = View.VISIBLE
-                    binding.progressbarBackground.isClickable = true
-                    lifecycleScope.launch {
-                        try {
-                            uploadingWeekMealPlans(requireContext(), title, getWeekStartDate(args.manageDate.day), menu, file)
-                        } catch (e: Exception) {
-                            Log.e("CameraFragment", "setWeekPhoto Error: $e")
-                            Toast.makeText(
+                binding.progressbar.visibility = View.VISIBLE // UI 블로킹 시작
+                binding.progressbarBackground.visibility = View.VISIBLE
+                binding.progressbarBackground.isClickable = true
+                lifecycleScope.launch {
+                    try {
+                        if (fileType == weekFileType){
+                            uploadingWeekMealPlans(
                                 requireContext(),
-                                "Error: ${e.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } finally {
-                            binding.progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
-                            binding.progressbarBackground.visibility = View.GONE
-                            Log.e("CameraFragment", "file.exists(): ${file.exists()}")
-                            returnToAdminFragment()
+                                title,
+                                getWeekStartDate(args.manageDate.day),
+                                menu,
+                                file
+                            )
+                            Toast.makeText(requireContext(), "Successful", Toast.LENGTH_LONG).show()
+                        } else {
+                            Log.e("CameraFragment", "setSaveBtn - photoFileType")
                         }
+                    } catch (e: Exception) {
+                        Log.e("CameraFragment", "setSaveBtn Error: $e")
+                        Toast.makeText(
+                            requireContext(),
+                            "Error: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } finally {
+                        binding.progressbar.visibility = View.GONE // 네트워크 완료 후 UI 다시 활성화
+                        binding.progressbarBackground.visibility = View.GONE
+                        Log.e("CameraFragment", "file.exists(): ${file.exists()}")
+                        returnToAdminFragment()
                     }
                 }
             }
@@ -206,16 +238,16 @@ class CameraFragment : Fragment() {
             return
         }
         // path check
-        val path: String
         if (args.flag) {
-            path = weekFilePath
-
+            filePath = weekFilePath
+            fileType = weekFileType
         } else {
-            path = photoFilePath
+            filePath = photoFilePath
+            fileType = photoFileType
         }
-        val photoFile = File(requireContext().externalCacheDirs?.firstOrNull(), path)
+        val photoFile = File(requireContext().externalCacheDirs?.firstOrNull(), filePath)
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-        Log.e("CameraFragment", "capturedPhotoFile: $capturedPhotoFile")
+        Log.e("CameraFragment", "capturedPhotoFile: $filePath -> $capturedPhotoFile")
 
         if (viewLifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
             imageCapture?.takePicture(outputOptions,
@@ -231,7 +263,6 @@ class CameraFragment : Fragment() {
                             Log.e("CameraFragment", "onImageSaved 중 실패", e)
                         }
                     }
-
                     override fun onError(exception: ImageCaptureException) {
                         Log.e("CameraFragment", "사진 저장 실패: ", exception)
                     }

@@ -431,7 +431,7 @@ class AdminFragment : Fragment() {
                 CafeteriaData.HYANGSEOL1.cfName -> {
                     navigateTo(
                         NavAdmin.weekCamera.navName,
-                        manageDate(dOw.MONDAY.dName, day, CafeteriaData.HYANGSEOL1.cfName),
+                        manageDate(dOw.MONDAY.engName, day, CafeteriaData.HYANGSEOL1.cfName),
                         true
                     )
                 }
@@ -439,7 +439,7 @@ class AdminFragment : Fragment() {
                 CafeteriaData.FACULTY.cfName -> {
                     navigateTo(
                         NavAdmin.weekCamera.navName,
-                        manageDate(dOw.MONDAY.dName, day, CafeteriaData.FACULTY.cfName),
+                        manageDate(dOw.MONDAY.engName, day, CafeteriaData.FACULTY.cfName),
                         true
                     )
                 }
@@ -496,27 +496,27 @@ class AdminFragment : Fragment() {
         with(binding) {
             btnMonday.setOnClickListener {
                 navigateTo(
-                    destination, manageDate(dOw.MONDAY.dName, day, cf), null
+                    destination, manageDate(dOw.MONDAY.engName, day, cf), null
                 )
             }
             btnTuesday.setOnClickListener {
                 navigateTo(
-                    destination, manageDate(dOw.TUESDAY.dName, day, cf), null
+                    destination, manageDate(dOw.TUESDAY.engName, day, cf), null
                 )
             }
             btnWednesday.setOnClickListener {
                 navigateTo(
-                    destination, manageDate(dOw.WEDNESDAY.dName, day, cf), null
+                    destination, manageDate(dOw.WEDNESDAY.engName, day, cf), null
                 )
             }
             btnThursday.setOnClickListener {
                 navigateTo(
-                    destination, manageDate(dOw.THURSDAY.dName, day, cf), null
+                    destination, manageDate(dOw.THURSDAY.engName, day, cf), null
                 )
             }
             btnFriday.setOnClickListener {
                 navigateTo(
-                    destination, manageDate(dOw.FRIDAY.dName, day, cf), null
+                    destination, manageDate(dOw.FRIDAY.engName, day, cf), null
                 )
             }
         }

@@ -200,7 +200,7 @@ class MasterStaffFragment : Fragment() {
                 dailyMeals(
                     args.manageDate.week, listOf(
                         meals(
-                            MealType.LUNCH.myName, txtLunchOpenTimeStart.text.toString(),
+                            MealType.LUNCH.engName, txtLunchOpenTimeStart.text.toString(),
                             txtLunchOpenTimeEnd.text.toString(),
                             edLunchMenu.text.toString(),
                             blank
@@ -221,11 +221,13 @@ class MasterStaffFragment : Fragment() {
                     if (checkData(data)) {
                         // 이미지가 사라져야 함
                         if (weekFlag) {
+                            Glide.with(requireContext()).clear(imgMasterStaff)
                             imgMasterStaff.visibility = View.GONE
                             weekFlag = false
                         }
                         // 이미지가 보여야 함
                         else {
+                            Glide.with(requireContext()).clear(imgMasterStaff)
                             if (data?.data?.weekMealImg != null) {
                                 val encodeByte =
                                     Base64.decode(data?.data?.weekMealImg, Base64.DEFAULT)
@@ -269,11 +271,13 @@ class MasterStaffFragment : Fragment() {
                     if (checkData(data)) {
                         // 이미지가 사라져야 함
                         if (dayOfWeekFlag) {
+                            Glide.with(requireContext()).clear(imgMasterStaff)
                             imgMasterStaff.visibility = View.GONE
                             dayOfWeekFlag = false
                         }
                         // 이미지가 보여야 함
                         else {
+                            Glide.with(requireContext()).clear(imgMasterStaff)
                             if (data?.data?.dayMealImg != null) {
                                 val encodeByte =
                                     Base64.decode(data?.data?.dayMealImg, Base64.DEFAULT)

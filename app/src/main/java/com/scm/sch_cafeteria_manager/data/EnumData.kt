@@ -11,7 +11,7 @@ enum class CafeteriaData(
 }
 
 enum class dOw(
-    val dName: String,
+    val engName: String,
     val korName: String
 ) {
     MONDAY("MONDAY", "월요일"),
@@ -24,9 +24,8 @@ enum class dOw(
 }
 
 enum class MealType(
-    val myName: String,
+    val engName: String,
     val korName: String
-
 ){
     BREAKFAST("BREAKFAST", "조식"),
     LUNCH("LUNCH", "중식"),

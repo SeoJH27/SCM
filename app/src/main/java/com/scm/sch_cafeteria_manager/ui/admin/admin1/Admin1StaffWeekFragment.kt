@@ -21,7 +21,6 @@ import com.scm.sch_cafeteria_manager.data.ShareViewModel
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.dataAdmin
 import com.scm.sch_cafeteria_manager.data.meals
-import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminStaffBinding
 import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
 import com.scm.sch_cafeteria_manager.util.fetchMealPlans
@@ -29,9 +28,8 @@ import com.scm.sch_cafeteria_manager.util.uploadingMealPlans
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
 import com.scm.sch_cafeteria_manager.util.utilAll.combineMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.dayOfWeekToKorean
-import com.scm.sch_cafeteria_manager.util.utilAll.fileToBase64
-import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
+import com.scm.sch_cafeteria_manager.util.utilAll.nonData
 import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
 import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
 import kotlinx.coroutines.launch
@@ -41,7 +39,7 @@ import java.util.Objects.isNull
 class Admin1StaffWeekFragment : Fragment() {
     private var _binding: FragmentAdminStaffBinding? = null
     private val binding get() = _binding!!
-    private val args: Admin1Hs1WeekFragmentArgs by navArgs()
+    private val args: Admin1StaffWeekFragmentArgs by navArgs()
     private lateinit var viewModel: ShareViewModel
 
     private var jsonData: dataAdmin? = null
@@ -156,7 +154,12 @@ class Admin1StaffWeekFragment : Fragment() {
     // 촬영하여 등록 버튼 누를 시 -> 촬영
     private fun setPhotoBtnClick() {
         binding.btnCaptureImage.setOnClickListener {
-            findNavController().navigate(Admin1StaffWeekFragmentDirections.admin1StaffToCamera(false, args.manageDate))
+            findNavController().navigate(
+                Admin1StaffWeekFragmentDirections.admin1StaffToCamera(
+                    false,
+                    args.manageDate
+                )
+            )
         }
     }
 
@@ -189,11 +192,11 @@ class Admin1StaffWeekFragment : Fragment() {
     // 서버로 전송 및 뒤로 가기
     private fun setTextSaveBtnClick() {
         binding.btnUploadAllMenu.setOnClickListener {
-            val isMenu: requestDTO_dayOfWeek? = getMenu()
+            val isMenu: dailyMeals? = getMenu()
             if (isNull(isMenu)) {
                 Toast.makeText(requireContext(), "사진이 없어 저장할 수 없습니다.", Toast.LENGTH_LONG).show()
             } else {
-                val menu: requestDTO_dayOfWeek = isMenu!!
+                val menu: dailyMeals = isMenu!!
                 with(binding) {
                     progressbar.visibility = View.VISIBLE // UI 블로킹 시작
                     binding.progressbarBackground.visibility = View.VISIBLE
@@ -204,8 +207,10 @@ class Admin1StaffWeekFragment : Fragment() {
                             uploadingMealPlans(
                                 requireContext(),
                                 CafeteriaData.HYANGSEOL1.cfName,
-                                getWeekStartDate(getWeekDates()[0]),
-                                menu
+                                args.manageDate.week,
+                                getWeekStartDate(args.manageDate.day),
+                                menu,
+                                getImg()
                             )
 //                            Log.e(
 //                                "Admin1Hs1WeekFragment",
@@ -231,25 +236,21 @@ class Admin1StaffWeekFragment : Fragment() {
     }
 
     // 전송을 위한 데이터 가져오기 TODO: 다시 재정리
-    private fun getMenu(): requestDTO_dayOfWeek? {
+    private fun getMenu(): dailyMeals? {
         if (checkImg()) {
             with(binding) {
                 val body =
-                    requestDTO_dayOfWeek(
-                        getWeekStartDate(args.manageDate.day),
-                        dailyMeals(
-                            args.manageDate.week,
-                            listOf(
-                                meals(
-                                    MealType.LUNCH.myName,
-                                    txtLunchOpenTimeStart.text.toString(),
-                                    txtLunchOpenTimeEnd.text.toString(),
-                                    txtLunchMenu.text.toString(),
-                                    blank
-                                )
-                            ),
-                        ),
-                        getImg()
+                    dailyMeals(
+                        args.manageDate.week,
+                        listOf(
+                            meals(
+                                MealType.LUNCH.engName,
+                                txtLunchOpenTimeStart.text.toString(),
+                                txtLunchOpenTimeEnd.text.toString(),
+                                (if (txtLunchMenu.text.toString() == "") nonData else txtLunchMenu.text.toString()),
+                                blank
+                            )
+                        )
                     )
                 Log.e(
                     "Admin1Hs1WeekFragment", "getMenu:\n$body"
@@ -261,11 +262,12 @@ class Admin1StaffWeekFragment : Fragment() {
             return null
         }
     }
+
     // 이미지 가져오기
-    private fun getImg(): String {
+    private fun getImg(): File {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-        val base64Image = fileToBase64(file)
-        return base64Image
+//        val base64Image = fileToBase64(file)
+        return file
     }
     // </editor-folder>
 
@@ -297,6 +299,7 @@ class Admin1StaffWeekFragment : Fragment() {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
         return file.exists()
     }
+
     // 이미지 삭제
     private fun deleteImg() {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
@@ -331,7 +334,7 @@ class Admin1StaffWeekFragment : Fragment() {
 
     // 에러 시 뒤로 가기
     private fun errorToBack() {
-        Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_SHORT).show()
         backToHome()
     }
 
@@ -342,6 +345,7 @@ class Admin1StaffWeekFragment : Fragment() {
     // </editor-folder>
 
     override fun onDestroyView() {
+        Log.e("Admin1StaffWeekFragment", "onDestroyView")
         super.onDestroyView()
         _binding = null
     }

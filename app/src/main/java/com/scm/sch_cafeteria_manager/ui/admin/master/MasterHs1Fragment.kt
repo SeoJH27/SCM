@@ -252,19 +252,19 @@ class MasterHs1Fragment : Fragment() {
                 dailyMeals(
                     args.manageDate.week, listOf(
                         meals(
-                            MealType.BREAKFAST.myName, txtBreakfastOpenTimeStart.text.toString(),
+                            MealType.BREAKFAST.engName, txtBreakfastOpenTimeStart.text.toString(),
                             txtBreakfastOpenTimeEnd.text.toString(),
                             edBreakfastMenu.text.toString(),
                             blank
                         ),
                         meals(
-                            MealType.LUNCH.myName, txtLunchOpenTimeStart.text.toString(),
+                            MealType.LUNCH.engName, txtLunchOpenTimeStart.text.toString(),
                             txtLunchOpenTimeEnd.text.toString(),
                             edLunchMenu.text.toString(),
                             blank
                         ),
                         meals(
-                            MealType.DINNER.myName, txtDinnerOpenTimeStart.text.toString(),
+                            MealType.DINNER.engName, txtDinnerOpenTimeStart.text.toString(),
                             txtDinnerOpenTimeEnd.text.toString(),
                             edDinnerMenu.text.toString(),
                             blank
@@ -285,11 +285,13 @@ class MasterHs1Fragment : Fragment() {
                     if (checkData(jsonData)) {
                         // 이미지가 사라져야 함
                         if (weekFlag) {
+                            Glide.with(requireContext()).clear(imgMasterHs1)
                             imgMasterHs1.visibility = View.GONE
                             weekFlag = false
                         }
                         // 이미지가 보여야 함
                         else {
+                            Glide.with(requireContext()).clear(imgMasterHs1)
                             if (jsonData?.data?.weekMealImg != null) {
                                 val encodeByte =
                                     Base64.decode(jsonData?.data?.weekMealImg, Base64.DEFAULT)
@@ -333,11 +335,13 @@ class MasterHs1Fragment : Fragment() {
                     if (checkData(jsonData)) {
                         // 이미지가 사라져야 함
                         if (dayOfWeekFlag) {
+                            Glide.with(requireContext()).clear(imgMasterHs1)
                             imgMasterHs1.visibility = View.GONE
                             dayOfWeekFlag = false
                         }
                         // 이미지가 보여야 함
                         else {
+                            Glide.with(requireContext()).clear(imgMasterHs1)
                             if (jsonData?.data?.dayMealImg != null) {
                                 val encodeByte =
                                     Base64.decode(jsonData?.data?.dayMealImg, Base64.DEFAULT)

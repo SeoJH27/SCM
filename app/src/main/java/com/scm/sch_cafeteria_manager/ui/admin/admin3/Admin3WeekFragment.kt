@@ -21,7 +21,6 @@ import com.scm.sch_cafeteria_manager.data.ShareViewModel
 import com.scm.sch_cafeteria_manager.data.dailyMeals
 import com.scm.sch_cafeteria_manager.data.dataAdmin
 import com.scm.sch_cafeteria_manager.data.meals
-import com.scm.sch_cafeteria_manager.data.requestDTO_dayOfWeek
 import com.scm.sch_cafeteria_manager.databinding.FragmentAdminStaffBinding
 import com.scm.sch_cafeteria_manager.extentions.setTimePickerDialog
 import com.scm.sch_cafeteria_manager.util.fetchMealPlans
@@ -29,8 +28,6 @@ import com.scm.sch_cafeteria_manager.util.uploadingMealPlans
 import com.scm.sch_cafeteria_manager.util.utilAll.blank
 import com.scm.sch_cafeteria_manager.util.utilAll.combineMainAndSub
 import com.scm.sch_cafeteria_manager.util.utilAll.dayOfWeekToKorean
-import com.scm.sch_cafeteria_manager.util.utilAll.fileToBase64
-import com.scm.sch_cafeteria_manager.util.utilAll.getWeekDates
 import com.scm.sch_cafeteria_manager.util.utilAll.getWeekStartDate
 import com.scm.sch_cafeteria_manager.util.utilAll.nonDate
 import com.scm.sch_cafeteria_manager.util.utilAll.photoFilePath
@@ -165,59 +162,60 @@ class Admin3WeekFragment : Fragment() {
 
     private fun setTextSaveBtnClick() {
         binding.btnUploadAllMenu.setOnClickListener {
-            val isMenu: requestDTO_dayOfWeek? = getMenu()
+            val isMenu: dailyMeals? = getMenu()
             if (isNull(isMenu)) {
                 Toast.makeText(requireContext(), "사진이 없어 저장할 수 없습니다.", Toast.LENGTH_LONG)
                     .show()
             } else {
-                val menu: requestDTO_dayOfWeek = isMenu!!
+                val menu: dailyMeals = isMenu!!
                 with(binding) {
                     progressbar.visibility = View.VISIBLE
+                    binding.progressbarBackground.visibility = View.VISIBLE
+                    binding.progressbarBackground.isClickable = true
                     Log.e("Admin3WeekFragment", "setTextSaveBtnClick - progressbar")
                     lifecycleScope.launch {
                         try {
                             uploadingMealPlans(
                                 requireContext(),
                                 CafeteriaData.FACULTY.cfName,
-                                getWeekStartDate(getWeekDates()[0]),
-                                menu
+                                args.manageDate.week,
+                                getWeekStartDate(args.manageDate.day),
+                                menu,
+                                getImg()
                             )
                             cancelImg()
                             backToHome()
                         } catch (e: Exception) {
                             Log.e(
                                 "Admin3WeekFragment",
-                                "uploadingMealPlans Exceptioin: $e"
+                                "uploadingMealPlans Exception: $e"
                             )
                             cancelImg()
                             errorToBack()
                         }
                         Log.e("Admin3WeekFragment", "setTextSaveBtnClick")
                         progressbar.visibility = View.GONE
+                        binding.progressbarBackground.visibility = View.GONE
                     }
                 }
             }
         }
     }
 
-    private fun getMenu(): requestDTO_dayOfWeek? {
+    private fun getMenu(): dailyMeals? {
         if (checkImg()) {
             val body =
-                requestDTO_dayOfWeek(
-                    getWeekStartDate(args.manageDate.day),
                     dailyMeals(
                         args.manageDate.week,
                         listOf(
                             meals(
-                                MealType.LUNCH.myName,
+                                MealType.LUNCH.engName,
                                 binding.txtLunchOpenTimeStart.text.toString(),
                                 binding.txtLunchOpenTimeEnd.text.toString(),
                                 binding.txtLunchMenu.text.toString(),
                                 blank
                             )
                         )
-                    ),
-                    getImg()
                 )
             Log.e("Admin3WeekFragment", "getMenu:\n$body")
             return body
@@ -227,10 +225,10 @@ class Admin3WeekFragment : Fragment() {
         }
     }
 
-    private fun getImg(): String {
+    private fun getImg(): File {
         val file = File(requireContext().externalCacheDirs?.firstOrNull(), photoFilePath)
-        val base64Img = fileToBase64(file)
-        return base64Img
+//        val base64Img = fileToBase64(file)
+        return file
     }
 
     private fun checkImg(): Boolean {
@@ -266,7 +264,7 @@ class Admin3WeekFragment : Fragment() {
     }
 
     private fun errorToBack() {
-        Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_LONG).show()
+//        Toast.makeText(requireContext(), "로딩할 수 없습니다.", Toast.LENGTH_LONG).show()
         backToHome()
     }
 

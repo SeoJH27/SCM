@@ -48,8 +48,8 @@ class HomeFragment : Fragment() {
 //            btnStudentUnion.setOnClickListener {
 //                navigateTo("student")
 //            }
-            icMap.setOnClickListener {
-                navigateTo("todaymenu")
+            viewTodayMenu.setOnClickListener {
+                navigateTo("today menu")
             }
             txtLogin.setOnClickListener{
                 toLogin()
@@ -73,7 +73,7 @@ class HomeFragment : Fragment() {
             "hs2" -> HomeFragmentDirections.homeToHs2()
             "staff" -> HomeFragmentDirections.homeToStaff()
             "student" -> HomeFragmentDirections.homeToStudentUnion()
-            "todaymenu" -> HomeFragmentDirections.homeToTodayMenu()
+            "today menu" -> HomeFragmentDirections.homeToTodayMenu()
             else -> throw IllegalArgumentException("Invalid button config: $destination")
         }
 

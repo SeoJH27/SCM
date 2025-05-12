@@ -96,7 +96,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
                     clickTab(tab)
                 }
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    connectAdapter(dOw.MONDAY.dName)
+                    connectAdapter(dOw.MONDAY.engName)
                 }
             })
             csLocation.setOnClickListener {
@@ -123,7 +123,7 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
         if (checkData(HS1)) {
             // init tab
             Log.e("DetailHs1Fragment", "setTab - checkData")
-            connectAdapter(dOw.MONDAY.dName)
+            connectAdapter(dOw.MONDAY.engName)
         } else
             backToHome()
     }
@@ -155,11 +155,11 @@ class DetailHs1Fragment : Fragment(R.layout.fragment_detail_hs1) {
             return
         }
         when (tab.position) {
-            0 -> connectAdapter(dOw.MONDAY.dName)
-            1 -> connectAdapter(dOw.TUESDAY.dName)
-            2 -> connectAdapter(dOw.WEDNESDAY.dName)
-            3 -> connectAdapter(dOw.THURSDAY.dName)
-            4 -> connectAdapter(dOw.FRIDAY.dName)
+            0 -> connectAdapter(dOw.MONDAY.engName)
+            1 -> connectAdapter(dOw.TUESDAY.engName)
+            2 -> connectAdapter(dOw.WEDNESDAY.engName)
+            3 -> connectAdapter(dOw.THURSDAY.engName)
+            4 -> connectAdapter(dOw.FRIDAY.engName)
             else -> throw IllegalArgumentException("Invalid button config: $tab")
         }
     }

@@ -45,7 +45,7 @@ class HomeActivity : BaseActivity() {
         builder.setPositiveButton(
             "업데이트"
         ) { _, _ ->
-            val url2 = "https://play.google.com/store/apps/details?id=앱 패키지명"
+            val url2 = "https://m.onestore.co.kr/ko-kr/apps/appsDetail.omp?prodId=0001000723"
             val i: Intent = Intent(Intent.ACTION_VIEW, Uri.parse(url2))
             startActivity(i)
             System.runFinalization()
