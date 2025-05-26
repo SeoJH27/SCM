@@ -21,7 +21,7 @@ import java.util.Objects.isNull
 object utilAll {
 
     val blank = " "
-    val nonData = "정보 없음"
+    val nonData = "아직 식단표가 업로드되지 않았습니다."
     val nonDate = "00:00"
 
     const val BASE_URL = "http://124.60.137.10:8080"

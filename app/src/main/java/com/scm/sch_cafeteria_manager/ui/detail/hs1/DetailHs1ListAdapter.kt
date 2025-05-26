@@ -47,7 +47,7 @@ class DetailHs1ListAdapter(
     }
 
     override fun getItemCount(): Int {
-        Log.e("DetailHs1ListAdapter", "getItemCount")
+        Log.e("DetailHs1ListAdapter", "getItemCount: ${MEAL.size}")
         return if (MEAL.isEmpty()) 1 else MEAL.size
     }
 }

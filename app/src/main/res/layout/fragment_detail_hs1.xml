@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+        app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_detail_hs1"
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/img_hs1"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed" />
+            app:layout_scrollFlags="scroll|exitUntilCollapsed" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -218,7 +218,7 @@
                 android:id="@+id/rv_detail_hs1_menu"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:nestedScrollingEnabled="false"
+                android:nestedScrollingEnabled="true"
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp"
                 android:paddingTop="20dp"
@@ -228,7 +228,8 @@
                 app:layout_constraintStart_toStartOf="@id/space_menu"
                 app:layout_constraintTop_toTopOf="@id/space_menu"
                 tools:itemCount="3"
-                tools:listitem="@layout/item_detail_menu" />
+                tools:listitem="@layout/item_detail_menu"
+                />
 
             <TextView
                 android:id="@+id/txt_inquiry"

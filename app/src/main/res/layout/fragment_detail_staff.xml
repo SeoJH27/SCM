@@ -218,7 +218,7 @@
                 android:id="@+id/rv_detail_staff_menu"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:nestedScrollingEnabled="false"
+                android:nestedScrollingEnabled="true"
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp"
                 android:paddingTop="20dp"
@@ -227,7 +227,7 @@
                 app:layout_constraintEnd_toEndOf="@id/space_menu"
                 app:layout_constraintStart_toStartOf="@id/space_menu"
                 app:layout_constraintTop_toTopOf="@id/space_menu"
-                tools:itemCount="1"
+                tools:itemCount="3"
                 tools:listitem="@layout/item_detail_menu" />
 
             <TextView
