@@ -1,17 +1,26 @@
+# IDE 및 설정 파일
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
-scm.jks
+.vscode/
 
+# Build & Cache
+build/
+.gradle/
+.cache/
+/captures/
+
+# OS 생성 시스템 파일
+.DS_Store
+Thumbs.db
+
+# Android NDK
+.externalNativeBuild/
+.cxx/
+
+# 환경 설정 및 API 키 (보안 파일)
+*.properties
+**/google-services.json
+
+# Key store
+*.jks
+*.keystore
